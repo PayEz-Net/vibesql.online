@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us — VibeSQL</title>
+    <meta name="description" content="Meet the team behind VibeSQL — the database built for agents. Governable encryption, no vendor lock-in, ACP ready.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vibesql-icon.svg">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#336791">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #e2e8f0;
+            background: #0f172a;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.light-mode { color: var(--dark); background: white; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid #334155;
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        body.light-mode header {
+            background: rgba(255,255,255,0.95);
+            border-bottom-color: var(--border);
+        }
+
+        nav { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            font-size: 24px; font-weight: 700; color: #ffffff;
+            text-decoration: none; display: flex; align-items: center; gap: 8px;
+        }
+        .logo svg { width: 28px; height: 28px; }
+        .logo span { color: var(--primary); }
+        body.light-mode .logo { color: var(--dark); }
+
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: #ffffff; }
+        body.light-mode .nav-links a { color: var(--gray); }
+        body.light-mode .nav-links a:hover { color: var(--dark); }
+
+        .theme-toggle {
+            background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
+            padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.2s;
+        }
+        .theme-toggle:hover { background: #334155; }
+        body.light-mode .theme-toggle { background: white; border-color: var(--border); color: var(--dark); }
+        body.light-mode .theme-toggle:hover { background: var(--light); }
+
+        .github-btn {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--dark); color: white; padding: 8px 16px;
+            border-radius: 8px; text-decoration: none; font-weight: 500;
+        }
+
+        /* Hero */
+        .page-hero {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-size: 48px; font-weight: 800; margin-bottom: 16px;
+            color: #f1f5f9; letter-spacing: -0.02em;
+        }
+        body.light-mode .page-hero h1 { color: var(--dark); }
+
+        .page-hero .tagline {
+            font-size: 20px; color: #94a3b8; max-width: 700px; margin: 0 auto;
+        }
+        body.light-mode .page-hero .tagline { color: var(--gray); }
+
+        /* Sections */
+        .section { padding: 60px 0; }
+        .section-alt { background: #1e293b; }
+        body.light-mode .section-alt { background: var(--light); }
+
+        .section h2 {
+            font-size: 32px; font-weight: 700; margin-bottom: 16px;
+            color: #f1f5f9; text-align: center;
+        }
+        body.light-mode .section h2 { color: var(--dark); }
+
+        .section .section-sub {
+            color: #94a3b8; font-size: 18px; text-align: center;
+            max-width: 600px; margin: 0 auto 48px;
+        }
+        body.light-mode .section .section-sub { color: var(--gray); }
+
+        /* Mission */
+        .mission-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+        }
+        .mission-text p {
+            color: #cbd5e1; font-size: 18px; margin-bottom: 16px; line-height: 1.8;
+        }
+        body.light-mode .mission-text p { color: #475569; }
+
+        .mission-stats {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+        }
+        .stat-card {
+            background: #0f172a; border: 1px solid #334155; border-radius: 12px;
+            padding: 24px; text-align: center;
+        }
+        body.light-mode .stat-card { background: white; border-color: var(--border); }
+
+        .stat-card .stat-value {
+            font-size: 32px; font-weight: 800; color: var(--primary); margin-bottom: 4px;
+        }
+        .stat-card .stat-label { color: #94a3b8; font-size: 14px; }
+        body.light-mode .stat-card .stat-label { color: var(--gray); }
+
+        /* Team */
+        .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+
+        .team-card {
+            background: #1e293b; border: 1px solid #334155; border-radius: 16px;
+            padding: 40px 32px; text-align: center;
+        }
+        body.light-mode .team-card { background: white; border-color: var(--border); }
+
+        .team-avatar {
+            width: 80px; height: 80px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px; font-size: 28px; font-weight: 700; color: white;
+        }
+
+        .team-card h3 { font-size: 20px; margin-bottom: 4px; color: #f1f5f9; }
+        body.light-mode .team-card h3 { color: var(--dark); }
+
+        .team-card .role { color: var(--primary); font-weight: 600; font-size: 14px; margin-bottom: 16px; }
+        .team-card p { color: #94a3b8; font-size: 14px; line-height: 1.7; }
+        body.light-mode .team-card p { color: var(--gray); }
+
+        /* Values */
+        .values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+
+        .value-card { text-align: center; }
+        .value-num { font-size: 36px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+        .value-card h3 { font-size: 18px; margin-bottom: 8px; color: #f1f5f9; }
+        body.light-mode .value-card h3 { color: var(--dark); }
+        .value-card p { color: #94a3b8; font-size: 14px; }
+        body.light-mode .value-card p { color: var(--gray); }
+
+        /* Pillars */
+        .pillars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        .pillar-card {
+            background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 32px;
+        }
+        body.light-mode .pillar-card { background: white; border-color: var(--border); }
+        .pillar-card h3 { font-size: 20px; margin-bottom: 8px; color: #f1f5f9; }
+        body.light-mode .pillar-card h3 { color: var(--dark); }
+        .pillar-card p { color: #94a3b8; }
+        body.light-mode .pillar-card p { color: var(--gray); }
+        .pillar-icon { font-size: 32px; margin-bottom: 12px; }
+
+        /* CTA */
+        .cta-section {
+            padding: 80px 0; text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        .cta-section h2 { color: white !important; margin-bottom: 16px; }
+        .cta-section p { color: rgba(255,255,255,0.85); font-size: 18px; margin-bottom: 32px; }
+        .cta-section .btn {
+            padding: 14px 28px; border-radius: 8px; font-weight: 600;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+            background: white; color: var(--primary); margin: 0 8px;
+        }
+        .cta-section .btn:hover { background: #f1f5f9; }
+        .cta-section .btn-outline {
+            background: transparent; color: white; border: 2px solid rgba(255,255,255,0.4);
+        }
+        .cta-section .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+        /* Footer */
+        footer {
+            padding: 40px 0; border-top: 1px solid #334155; color: var(--gray);
+        }
+        body.light-mode footer { border-top-color: var(--border); }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; }
+        footer .links { display: flex; gap: 24px; }
+        footer a { color: var(--gray); text-decoration: none; }
+        footer a:hover { color: #e2e8f0; }
+        body.light-mode footer a:hover { color: var(--dark); }
+
+        .powered-by {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 12px; color: var(--gray);
+        }
+        .powered-by svg { width: 16px; height: 16px; }
+        .powered-by a { color: #7c3aed; font-weight: 500; }
+
+        @media (max-width: 768px) {
+            .page-hero h1 { font-size: 32px; }
+            .mission-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: 1fr; }
+            .values-grid { grid-template-columns: 1fr 1fr; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .footer-content { flex-direction: column; gap: 20px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/" class="logo">
+                    <svg width="28" height="28" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="vibeGradient" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#7c3aed"/>
+                                <stop offset="100%" stop-color="#06b6d4"/>
+                            </linearGradient>
+                        </defs>
+                        <g transform="translate(37, 37)">
+                            <circle cx="0" cy="0" r="12" fill="url(#vibeGradient)"/>
+                            <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" stroke-width="3" transform="rotate(-30)" fill="none" opacity="0.8"/>
+                            <circle cx="35" cy="0" r="5" fill="#06b6d4" transform="rotate(-30)"/>
+                            <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" stroke-width="3" transform="rotate(30)" fill="none" opacity="0.8"/>
+                            <circle cx="-35" cy="0" r="5" fill="#7c3aed" transform="rotate(30)"/>
+                        </g>
+                    </svg>
+                    Vibe<span>SQL</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/#features">Features</a>
+                    <a href="/#schemas">Schemas</a>
+                    <a href="/#pricing">Pricing</a>
+                    <a href="/docs.html">Docs</a>
+                    <a href="/about.html">About</a>
+                    <button class="theme-toggle" onclick="toggleTheme()">Light</button>
+                    <a href="https://github.com/PayEz-Net/vibesql-server" class="github-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        Server
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>About VibeSQL</h1>
+            <p class="tagline">The database built for agents. We're building the complete abstraction of the data plane — governable, open, and vendor-neutral.</p>
+        </div>
+    </section>
+
+    <!-- Mission -->
+    <section class="section">
+        <div class="container">
+            <div class="mission-grid">
+                <div class="mission-text">
+                    <p>
+                        AI agents need a data layer that speaks their language. Not SQL strings cobbled together by prompt engineering. Not vendor-locked managed services that hold your data hostage.
+                    </p>
+                    <p>
+                        VibeSQL is the complete abstraction of the data plane — a novel JSON-based SQL platform with governable encryption, multi-tenant isolation, and native Agent Communication Protocol support. Open source, Apache 2.0, deploy anywhere.
+                    </p>
+                    <p>
+                        We believe the future of data is agent-driven, and that future should be open.
+                    </p>
+                </div>
+                <div class="mission-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">Apache 2.0</div>
+                        <div class="stat-label">Open Source License</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Deployment Options</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Vendor Lock-in</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">ACP</div>
+                        <div class="stat-label">Protocol Ready</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Pillars -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2>Core Pillars</h2>
+            <p class="section-sub">The principles that drive every decision we make.</p>
+
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <div class="pillar-icon">🔐</div>
+                    <h3>Governable Encryption</h3>
+                    <p>You control your encryption keys, your governance policies, your compliance posture. Not us. Not your cloud provider. You.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">🔓</div>
+                    <h3>No Vendor Lock-in</h3>
+                    <p>Apache 2.0. Fork it, host it, white-label it. Your data lives on your infrastructure. Move it whenever you want. No exit fees, no proprietary formats.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">🤖</div>
+                    <h3>Agent Communication Protocol</h3>
+                    <p>Native ACP support means your agents coordinate through the database, not around it. Async messaging, state management, and multi-agent orchestration built in.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">📡</div>
+                    <h3>Data Plane Abstraction</h3>
+                    <p>The complete abstraction of the data plane. Your agents interact with JSON schemas and JSON queries — the underlying storage engine is invisible and replaceable.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Team -->
+    <section class="section">
+        <div class="container">
+            <h2>Leadership Team</h2>
+            <p class="section-sub">Industry veterans building the database agents deserve.</p>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">PS</div>
+                    <h3>Praveen Sattaru</h3>
+                    <div class="role">Founder &amp; CEO</div>
+                    <p>20+ years of industry experience at Microsoft and T-Mobile. Serial entrepreneur with a track record of building successful startups. Driving the vision of agent-native infrastructure.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar" style="background: linear-gradient(135deg, #22c55e, #059669);">JR</div>
+                    <h3>Jon Ranes</h3>
+                    <div class="role">Head of AI Development</div>
+                    <p>30+ years expertise in NLP and machine learning. Former research scientist with a passion for practical AI applications. Architecting the bridge between agents and data.</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar" style="background: linear-gradient(135deg, #f97316, #ec4899);">RC</div>
+                    <h3>Rayan Chepuri</h3>
+                    <div class="role">Head of Marketing</div>
+                    <p>Growth strategist focused on helping businesses succeed. Expert in product marketing and brand development. Bringing VibeSQL to the teams that need it most.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2>Our Values</h2>
+            <p class="section-sub">What we stand for, in everything we build.</p>
+
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-num">01</div>
+                    <h3>Open by Default</h3>
+                    <p>Open source isn't a marketing strategy. It's how infrastructure should be built. Apache 2.0, always.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-num">02</div>
+                    <h3>Agent-First</h3>
+                    <p>Every API, every schema, every protocol decision starts with one question: does this make agents better?</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-num">03</div>
+                    <h3>Security as Architecture</h3>
+                    <p>Encryption governance, tenant isolation, and audit trails aren't features. They're the foundation.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-num">04</div>
+                    <h3>Ship, Then Iterate</h3>
+                    <p>Production-grade from day one. We don't build demos — we build infrastructure teams depend on.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Build with VibeSQL?</h2>
+            <p>Open source. Deploy anywhere. The database your agents have been waiting for.</p>
+            <a href="https://github.com/PayEz-Net/vibesql-server" class="btn">Get Server Edition</a>
+            <a href="https://github.com/PayEz-Net/vibesql-micro/releases" class="btn btn-outline">Try Micro Free</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="links">
+                    <a href="https://github.com/PayEz-Net/vibesql-server">Server Edition</a>
+                    <a href="https://github.com/PayEz-Net/vibesql-micro">Micro (Dev Tool)</a>
+                    <a href="/docs.html">Docs</a>
+                    <a href="mailto:hello@vibesql.online">Contact</a>
+                    <span>Apache 2.0</span>
+                </div>
+
+                <div class="powered-by">
+                    <svg viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="vibeGradient2" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#7c3aed"/>
+                                <stop offset="100%" stop-color="#06b6d4"/>
+                            </linearGradient>
+                        </defs>
+                        <g transform="translate(37, 37)">
+                            <circle cx="0" cy="0" r="12" fill="url(#vibeGradient2)"/>
+                            <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient2)" stroke-width="3" transform="rotate(-30)" fill="none" opacity="0.8"/>
+                            <circle cx="35" cy="0" r="5" fill="#06b6d4" transform="rotate(-30)"/>
+                            <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient2)" stroke-width="3" transform="rotate(30)" fill="none" opacity="0.8"/>
+                            <circle cx="-35" cy="0" r="5" fill="#7c3aed" transform="rotate(30)"/>
+                        </g>
+                    </svg>
+                    <span>Built by <a href="https://idealvibe.online">IdealVibe</a> — open source platforms and AI-native databases.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            updateThemeButton();
+        }
+
+        function updateThemeButton() {
+            const btn = document.querySelector('.theme-toggle');
+            const isLight = document.body.classList.contains('light-mode');
+            btn.textContent = isLight ? 'Dark' : 'Light';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+            }
+            updateThemeButton();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeSQL Documentation — Complete API & SDK Reference</title>
+    <meta name="description" content="Comprehensive technical reference for VibeSQL. API syntax, SQL types, field restrictions, JSONB operators, error codes, SDK methods, HMAC authentication, schema evolution, and configuration.">
+
+    <link rel="icon" type="image/svg+xml" href="/vibesql-icon.svg">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#336791">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --code-bg: #1e293b;
+            --sidebar-w: 280px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #e2e8f0;
+            background: #0f172a;
+        }
+
+        body.light-mode { color: var(--dark); background: white; }
+        body.light-mode .doc-header { background: rgba(255,255,255,0.95); border-bottom-color: var(--border); }
+        body.light-mode .doc-header .logo, body.light-mode .doc-header a { color: var(--dark); }
+        body.light-mode .sidebar { background: var(--light); border-right-color: var(--border); }
+        body.light-mode .sidebar a { color: var(--gray); }
+        body.light-mode .sidebar a:hover, body.light-mode .sidebar a.active { color: var(--primary); }
+        body.light-mode .sidebar .section-title { color: var(--dark); }
+        body.light-mode .doc-content h1, body.light-mode .doc-content h2, body.light-mode .doc-content h3 { color: var(--dark); }
+        body.light-mode .doc-content p, body.light-mode .doc-content li, body.light-mode .doc-content td { color: #334155; }
+        body.light-mode .doc-content th { background: var(--light); color: var(--dark); }
+        body.light-mode .doc-content table { border-color: var(--border); }
+        body.light-mode .doc-content td, body.light-mode .doc-content th { border-color: var(--border); }
+        body.light-mode code:not(pre code) { background: #e2e8f0; color: #1e293b; }
+        body.light-mode .callout { background: #eff6ff; border-color: var(--primary); color: #1e40af; }
+        body.light-mode .callout.warning { background: #fefce8; border-color: #ca8a04; color: #854d0e; }
+        body.light-mode .callout.danger { background: #fef2f2; border-color: #dc2626; color: #991b1b; }
+
+        /* Header */
+        .doc-header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(15,23,42,0.95);
+            border-bottom: 1px solid #334155;
+            padding: 12px 24px;
+            backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .doc-header .left { display: flex; align-items: center; gap: 16px; }
+        .doc-header .logo {
+            font-size: 20px; font-weight: 700; color: #fff; text-decoration: none;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .doc-header .logo span { color: var(--primary); }
+        .doc-header .logo svg { width: 24px; height: 24px; }
+        .doc-header .badge {
+            background: #1e3a8a; color: #93c5fd; padding: 2px 10px;
+            border-radius: 12px; font-size: 12px; font-weight: 600;
+        }
+        .doc-header .right { display: flex; align-items: center; gap: 16px; }
+        .doc-header a { color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .doc-header a:hover { color: #e2e8f0; }
+
+        .theme-toggle {
+            background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px;
+        }
+        .theme-toggle:hover { background: #334155; }
+        body.light-mode .theme-toggle { background: white; border-color: var(--border); color: var(--dark); }
+
+        .hamburger { display: none; background: none; border: none; color: #e2e8f0; cursor: pointer; font-size: 24px; }
+        body.light-mode .hamburger { color: var(--dark); }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 53px; left: 0; bottom: 0; width: var(--sidebar-w);
+            background: #0c1222; border-right: 1px solid #1e293b;
+            overflow-y: auto; padding: 20px 0; z-index: 50;
+        }
+        .sidebar .section-title {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #94a3b8; padding: 16px 20px 6px;
+        }
+        .sidebar a {
+            display: block; padding: 5px 20px; font-size: 13px;
+            color: #64748b; text-decoration: none; transition: color 0.15s;
+        }
+        .sidebar a:hover { color: #e2e8f0; }
+        .sidebar a.active { color: var(--primary); font-weight: 600; border-right: 2px solid var(--primary); }
+
+        /* Content */
+        .doc-content {
+            margin-left: var(--sidebar-w); margin-top: 53px;
+            padding: 40px 48px 80px; max-width: 900px;
+        }
+        .doc-content h1 { font-size: 32px; font-weight: 800; color: #f1f5f9; margin-bottom: 8px; }
+        .doc-content .subtitle { color: #94a3b8; font-size: 16px; margin-bottom: 32px; }
+        .doc-content h2 {
+            font-size: 24px; font-weight: 700; color: #f1f5f9;
+            margin-top: 48px; margin-bottom: 16px;
+            padding-top: 24px; border-top: 1px solid #1e293b;
+        }
+        .doc-content h2:first-of-type { border-top: none; padding-top: 0; }
+        .doc-content h3 { font-size: 18px; font-weight: 600; color: #cbd5e1; margin-top: 32px; margin-bottom: 12px; }
+        .doc-content p { color: #94a3b8; margin-bottom: 16px; font-size: 15px; }
+        .doc-content ul, .doc-content ol { color: #94a3b8; margin-bottom: 16px; padding-left: 24px; font-size: 15px; }
+        .doc-content li { margin-bottom: 6px; }
+        .doc-content strong { color: #e2e8f0; }
+        body.light-mode .doc-content strong { color: var(--dark); }
+
+        /* Code */
+        pre {
+            background: #0f172a; color: #e2e8f0; padding: 16px 20px;
+            border-radius: 8px; overflow-x: auto; font-size: 13px;
+            font-family: 'SF Mono', 'Fira Code', Monaco, Consolas, monospace;
+            margin-bottom: 16px; border: 1px solid #1e293b; line-height: 1.5;
+        }
+        code:not(pre code) {
+            background: #1e293b; color: #93c5fd; padding: 2px 6px;
+            border-radius: 4px; font-size: 13px;
+            font-family: 'SF Mono', 'Fira Code', Monaco, Consolas, monospace;
+        }
+        .comment { color: #475569; }
+        .keyword { color: #c084fc; }
+        .string { color: #86efac; }
+        .number { color: #fdba74; }
+        .type { color: #67e8f9; }
+
+        /* Tables */
+        table {
+            width: 100%; border-collapse: collapse; margin-bottom: 24px;
+            font-size: 14px; border: 1px solid #1e293b;
+        }
+        th {
+            text-align: left; padding: 10px 14px; background: #1e293b;
+            color: #e2e8f0; font-weight: 600; font-size: 13px; border: 1px solid #334155;
+        }
+        td {
+            padding: 8px 14px; border: 1px solid #1e293b; color: #94a3b8;
+            vertical-align: top;
+        }
+        tr:hover td { background: rgba(37,99,235,0.04); }
+
+        /* Callouts */
+        .callout {
+            padding: 14px 18px; border-radius: 8px; margin-bottom: 16px;
+            font-size: 14px; border-left: 4px solid var(--primary);
+            background: rgba(37,99,235,0.08); color: #93c5fd;
+        }
+        .callout.warning { border-color: #ca8a04; background: rgba(202,138,4,0.08); color: #fde68a; }
+        .callout.danger { border-color: #dc2626; background: rgba(220,38,38,0.08); color: #fca5a5; }
+        .callout strong { color: inherit; }
+
+        /* Edition badges */
+        .edition-badge {
+            display: inline-block; font-size: 11px; font-weight: 600;
+            padding: 2px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle;
+        }
+        .edition-micro { background: #064e3b; color: #6ee7b7; }
+        .edition-server { background: #1e3a8a; color: #93c5fd; }
+        .edition-sdk { background: #581c87; color: #d8b4fe; }
+        .edition-all { background: #334155; color: #94a3b8; }
+        body.light-mode .edition-micro { background: #d1fae5; color: #065f46; }
+        body.light-mode .edition-server { background: #dbeafe; color: #1e40af; }
+        body.light-mode .edition-sdk { background: #f3e8ff; color: #6b21a8; }
+        body.light-mode .edition-all { background: #f1f5f9; color: #64748b; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+            .sidebar.open { transform: translateX(0); }
+            .doc-content { margin-left: 0; padding: 24px 20px 60px; }
+            .hamburger { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="doc-header">
+    <div class="left">
+        <button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+        <a href="/" class="logo">
+            <svg width="24" height="24" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="vg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
+                <g transform="translate(37,37)"><circle cx="0" cy="0" r="12" fill="url(#vg)"/><ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vg)" stroke-width="3" transform="rotate(-30)" fill="none" opacity="0.8"/><circle cx="35" cy="0" r="5" fill="#06b6d4" transform="rotate(-30)"/><ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vg)" stroke-width="3" transform="rotate(30)" fill="none" opacity="0.8"/><circle cx="-35" cy="0" r="5" fill="#7c3aed" transform="rotate(30)"/></g>
+            </svg>
+            Vibe<span>SQL</span>
+        </a>
+        <span class="badge">Documentation</span>
+    </div>
+    <div class="right">
+        <a href="/">Home</a>
+        <a href="https://github.com/PayEz-Net/vibesql-server">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()">Light</button>
+    </div>
+</div>
+
+<nav class="sidebar" id="sidebar">
+    <div class="section-title">Getting Started</div>
+    <a href="#quickstart">Quick Start</a>
+    <a href="#editions">Editions Overview</a>
+
+    <div class="section-title">API Reference</div>
+    <a href="#endpoint">Endpoint</a>
+    <a href="#request-format">Request Format</a>
+    <a href="#response-format">Response Format</a>
+
+    <div class="section-title">SQL Reference</div>
+    <a href="#supported-statements">Supported Statements</a>
+    <a href="#data-types">PostgreSQL Data Types</a>
+    <a href="#create-table">CREATE TABLE</a>
+    <a href="#select">SELECT</a>
+    <a href="#insert">INSERT</a>
+    <a href="#update">UPDATE</a>
+    <a href="#delete">DELETE</a>
+    <a href="#alter-table">ALTER TABLE</a>
+    <a href="#drop-table">DROP TABLE</a>
+    <a href="#truncate">TRUNCATE</a>
+
+    <div class="section-title">JSONB</div>
+    <a href="#jsonb-operators">All 9 Operators</a>
+    <a href="#jsonb-patterns">Common Patterns</a>
+    <a href="#jsonb-casting">Type Casting</a>
+
+    <div class="section-title">Safety &amp; Limits</div>
+    <a href="#safety-rules">Safety Rules</a>
+    <a href="#query-limits">Query Limits</a>
+    <a href="#tier-limits">Tier-Based Limits</a>
+
+    <div class="section-title">Error Reference</div>
+    <a href="#error-format">Error Format</a>
+    <a href="#error-codes">Error Codes</a>
+    <a href="#sqlstate-mapping">SQLSTATE Mapping</a>
+
+    <div class="section-title">Configuration</div>
+    <a href="#micro-config">Micro Configuration</a>
+    <a href="#server-config">Server Configuration</a>
+
+    <div class="section-title">Authentication</div>
+    <a href="#hmac-auth">HMAC Authentication</a>
+    <a href="#public-endpoints">Public Endpoints</a>
+
+    <div class="section-title">Schema Evolution</div>
+    <a href="#schema-versioning">Versioning</a>
+    <a href="#migration-transforms">Migration Transforms</a>
+    <a href="#compatibility">Compatibility Checks</a>
+
+    <div class="section-title">SDK Reference</div>
+    <a href="#sdk-install">Installation</a>
+    <a href="#sdk-client">Client Setup</a>
+    <a href="#sdk-collections">Collection CRUD</a>
+    <a href="#sdk-admin">Admin API</a>
+    <a href="#sdk-auth">Auth Utilities</a>
+    <a href="#sdk-errors">Error Handling</a>
+    <a href="#sdk-types">Type Generation</a>
+</nav>
+
+<main class="doc-content">
+
+    <h1>VibeSQL Documentation</h1>
+    <p class="subtitle">Complete technical reference for VibeSQL Micro, Server, and SDK.</p>
+    <div class="callout" style="margin-bottom: 24px;">
+        <strong>AI Agents:</strong> Fetch <a href="/docs.md" style="color: inherit; text-decoration: underline;">/docs.md</a> for a clean, machine-readable version of this reference optimized for prompt context.
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- GETTING STARTED                                               -->
+    <!-- ============================================================ -->
+
+    <h2 id="quickstart">Quick Start</h2>
+
+    <h3>VibeSQL Micro <span class="edition-badge edition-micro">Micro</span></h3>
+    <p>Download the single binary for your platform and run it. No installation, no sign-up.</p>
+<pre>
+<span class="comment"># Download from GitHub releases</span>
+<span class="comment"># https://github.com/PayEz-Net/vibesql-micro/releases</span>
+
+<span class="comment"># Windows</span>
+.\vibesql-micro-windows-x64.exe
+
+<span class="comment"># macOS</span>
+./vibesql-micro-macos-arm64
+
+<span class="comment"># Linux</span>
+./vibesql-micro-linux-x64
+</pre>
+    <p>The server starts on <code>http://127.0.0.1:5173</code>. Data is stored in <code>./vibe-data/</code> relative to where you run the binary.</p>
+
+<pre>
+<span class="comment"># Test it immediately</span>
+curl -X POST http://127.0.0.1:5173/v1/query \
+  -H "Content-Type: application/json" \
+  -d '{"sql": "SELECT 1 AS hello"}'
+</pre>
+<pre>
+{
+  "success": true,
+  "rows": [{"hello": 1}],
+  "rowCount": 1,
+  "executionTime": 0.42
+}
+</pre>
+
+    <h3>VibeSQL Server <span class="edition-badge edition-server">Server</span></h3>
+    <p>Production deployment with Docker, Kubernetes, or bare metal.</p>
+<pre>
+<span class="comment"># Docker</span>
+docker run -d -p 5432:5432 vibesql/server:latest
+
+<span class="comment"># Kubernetes</span>
+kubectl apply -f vibesql-server.yaml
+</pre>
+
+    <h3>Vibe SDK <span class="edition-badge edition-sdk">SDK</span></h3>
+    <p>TypeScript client for Node.js and browser applications.</p>
+<pre>
+npm install @vibe/client
+</pre>
+<pre>
+<span class="keyword">import</span> { createVibeClient } <span class="keyword">from</span> <span class="string">'@vibe/client'</span>;
+
+<span class="keyword">const</span> client = createVibeClient({
+  apiUrl: <span class="string">'http://127.0.0.1:5173'</span>,
+});
+
+<span class="keyword">const</span> users = client.collection(<span class="string">'users'</span>);
+<span class="keyword">const</span> result = <span class="keyword">await</span> users.list({ limit: <span class="number">10</span> });
+</pre>
+
+    <h2 id="editions">Editions Overview</h2>
+
+    <table>
+        <tr>
+            <th>Feature</th>
+            <th>Micro</th>
+            <th>Server</th>
+            <th>Cloud</th>
+        </tr>
+        <tr>
+            <td>License</td>
+            <td>Apache 2.0</td>
+            <td>Apache 2.0</td>
+            <td>Managed</td>
+        </tr>
+        <tr>
+            <td>Deployment</td>
+            <td>Single binary</td>
+            <td>Docker / K8s / bare metal</td>
+            <td>Fully managed</td>
+        </tr>
+        <tr>
+            <td>Binary size</td>
+            <td>~77 MB</td>
+            <td>N/A</td>
+            <td>N/A</td>
+        </tr>
+        <tr>
+            <td>PostgreSQL</td>
+            <td>Embedded 16.1</td>
+            <td>External (16+)</td>
+            <td>Managed</td>
+        </tr>
+        <tr>
+            <td>Multi-tenant</td>
+            <td>No</td>
+            <td>Yes</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>Authentication</td>
+            <td>None (localhost)</td>
+            <td>HMAC-SHA256</td>
+            <td>Token-based</td>
+        </tr>
+        <tr>
+            <td>Encryption governance</td>
+            <td>No</td>
+            <td>Yes</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>Schema evolution</td>
+            <td>No</td>
+            <td>Yes</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>Tier-based limits</td>
+            <td>Fixed</td>
+            <td>Configurable per tier</td>
+            <td>Plan-based</td>
+        </tr>
+        <tr>
+            <td>API endpoint</td>
+            <td><code>POST /v1/query</code></td>
+            <td><code>POST /v1/query</code> + Admin API</td>
+            <td><code>POST /v1/query</code> + Admin API</td>
+        </tr>
+        <tr>
+            <td>Platforms</td>
+            <td>Windows, macOS, Linux</td>
+            <td>Any (.NET 9)</td>
+            <td>N/A</td>
+        </tr>
+    </table>
+
+    <!-- ============================================================ -->
+    <!-- API REFERENCE                                                 -->
+    <!-- ============================================================ -->
+
+    <h2 id="endpoint">Endpoint</h2>
+
+    <p>All SQL queries are sent as JSON to a single HTTP endpoint:</p>
+<pre>
+POST /v1/query
+Content-Type: application/json
+</pre>
+
+    <table>
+        <tr>
+            <th>Edition</th>
+            <th>Default URL</th>
+            <th>Port</th>
+        </tr>
+        <tr>
+            <td>Micro</td>
+            <td><code>http://127.0.0.1:5173/v1/query</code></td>
+            <td>5173 (HTTP) / 5433 (internal PG)</td>
+        </tr>
+        <tr>
+            <td>Server</td>
+            <td><code>http://your-server:5432/v1/query</code></td>
+            <td>Configurable</td>
+        </tr>
+    </table>
+
+    <h2 id="request-format">Request Format</h2>
+<pre>
+{
+  <span class="string">"sql"</span>: <span class="string">"SELECT * FROM users WHERE id = 1"</span>
+}
+</pre>
+
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Required</th><th>Constraints</th></tr>
+        <tr>
+            <td><code>sql</code></td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Max 10,240 bytes (10 KB). Must start with a valid SQL keyword.</td>
+        </tr>
+    </table>
+
+    <h2 id="response-format">Response Format</h2>
+
+    <h3>Success (HTTP 200)</h3>
+<pre>
+{
+  <span class="string">"success"</span>: <span class="keyword">true</span>,
+  <span class="string">"rows"</span>: [
+    {<span class="string">"id"</span>: <span class="number">1</span>, <span class="string">"name"</span>: <span class="string">"Alice"</span>, <span class="string">"email"</span>: <span class="string">"alice@example.com"</span>}
+  ],
+  <span class="string">"rowCount"</span>: <span class="number">1</span>,
+  <span class="string">"executionTime"</span>: <span class="number">0.42</span>
+}
+</pre>
+
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>success</code></td><td>boolean</td><td>Always <code>true</code> for successful queries</td></tr>
+        <tr><td><code>rows</code></td><td>array | null</td><td>Array of row objects (column name &rarr; value). <code>null</code> for non-SELECT statements without RETURNING.</td></tr>
+        <tr><td><code>rowCount</code></td><td>integer</td><td>Number of rows returned or affected</td></tr>
+        <tr><td><code>executionTime</code></td><td>float</td><td>Execution time in milliseconds</td></tr>
+    </table>
+
+    <h3>Error (HTTP 4xx/5xx)</h3>
+<pre>
+{
+  <span class="string">"success"</span>: <span class="keyword">false</span>,
+  <span class="string">"error"</span>: {
+    <span class="string">"code"</span>: <span class="string">"INVALID_SQL"</span>,
+    <span class="string">"message"</span>: <span class="string">"Invalid SQL syntax"</span>,
+    <span class="string">"detail"</span>: <span class="string">"PostgreSQL error: relation \"nonexistent\" does not exist"</span>
+  }
+}
+</pre>
+
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>success</code></td><td>boolean</td><td>Always <code>false</code></td></tr>
+        <tr><td><code>error.code</code></td><td>string</td><td>Machine-readable error code (see <a href="#error-codes">Error Codes</a>)</td></tr>
+        <tr><td><code>error.message</code></td><td>string</td><td>Human-readable error message</td></tr>
+        <tr><td><code>error.detail</code></td><td>string</td><td>Additional context (optional)</td></tr>
+    </table>
+
+    <p><strong>Value encoding notes:</strong></p>
+    <ul>
+        <li>SQL <code>NULL</code> values are returned as JSON <code>null</code></li>
+        <li>JSONB columns are returned as JSON objects/arrays (not as strings)</li>
+        <li>TIMESTAMP values are returned as ISO 8601 strings</li>
+        <li>NUMERIC values are returned as JSON numbers</li>
+        <li>BOOLEAN values are returned as JSON <code>true</code>/<code>false</code></li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <!-- SQL REFERENCE                                                 -->
+    <!-- ============================================================ -->
+
+    <h2 id="supported-statements">Supported SQL Statements</h2>
+
+    <p>Queries must start with one of these 8 keywords (case-insensitive):</p>
+
+    <table>
+        <tr><th>Keyword</th><th>Description</th><th>WHERE Required?</th></tr>
+        <tr><td><code>SELECT</code></td><td>Read rows from tables</td><td>No</td></tr>
+        <tr><td><code>INSERT</code></td><td>Create new rows</td><td>No</td></tr>
+        <tr><td><code>UPDATE</code></td><td>Modify existing rows</td><td><strong>Yes</strong></td></tr>
+        <tr><td><code>DELETE</code></td><td>Remove rows</td><td><strong>Yes</strong></td></tr>
+        <tr><td><code>CREATE</code></td><td>Create tables, indexes, etc.</td><td>No</td></tr>
+        <tr><td><code>DROP</code></td><td>Remove tables</td><td>No</td></tr>
+        <tr><td><code>ALTER</code></td><td>Modify table structure</td><td>No</td></tr>
+        <tr><td><code>TRUNCATE</code></td><td>Remove all rows from a table</td><td>No</td></tr>
+    </table>
+
+    <div class="callout danger">
+        <strong>Safety:</strong> UPDATE and DELETE <strong>require</strong> a WHERE clause. To intentionally affect all rows, use <code>WHERE 1=1</code>. Omitting WHERE returns <code>UNSAFE_QUERY</code> (HTTP 400).
+    </div>
+
+    <h2 id="data-types">PostgreSQL Data Types</h2>
+
+    <p>VibeSQL supports all standard PostgreSQL data types. Here is the complete reference with size restrictions:</p>
+
+    <table>
+        <tr><th>Type</th><th>Description</th><th>Size / Range</th></tr>
+        <tr><td><code>TEXT</code></td><td>Variable-length string</td><td>Unlimited (up to 1 GB)</td></tr>
+        <tr><td><code>VARCHAR(n)</code></td><td>Variable-length string with limit</td><td>Max <em>n</em> characters</td></tr>
+        <tr><td><code>CHAR(n)</code></td><td>Fixed-length string</td><td>Exactly <em>n</em> characters, space-padded</td></tr>
+        <tr><td><code>INTEGER</code> / <code>INT</code></td><td>Signed integer</td><td>-2,147,483,648 to 2,147,483,647 (4 bytes)</td></tr>
+        <tr><td><code>BIGINT</code></td><td>Large signed integer</td><td>-9,223,372,036,854,775,808 to 9,223,372,036,854,775,807 (8 bytes)</td></tr>
+        <tr><td><code>SMALLINT</code></td><td>Small signed integer</td><td>-32,768 to 32,767 (2 bytes)</td></tr>
+        <tr><td><code>SERIAL</code></td><td>Auto-incrementing integer</td><td>1 to 2,147,483,647</td></tr>
+        <tr><td><code>BIGSERIAL</code></td><td>Auto-incrementing large integer</td><td>1 to 9,223,372,036,854,775,807</td></tr>
+        <tr><td><code>NUMERIC(p,s)</code></td><td>Exact decimal number</td><td><em>p</em> total digits, <em>s</em> after decimal. Max precision: 131,072 digits before decimal, 16,383 after.</td></tr>
+        <tr><td><code>REAL</code></td><td>Floating-point (single)</td><td>6 decimal digits precision (4 bytes)</td></tr>
+        <tr><td><code>DOUBLE PRECISION</code></td><td>Floating-point (double)</td><td>15 decimal digits precision (8 bytes)</td></tr>
+        <tr><td><code>BOOLEAN</code></td><td>True or false</td><td><code>TRUE</code>, <code>FALSE</code>, <code>NULL</code></td></tr>
+        <tr><td><code>DATE</code></td><td>Calendar date</td><td>4713 BC to 5874897 AD (4 bytes)</td></tr>
+        <tr><td><code>TIME</code></td><td>Time of day (no timezone)</td><td>00:00:00 to 24:00:00 (8 bytes)</td></tr>
+        <tr><td><code>TIMESTAMP</code></td><td>Date and time (no timezone)</td><td>4713 BC to 294276 AD (8 bytes)</td></tr>
+        <tr><td><code>TIMESTAMPTZ</code></td><td>Date and time with timezone</td><td>Same range, timezone-aware (8 bytes)</td></tr>
+        <tr><td><code>UUID</code></td><td>Universally unique identifier</td><td>128-bit RFC 4122 format (16 bytes)</td></tr>
+        <tr><td><code>JSONB</code></td><td>Binary JSON data</td><td>Up to 255 MB per value</td></tr>
+        <tr><td><code>JSON</code></td><td>Text JSON data</td><td>Up to 255 MB per value (prefer JSONB)</td></tr>
+        <tr><td><code>TEXT[]</code></td><td>Array of text</td><td>Multi-dimensional arrays supported</td></tr>
+        <tr><td><code>INTEGER[]</code></td><td>Array of integers</td><td>Multi-dimensional arrays supported</td></tr>
+        <tr><td><code>UUID[]</code></td><td>Array of UUIDs</td><td>Multi-dimensional arrays supported</td></tr>
+        <tr><td><code>BYTEA</code></td><td>Binary data</td><td>Up to 1 GB</td></tr>
+    </table>
+
+    <h2 id="create-table">CREATE TABLE</h2>
+
+<pre>
+<span class="comment">-- Basic table</span>
+<span class="keyword">CREATE TABLE</span> users (
+  id <span class="type">SERIAL</span> <span class="keyword">PRIMARY KEY</span>,
+  name <span class="type">TEXT</span> <span class="keyword">NOT NULL</span>,
+  email <span class="type">TEXT</span> <span class="keyword">UNIQUE</span>,
+  age <span class="type">INTEGER</span>,
+  created_at <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> NOW()
+);
+
+<span class="comment">-- Table with JSONB and UUID</span>
+<span class="keyword">CREATE TABLE</span> documents (
+  id <span class="type">UUID</span> <span class="keyword">PRIMARY KEY DEFAULT</span> gen_random_uuid(),
+  data <span class="type">JSONB</span> <span class="keyword">NOT NULL</span>,
+  tags <span class="type">TEXT[]</span>,
+  price <span class="type">NUMERIC(10,2)</span>,
+  is_active <span class="type">BOOLEAN</span> <span class="keyword">DEFAULT</span> <span class="keyword">true</span>
+);
+
+<span class="comment">-- Table with foreign keys</span>
+<span class="keyword">CREATE TABLE</span> messages (
+  id <span class="type">UUID</span> <span class="keyword">PRIMARY KEY DEFAULT</span> gen_random_uuid(),
+  conversation_id <span class="type">UUID</span> <span class="keyword">REFERENCES</span> conversations(id),
+  agent_id <span class="type">UUID</span> <span class="keyword">REFERENCES</span> agents(id),
+  content <span class="type">TEXT</span>,
+  metadata <span class="type">JSONB</span>,
+  created_at <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> NOW()
+);
+</pre>
+
+    <h2 id="select">SELECT</h2>
+
+<pre>
+<span class="comment">-- All columns</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users;
+
+<span class="comment">-- Specific columns</span>
+<span class="keyword">SELECT</span> name, email <span class="keyword">FROM</span> users;
+
+<span class="comment">-- With WHERE</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> age > <span class="number">21</span> <span class="keyword">AND</span> is_active = <span class="keyword">true</span>;
+
+<span class="comment">-- ORDER BY, LIMIT, OFFSET (pagination)</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users
+  <span class="keyword">ORDER BY</span> name <span class="keyword">ASC</span>
+  <span class="keyword">LIMIT</span> <span class="number">10</span> <span class="keyword">OFFSET</span> <span class="number">20</span>;
+
+<span class="comment">-- Aggregates</span>
+<span class="keyword">SELECT</span> role, COUNT(*) <span class="keyword">AS</span> count
+  <span class="keyword">FROM</span> users
+  <span class="keyword">GROUP BY</span> role
+  <span class="keyword">HAVING</span> COUNT(*) > <span class="number">5</span>;
+
+<span class="comment">-- JOINs</span>
+<span class="keyword">SELECT</span> u.name, m.content
+  <span class="keyword">FROM</span> users u
+  <span class="keyword">JOIN</span> messages m <span class="keyword">ON</span> u.id = m.user_id
+  <span class="keyword">WHERE</span> m.created_at > <span class="string">'2024-01-01'</span>;
+
+<span class="comment">-- Subqueries</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users
+  <span class="keyword">WHERE</span> id <span class="keyword">IN</span> (<span class="keyword">SELECT</span> user_id <span class="keyword">FROM</span> orders <span class="keyword">WHERE</span> total > <span class="number">100</span>);
+</pre>
+
+    <h2 id="insert">INSERT</h2>
+
+<pre>
+<span class="comment">-- Single row</span>
+<span class="keyword">INSERT INTO</span> users (name, email) <span class="keyword">VALUES</span> (<span class="string">'Alice'</span>, <span class="string">'alice@example.com'</span>);
+
+<span class="comment">-- With RETURNING (get inserted data back)</span>
+<span class="keyword">INSERT INTO</span> users (name, email)
+  <span class="keyword">VALUES</span> (<span class="string">'Bob'</span>, <span class="string">'bob@example.com'</span>)
+  <span class="keyword">RETURNING</span> id, name, created_at;
+
+<span class="comment">-- Multiple rows</span>
+<span class="keyword">INSERT INTO</span> users (name, email) <span class="keyword">VALUES</span>
+  (<span class="string">'Charlie'</span>, <span class="string">'charlie@example.com'</span>),
+  (<span class="string">'Diana'</span>, <span class="string">'diana@example.com'</span>);
+
+<span class="comment">-- With JSONB data</span>
+<span class="keyword">INSERT INTO</span> documents (data) <span class="keyword">VALUES</span>
+  (<span class="string">'{"name": "Invoice", "amount": 99.50, "tags": ["billing", "q4"]}'</span>);
+
+<span class="comment">-- With ON CONFLICT (upsert)</span>
+<span class="keyword">INSERT INTO</span> users (email, name) <span class="keyword">VALUES</span> (<span class="string">'alice@example.com'</span>, <span class="string">'Alice Updated'</span>)
+  <span class="keyword">ON CONFLICT</span> (email) <span class="keyword">DO UPDATE SET</span> name = EXCLUDED.name;
+</pre>
+
+    <h2 id="update">UPDATE</h2>
+
+    <div class="callout danger">
+        <strong>WHERE clause is required.</strong> UPDATE without WHERE returns <code>UNSAFE_QUERY</code> (HTTP 400). Use <code>WHERE 1=1</code> to update all rows intentionally.
+    </div>
+
+<pre>
+<span class="comment">-- Update specific row</span>
+<span class="keyword">UPDATE</span> users <span class="keyword">SET</span> email = <span class="string">'newemail@example.com'</span> <span class="keyword">WHERE</span> id = <span class="number">1</span>;
+
+<span class="comment">-- Update multiple columns</span>
+<span class="keyword">UPDATE</span> users <span class="keyword">SET</span> name = <span class="string">'Alice Smith'</span>, age = <span class="number">31</span> <span class="keyword">WHERE</span> id = <span class="number">1</span>;
+
+<span class="comment">-- Update all rows (explicit)</span>
+<span class="keyword">UPDATE</span> users <span class="keyword">SET</span> is_active = <span class="keyword">false</span> <span class="keyword">WHERE</span> <span class="number">1</span>=<span class="number">1</span>;
+
+<span class="comment">-- Update with RETURNING</span>
+<span class="keyword">UPDATE</span> users <span class="keyword">SET</span> name = <span class="string">'Updated'</span> <span class="keyword">WHERE</span> id = <span class="number">1</span> <span class="keyword">RETURNING</span> *;
+
+<span class="comment">-- Update JSONB field</span>
+<span class="keyword">UPDATE</span> documents
+  <span class="keyword">SET</span> data = jsonb_set(data, <span class="string">'{status}'</span>, <span class="string">'"completed"'</span>)
+  <span class="keyword">WHERE</span> id = <span class="number">1</span>;
+</pre>
+
+    <h2 id="delete">DELETE</h2>
+
+    <div class="callout danger">
+        <strong>WHERE clause is required.</strong> DELETE without WHERE returns <code>UNSAFE_QUERY</code> (HTTP 400). Use <code>WHERE 1=1</code> to delete all rows intentionally.
+    </div>
+
+<pre>
+<span class="comment">-- Delete specific row</span>
+<span class="keyword">DELETE FROM</span> users <span class="keyword">WHERE</span> id = <span class="number">1</span>;
+
+<span class="comment">-- Delete with condition</span>
+<span class="keyword">DELETE FROM</span> messages <span class="keyword">WHERE</span> created_at &lt; <span class="string">'2024-01-01'</span>;
+
+<span class="comment">-- Delete all rows (explicit)</span>
+<span class="keyword">DELETE FROM</span> temp_data <span class="keyword">WHERE</span> <span class="number">1</span>=<span class="number">1</span>;
+
+<span class="comment">-- Delete with RETURNING</span>
+<span class="keyword">DELETE FROM</span> users <span class="keyword">WHERE</span> id = <span class="number">1</span> <span class="keyword">RETURNING</span> id, name;
+</pre>
+
+    <h2 id="alter-table">ALTER TABLE</h2>
+
+<pre>
+<span class="comment">-- Add column</span>
+<span class="keyword">ALTER TABLE</span> users <span class="keyword">ADD COLUMN</span> phone <span class="type">TEXT</span>;
+
+<span class="comment">-- Drop column</span>
+<span class="keyword">ALTER TABLE</span> users <span class="keyword">DROP COLUMN</span> phone;
+
+<span class="comment">-- Rename column</span>
+<span class="keyword">ALTER TABLE</span> users <span class="keyword">RENAME COLUMN</span> name <span class="keyword">TO</span> full_name;
+
+<span class="comment">-- Change column type</span>
+<span class="keyword">ALTER TABLE</span> users <span class="keyword">ALTER COLUMN</span> age <span class="keyword">TYPE</span> <span class="type">BIGINT</span>;
+
+<span class="comment">-- Add constraint</span>
+<span class="keyword">ALTER TABLE</span> users <span class="keyword">ADD CONSTRAINT</span> email_unique <span class="keyword">UNIQUE</span> (email);
+
+<span class="comment">-- Set default</span>
+<span class="keyword">ALTER TABLE</span> users <span class="keyword">ALTER COLUMN</span> is_active <span class="keyword">SET DEFAULT</span> <span class="keyword">true</span>;
+
+<span class="comment">-- Rename table</span>
+<span class="keyword">ALTER TABLE</span> users <span class="keyword">RENAME TO</span> accounts;
+</pre>
+
+    <h2 id="drop-table">DROP TABLE</h2>
+
+<pre>
+<span class="comment">-- Drop table</span>
+<span class="keyword">DROP TABLE</span> users;
+
+<span class="comment">-- Drop if exists (no error if missing)</span>
+<span class="keyword">DROP TABLE IF EXISTS</span> users;
+
+<span class="comment">-- Drop with cascading foreign keys</span>
+<span class="keyword">DROP TABLE IF EXISTS</span> users <span class="keyword">CASCADE</span>;
+</pre>
+
+    <h2 id="truncate">TRUNCATE</h2>
+
+<pre>
+<span class="comment">-- Remove all rows (faster than DELETE WHERE 1=1)</span>
+<span class="keyword">TRUNCATE TABLE</span> users;
+
+<span class="comment">-- Truncate with cascade</span>
+<span class="keyword">TRUNCATE TABLE</span> users <span class="keyword">CASCADE</span>;
+
+<span class="comment">-- Truncate and reset auto-increment</span>
+<span class="keyword">TRUNCATE TABLE</span> users <span class="keyword">RESTART IDENTITY</span>;
+</pre>
+
+    <!-- ============================================================ -->
+    <!-- JSONB                                                         -->
+    <!-- ============================================================ -->
+
+    <h2 id="jsonb-operators">JSONB Operators</h2>
+
+    <p>VibeSQL supports all 9 PostgreSQL JSONB operators through standard SQL syntax.</p>
+
+    <h3><code>-></code> Get Field as JSON</h3>
+    <p>Returns a JSON element by key (object) or index (array). Result is JSON type.</p>
+<pre>
+<span class="keyword">SELECT</span> data<span class="keyword">-></span><span class="string">'name'</span> <span class="keyword">FROM</span> documents;
+<span class="comment">-- Returns: "Alice" (as JSON string, with quotes)</span>
+
+<span class="keyword">SELECT</span> data<span class="keyword">-></span><span class="string">'tags'</span><span class="keyword">-></span><span class="number">0</span> <span class="keyword">FROM</span> documents;
+<span class="comment">-- Returns: "staff" (first array element)</span>
+
+<span class="keyword">SELECT</span> data<span class="keyword">-></span><span class="string">'address'</span> <span class="keyword">FROM</span> documents;
+<span class="comment">-- Returns: {"city": "Portland", "state": "OR"}</span>
+</pre>
+
+    <h3><code>->></code> Get Field as Text</h3>
+    <p>Returns a JSON element as plain text. The most common operator for extracting values.</p>
+<pre>
+<span class="keyword">SELECT</span> data<span class="keyword">->></span><span class="string">'name'</span> <span class="keyword">FROM</span> documents;
+<span class="comment">-- Returns: Alice (as text, no quotes)</span>
+
+<span class="keyword">SELECT</span> data<span class="keyword">->></span><span class="string">'age'</span> <span class="keyword">FROM</span> documents;
+<span class="comment">-- Returns: 30 (as text)</span>
+
+<span class="keyword">SELECT</span> data<span class="keyword">-></span><span class="string">'address'</span><span class="keyword">->></span><span class="string">'city'</span> <span class="keyword">FROM</span> documents;
+<span class="comment">-- Returns: Portland</span>
+</pre>
+
+    <h3><code>#></code> Get Path as JSON</h3>
+    <p>Navigates a JSON path and returns JSON. Path is specified as a text array.</p>
+<pre>
+<span class="keyword">SELECT</span> data <span class="keyword">#></span> <span class="string">'{address,city}'</span> <span class="keyword">FROM</span> documents;
+<span class="comment">-- Returns: "Portland" (as JSON string)</span>
+
+<span class="keyword">SELECT</span> data <span class="keyword">#></span> <span class="string">'{tags,0}'</span> <span class="keyword">FROM</span> documents;
+<span class="comment">-- Returns: "staff" (as JSON string)</span>
+</pre>
+
+    <h3><code>#>></code> Get Path as Text</h3>
+    <p>Navigates a JSON path and returns text.</p>
+<pre>
+<span class="keyword">SELECT</span> data <span class="keyword">#>></span> <span class="string">'{address,city}'</span> <span class="keyword">FROM</span> documents;
+<span class="comment">-- Returns: Portland (as text)</span>
+
+<span class="keyword">SELECT</span> data <span class="keyword">#>></span> <span class="string">'{address,state}'</span> <span class="keyword">FROM</span> documents;
+<span class="comment">-- Returns: OR</span>
+</pre>
+
+    <h3><code>@></code> Contains</h3>
+    <p>Tests if the left JSONB value contains the right JSONB value. Ideal for filtering.</p>
+<pre>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> documents <span class="keyword">WHERE</span> data <span class="keyword">@></span> <span class="string">'{"role": "admin"}'</span>;
+<span class="comment">-- Rows where data contains role=admin</span>
+
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> documents <span class="keyword">WHERE</span> data <span class="keyword">@></span> <span class="string">'{"tags": ["manager"]}'</span>;
+<span class="comment">-- Rows where tags array contains "manager"</span>
+
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> documents <span class="keyword">WHERE</span> data<span class="keyword">-></span><span class="string">'address'</span> <span class="keyword">@></span> <span class="string">'{"state": "OR"}'</span>;
+<span class="comment">-- Rows where address.state = "OR"</span>
+</pre>
+
+    <h3><code>&lt;@</code> Contained By</h3>
+    <p>Tests if the left JSONB value is contained by the right. Reverse of <code>@></code>.</p>
+<pre>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> documents
+  <span class="keyword">WHERE</span> <span class="string">'{"role": "admin", "name": "Alice"}'</span> <span class="keyword">&lt;@</span> data;
+<span class="comment">-- Rows where data contains both role=admin AND name=Alice</span>
+</pre>
+
+    <h3><code>?</code> Key Exists</h3>
+    <p>Tests if a key exists in the top-level of a JSONB object.</p>
+<pre>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> documents <span class="keyword">WHERE</span> data <span class="keyword">?</span> <span class="string">'name'</span>;
+<span class="comment">-- Rows that have a "name" key</span>
+
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> documents <span class="keyword">WHERE</span> data <span class="keyword">?</span> <span class="string">'phone'</span>;
+<span class="comment">-- Rows that have a "phone" key</span>
+</pre>
+
+    <h3><code>?|</code> Any Key Exists</h3>
+    <p>Tests if any of the given keys exist.</p>
+<pre>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> documents
+  <span class="keyword">WHERE</span> data <span class="keyword">?|</span> array[<span class="string">'phone'</span>, <span class="string">'email'</span>, <span class="string">'name'</span>];
+<span class="comment">-- Rows with at least one of: phone, email, or name</span>
+</pre>
+
+    <h3><code>?&</code> All Keys Exist</h3>
+    <p>Tests if all of the given keys exist.</p>
+<pre>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> documents
+  <span class="keyword">WHERE</span> data <span class="keyword">?&amp;</span> array[<span class="string">'name'</span>, <span class="string">'age'</span>, <span class="string">'role'</span>];
+<span class="comment">-- Rows that have ALL of: name, age, and role</span>
+</pre>
+
+    <h3>Operator Summary</h3>
+
+    <table>
+        <tr><th>Operator</th><th>Returns</th><th>Use When</th></tr>
+        <tr><td><code>-></code></td><td>JSONB</td><td>You need JSON for further operations or chaining</td></tr>
+        <tr><td><code>->></code></td><td>text</td><td>You need the value as a plain string</td></tr>
+        <tr><td><code>#></code></td><td>JSONB</td><td>You need a nested value as JSON via path</td></tr>
+        <tr><td><code>#>></code></td><td>text</td><td>You need a nested value as text via path</td></tr>
+        <tr><td><code>@></code></td><td>boolean</td><td>Filtering: left contains right</td></tr>
+        <tr><td><code>&lt;@</code></td><td>boolean</td><td>Filtering: left is contained by right</td></tr>
+        <tr><td><code>?</code></td><td>boolean</td><td>Check if a single key exists</td></tr>
+        <tr><td><code>?|</code></td><td>boolean</td><td>Check if any key in array exists</td></tr>
+        <tr><td><code>?&</code></td><td>boolean</td><td>Check if all keys in array exist</td></tr>
+    </table>
+
+    <h2 id="jsonb-patterns">Common JSONB Patterns</h2>
+
+<pre>
+<span class="comment">-- Filter by nested value</span>
+<span class="keyword">SELECT</span> data<span class="keyword">->></span><span class="string">'name'</span> <span class="keyword">AS</span> name
+  <span class="keyword">FROM</span> documents
+  <span class="keyword">WHERE</span> data<span class="keyword">-></span><span class="string">'address'</span><span class="keyword">->></span><span class="string">'city'</span> = <span class="string">'Portland'</span>;
+
+<span class="comment">-- Sort by JSONB field (cast to int for numeric sort)</span>
+<span class="keyword">SELECT</span> data<span class="keyword">->></span><span class="string">'name'</span> <span class="keyword">AS</span> name, (data<span class="keyword">->></span><span class="string">'age'</span>)::<span class="type">int</span> <span class="keyword">AS</span> age
+  <span class="keyword">FROM</span> documents
+  <span class="keyword">ORDER BY</span> (data<span class="keyword">->></span><span class="string">'age'</span>)::<span class="type">int</span> <span class="keyword">DESC</span>;
+
+<span class="comment">-- Count by JSONB field</span>
+<span class="keyword">SELECT</span> data<span class="keyword">->></span><span class="string">'role'</span> <span class="keyword">AS</span> role, COUNT(*) <span class="keyword">AS</span> count
+  <span class="keyword">FROM</span> documents
+  <span class="keyword">GROUP BY</span> data<span class="keyword">->></span><span class="string">'role'</span>;
+
+<span class="comment">-- Check array contains a specific value</span>
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> documents
+  <span class="keyword">WHERE</span> data<span class="keyword">-></span><span class="string">'tags'</span> <span class="keyword">@></span> <span class="string">'"manager"'</span>;
+
+<span class="comment">-- Extract multiple fields</span>
+<span class="keyword">SELECT</span>
+  data<span class="keyword">->></span><span class="string">'name'</span> <span class="keyword">AS</span> name,
+  data<span class="keyword">->></span><span class="string">'role'</span> <span class="keyword">AS</span> role,
+  data <span class="keyword">#>></span> <span class="string">'{address,city}'</span> <span class="keyword">AS</span> city
+  <span class="keyword">FROM</span> documents;
+
+<span class="comment">-- Multiple JSONB conditions</span>
+<span class="keyword">SELECT</span> data<span class="keyword">->></span><span class="string">'name'</span> <span class="keyword">AS</span> name
+  <span class="keyword">FROM</span> documents
+  <span class="keyword">WHERE</span> data <span class="keyword">@></span> <span class="string">'{"role": "admin"}'</span>
+    <span class="keyword">AND</span> data <span class="keyword">?</span> <span class="string">'address'</span>
+    <span class="keyword">AND</span> (data<span class="keyword">->></span><span class="string">'age'</span>)::<span class="type">int</span> > <span class="number">25</span>;
+</pre>
+
+    <h2 id="jsonb-casting">JSONB Type Casting</h2>
+
+    <p>The <code>->></code> and <code>#>></code> operators always return <code>text</code>. Cast to other types as needed:</p>
+
+<pre>
+(data<span class="keyword">->></span><span class="string">'age'</span>)::<span class="type">int</span>             <span class="comment">-- Cast to integer</span>
+(data<span class="keyword">->></span><span class="string">'price'</span>)::<span class="type">numeric</span>       <span class="comment">-- Cast to decimal</span>
+(data<span class="keyword">->></span><span class="string">'active'</span>)::<span class="type">boolean</span>      <span class="comment">-- Cast to boolean</span>
+(data<span class="keyword">->></span><span class="string">'created'</span>)::<span class="type">timestamp</span>   <span class="comment">-- Cast to timestamp</span>
+(data<span class="keyword">->></span><span class="string">'score'</span>)::<span class="type">double precision</span> <span class="comment">-- Cast to float</span>
+</pre>
+
+    <!-- ============================================================ -->
+    <!-- SAFETY & LIMITS                                               -->
+    <!-- ============================================================ -->
+
+    <h2 id="safety-rules">Safety Rules</h2>
+
+    <p>VibeSQL enforces safety rules to prevent accidental data loss:</p>
+
+    <table>
+        <tr><th>Rule</th><th>Applies To</th><th>Error Code</th></tr>
+        <tr>
+            <td>WHERE clause required</td>
+            <td><code>UPDATE</code>, <code>DELETE</code></td>
+            <td><code>UNSAFE_QUERY</code> (400)</td>
+        </tr>
+        <tr>
+            <td>Must start with valid SQL keyword</td>
+            <td>All queries</td>
+            <td><code>INVALID_SQL</code> (400)</td>
+        </tr>
+        <tr>
+            <td>Query size &le; 10 KB</td>
+            <td>All queries</td>
+            <td><code>QUERY_TOO_LARGE</code> (413)</td>
+        </tr>
+    </table>
+
+    <div class="callout">
+        <strong>Intentional bulk operations:</strong> To UPDATE or DELETE all rows, explicitly use <code>WHERE 1=1</code>. This confirms the operation is intentional.
+    </div>
+
+    <h2 id="query-limits">Query Limits <span class="edition-badge edition-micro">Micro</span></h2>
+
+    <p>VibeSQL Micro enforces fixed limits. These are hardcoded and not configurable.</p>
+
+    <table>
+        <tr><th>Limit</th><th>Value</th><th>Error Code</th></tr>
+        <tr><td>Max query size</td><td><strong>10 KB</strong> (10,240 bytes)</td><td><code>QUERY_TOO_LARGE</code> (413)</td></tr>
+        <tr><td>Max result rows</td><td><strong>1,000 rows</strong></td><td><code>RESULT_TOO_LARGE</code> (413)</td></tr>
+        <tr><td>Query timeout</td><td><strong>5 seconds</strong></td><td><code>QUERY_TIMEOUT</code> (408)</td></tr>
+        <tr><td>Max concurrent connections</td><td><strong>2</strong></td><td>&mdash;</td></tr>
+        <tr><td>Connection pool max</td><td><strong>5</strong></td><td>&mdash;</td></tr>
+        <tr><td>Idle connections</td><td><strong>2</strong></td><td>&mdash;</td></tr>
+        <tr><td>Connection max lifetime</td><td><strong>1 hour</strong></td><td>&mdash;</td></tr>
+        <tr><td>HTTP read timeout</td><td><strong>10 seconds</strong></td><td>&mdash;</td></tr>
+        <tr><td>HTTP write timeout</td><td><strong>10 seconds</strong></td><td>&mdash;</td></tr>
+        <tr><td>HTTP header timeout</td><td><strong>5 seconds</strong></td><td>&mdash;</td></tr>
+    </table>
+
+    <h2 id="tier-limits">Tier-Based Limits <span class="edition-badge edition-server">Server</span></h2>
+
+    <p>VibeSQL Server supports configurable, tier-based limits. Timeouts and row limits are set per tenant tier.</p>
+
+    <h3>Default Timeouts by Tier</h3>
+
+    <table>
+        <tr><th>Tier</th><th>Timeout</th><th>Config Key</th></tr>
+        <tr><td><code>free</code></td><td><strong>2 seconds</strong></td><td><code>VibeQueryTimeouts:FreeSeconds</code></td></tr>
+        <tr><td><code>starter</code></td><td><strong>5 seconds</strong></td><td><code>VibeQueryTimeouts:StarterSeconds</code></td></tr>
+        <tr><td><code>pro</code></td><td><strong>10 seconds</strong></td><td><code>VibeQueryTimeouts:ProSeconds</code></td></tr>
+        <tr><td><code>enterprise</code></td><td><strong>30 seconds</strong></td><td><code>VibeQueryTimeouts:EnterpriseSeconds</code></td></tr>
+        <tr><td><em>(default / unspecified)</em></td><td><strong>5 seconds</strong></td><td><code>VibeQueryTimeouts:DefaultSeconds</code></td></tr>
+    </table>
+
+    <h3>Configurable Limits</h3>
+
+    <table>
+        <tr><th>Setting</th><th>Config Key</th><th>Default</th></tr>
+        <tr><td>Max result rows</td><td><code>VibeQueryLimits:MaxResultRows</code></td><td>1,000</td></tr>
+        <tr><td>Max query size</td><td>Hardcoded</td><td>10 KB (10,240 bytes)</td></tr>
+    </table>
+
+    <p>The client tier is passed via the <code>X-Vibe-Client-Tier</code> HTTP header during HMAC authentication.</p>
+
+    <!-- ============================================================ -->
+    <!-- ERROR REFERENCE                                               -->
+    <!-- ============================================================ -->
+
+    <h2 id="error-format">Error Format</h2>
+
+    <p>All errors return a JSON response with <code>"success": false</code> and an <code>error</code> object:</p>
+
+<pre>
+{
+  <span class="string">"success"</span>: <span class="keyword">false</span>,
+  <span class="string">"error"</span>: {
+    <span class="string">"code"</span>: <span class="string">"ERROR_CODE"</span>,
+    <span class="string">"message"</span>: <span class="string">"Human-readable message"</span>,
+    <span class="string">"detail"</span>: <span class="string">"Additional context"</span>
+  }
+}
+</pre>
+
+    <h2 id="error-codes">Error Codes</h2>
+
+    <h3>INVALID_SQL <code>HTTP 400</code></h3>
+    <p>SQL query has syntax errors, references undefined tables/columns, uses unsupported functions, or doesn't start with a valid SQL keyword.</p>
+    <p><strong>Triggers:</strong> SQL syntax errors, undefined table (<code>42P01</code>), undefined column (<code>42703</code>), undefined function (<code>42883</code>), data type mismatch (<code>42804</code>), invalid keyword.</p>
+    <p><strong>Resolution:</strong> Check SQL syntax. Verify table and column names exist. Ensure query starts with one of: SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER, TRUNCATE.</p>
+
+    <h3>MISSING_REQUIRED_FIELD <code>HTTP 400</code></h3>
+    <p>The <code>sql</code> field is missing or empty in the request body.</p>
+<pre>
+<span class="comment">// Wrong: using "query" instead of "sql"</span>
+{"query": "SELECT 1"}
+
+<span class="comment">// Correct</span>
+{"sql": "SELECT 1"}
+</pre>
+
+    <h3>UNSAFE_QUERY <code>HTTP 400</code></h3>
+    <p>An UPDATE or DELETE statement is missing a WHERE clause.</p>
+<pre>
+<span class="comment">// This fails:</span>
+{"sql": "DELETE FROM users"}
+
+<span class="comment">// This works (intentional delete-all):</span>
+{"sql": "DELETE FROM users WHERE 1=1"}
+</pre>
+
+    <h3>QUERY_TIMEOUT <code>HTTP 408</code></h3>
+    <p>Query exceeded the maximum execution time. Default is 5 seconds (Micro) or tier-based (Server).</p>
+    <p><strong>Resolution:</strong> Optimize the query (add indexes, reduce data scanned), add LIMIT, break into smaller operations.</p>
+
+    <h3>QUERY_TOO_LARGE <code>HTTP 413</code></h3>
+    <p>SQL query exceeds the 10 KB (10,240 bytes) size limit.</p>
+    <p><strong>Resolution:</strong> Reduce query size. Break large INSERT statements into multiple smaller requests.</p>
+
+    <h3>RESULT_TOO_LARGE <code>HTTP 413</code></h3>
+    <p>Query result exceeds 1,000 rows.</p>
+    <p><strong>Resolution:</strong> Add <code>LIMIT 1000</code> (or smaller) to your query. Use <code>OFFSET</code> for pagination. Add WHERE clauses to filter results.</p>
+
+    <h3>DOCUMENT_TOO_LARGE <code>HTTP 413</code></h3>
+    <p>A JSONB document or statement exceeds PostgreSQL's internal limits.</p>
+    <p><strong>Triggers:</strong> PostgreSQL SQLSTATE <code>54000</code> (program_limit_exceeded), <code>54001</code> (statement_too_complex).</p>
+    <p><strong>Resolution:</strong> Reduce JSONB document size. Simplify deeply nested JSON structures. Break large documents into smaller related records.</p>
+
+    <h3>INTERNAL_ERROR <code>HTTP 500</code></h3>
+    <p>Unexpected server error not covered by other error codes.</p>
+    <p><strong>Resolution:</strong> Check server logs for details. Retry the request. If persistent, restart the server.</p>
+
+    <h3>SERVICE_UNAVAILABLE <code>HTTP 503</code></h3>
+    <p>The server is not ready to handle requests (still starting up).</p>
+    <p><strong>Resolution:</strong> Wait for the server to finish starting. Check that the process is running.</p>
+
+    <h3>DATABASE_UNAVAILABLE <code>HTTP 503</code></h3>
+    <p>The embedded (Micro) or external (Server) PostgreSQL instance is unreachable.</p>
+    <p><strong>Triggers:</strong> PostgreSQL process crashed, connection failure (<code>08xxx</code>), insufficient resources (<code>53xxx</code>), too many connections (<code>53300</code>).</p>
+    <p><strong>Resolution:</strong> Restart the server. Check disk space (PostgreSQL needs space for WAL files). Check if another process is using the PostgreSQL port.</p>
+
+    <h3>HTTP Status Summary</h3>
+
+    <table>
+        <tr><th>Status</th><th>Meaning</th></tr>
+        <tr><td><code>200</code></td><td>Query executed successfully</td></tr>
+        <tr><td><code>400</code></td><td>Invalid SQL, missing field, or unsafe query</td></tr>
+        <tr><td><code>401</code></td><td>HMAC authentication failed (Server only)</td></tr>
+        <tr><td><code>408</code></td><td>Query timed out</td></tr>
+        <tr><td><code>413</code></td><td>Query or result too large</td></tr>
+        <tr><td><code>500</code></td><td>Internal server error</td></tr>
+        <tr><td><code>503</code></td><td>Database or service unavailable</td></tr>
+    </table>
+
+    <h2 id="sqlstate-mapping">PostgreSQL SQLSTATE Mapping</h2>
+
+    <p>VibeSQL maps PostgreSQL SQLSTATE codes to VibeSQL error codes:</p>
+
+    <table>
+        <tr><th>SQLSTATE</th><th>VibeSQL Code</th><th>PostgreSQL Description</th></tr>
+        <tr><td><code>42601</code></td><td><code>INVALID_SQL</code></td><td>syntax_error</td></tr>
+        <tr><td><code>42703</code></td><td><code>INVALID_SQL</code></td><td>undefined_column</td></tr>
+        <tr><td><code>42P01</code></td><td><code>INVALID_SQL</code></td><td>undefined_table</td></tr>
+        <tr><td><code>42P02</code></td><td><code>INVALID_SQL</code></td><td>undefined_parameter</td></tr>
+        <tr><td><code>42883</code></td><td><code>INVALID_SQL</code></td><td>undefined_function</td></tr>
+        <tr><td><code>42804</code></td><td><code>INVALID_SQL</code></td><td>datatype_mismatch</td></tr>
+        <tr><td><code>57014</code></td><td><code>QUERY_TIMEOUT</code></td><td>query_canceled</td></tr>
+        <tr><td><code>53000</code></td><td><code>DATABASE_UNAVAILABLE</code></td><td>insufficient_resources</td></tr>
+        <tr><td><code>53100</code></td><td><code>DATABASE_UNAVAILABLE</code></td><td>disk_full</td></tr>
+        <tr><td><code>53200</code></td><td><code>DATABASE_UNAVAILABLE</code></td><td>out_of_memory</td></tr>
+        <tr><td><code>53300</code></td><td><code>DATABASE_UNAVAILABLE</code></td><td>too_many_connections</td></tr>
+        <tr><td><code>53400</code></td><td><code>DATABASE_UNAVAILABLE</code></td><td>configuration_limit_exceeded</td></tr>
+        <tr><td><code>08000</code></td><td><code>DATABASE_UNAVAILABLE</code></td><td>connection_exception</td></tr>
+        <tr><td><code>08003</code></td><td><code>DATABASE_UNAVAILABLE</code></td><td>connection_does_not_exist</td></tr>
+        <tr><td><code>08006</code></td><td><code>DATABASE_UNAVAILABLE</code></td><td>connection_failure</td></tr>
+        <tr><td><code>08001</code></td><td><code>DATABASE_UNAVAILABLE</code></td><td>sqlclient_unable_to_establish</td></tr>
+        <tr><td><code>08004</code></td><td><code>DATABASE_UNAVAILABLE</code></td><td>sqlserver_rejected_establishment</td></tr>
+        <tr><td><code>54000</code></td><td><code>DOCUMENT_TOO_LARGE</code></td><td>program_limit_exceeded</td></tr>
+        <tr><td><code>54001</code></td><td><code>DOCUMENT_TOO_LARGE</code></td><td>statement_too_complex</td></tr>
+    </table>
+
+    <!-- ============================================================ -->
+    <!-- CONFIGURATION                                                 -->
+    <!-- ============================================================ -->
+
+    <h2 id="micro-config">Micro Configuration <span class="edition-badge edition-micro">Micro</span></h2>
+
+    <h3>Environment Variables</h3>
+
+    <table>
+        <tr><th>Variable</th><th>Default</th><th>Description</th></tr>
+        <tr><td><code>VIBE_BIND_HOST</code></td><td><code>127.0.0.1</code></td><td>Host address to bind the HTTP server. Set to <code>0.0.0.0</code> for external access.</td></tr>
+        <tr><td><code>POSTGRES_BIN</code></td><td>(embedded)</td><td>Path to external PostgreSQL binaries (overrides embedded).</td></tr>
+    </table>
+
+    <h3>Ports</h3>
+
+    <table>
+        <tr><th>Port</th><th>Protocol</th><th>Description</th></tr>
+        <tr><td><code>5173</code></td><td>HTTP</td><td>VibeSQL API endpoint</td></tr>
+        <tr><td><code>5433</code></td><td>PostgreSQL</td><td>Internal embedded PostgreSQL (not for direct access)</td></tr>
+    </table>
+
+    <h3>Data Storage</h3>
+    <p>Data is stored in <code>./vibe-data/</code> relative to the working directory where <code>vibe serve</code> is run. This directory contains PostgreSQL data files and is persistent across restarts.</p>
+
+    <div class="callout warning">
+        <strong>Backup:</strong> To back up your data, stop the server and copy the entire <code>vibe-data</code> directory. To reset, delete the directory and restart.
+    </div>
+
+    <h2 id="server-config">Server Configuration <span class="edition-badge edition-server">Server</span></h2>
+
+    <h3>appsettings.json Keys</h3>
+
+    <table>
+        <tr><th>Key</th><th>Default</th><th>Description</th></tr>
+        <tr><td><code>VibeQueryTimeouts:DefaultSeconds</code></td><td><code>5</code></td><td>Default query timeout (when tier is not specified)</td></tr>
+        <tr><td><code>VibeQueryTimeouts:FreeSeconds</code></td><td><code>2</code></td><td>Timeout for <code>free</code> tier</td></tr>
+        <tr><td><code>VibeQueryTimeouts:StarterSeconds</code></td><td><code>5</code></td><td>Timeout for <code>starter</code> tier</td></tr>
+        <tr><td><code>VibeQueryTimeouts:ProSeconds</code></td><td><code>10</code></td><td>Timeout for <code>pro</code> tier</td></tr>
+        <tr><td><code>VibeQueryTimeouts:EnterpriseSeconds</code></td><td><code>30</code></td><td>Timeout for <code>enterprise</code> tier</td></tr>
+        <tr><td><code>VibeQueryLimits:MaxResultRows</code></td><td><code>1000</code></td><td>Maximum rows per query result</td></tr>
+        <tr><td><code>VibeSQL:DevBypassHmac</code></td><td><code>false</code></td><td>Bypass HMAC auth in development (never in production)</td></tr>
+    </table>
+
+    <!-- ============================================================ -->
+    <!-- AUTHENTICATION                                                -->
+    <!-- ============================================================ -->
+
+    <h2 id="hmac-auth">HMAC Authentication <span class="edition-badge edition-server">Server</span></h2>
+
+    <p>VibeSQL Server authenticates requests using HMAC-SHA256 signatures. Micro does not require authentication (localhost only).</p>
+
+    <h3>Required Headers</h3>
+
+    <table>
+        <tr><th>Header</th><th>Value</th><th>Description</th></tr>
+        <tr><td><code>X-Vibe-Timestamp</code></td><td>Unix epoch (seconds)</td><td>Current time as a Unix timestamp. Must be within 5 minutes of server time.</td></tr>
+        <tr><td><code>X-Vibe-Signature</code></td><td>Base64 string</td><td>HMAC-SHA256 signature of the string-to-sign.</td></tr>
+    </table>
+
+    <h3>Optional Headers</h3>
+
+    <table>
+        <tr><th>Header</th><th>Description</th></tr>
+        <tr><td><code>X-Vibe-Service</code></td><td>Service identifier (for logging and audit trails)</td></tr>
+        <tr><td><code>X-Vibe-Client-Tier</code></td><td>Client tier for timeout configuration (<code>free</code>, <code>starter</code>, <code>pro</code>, <code>enterprise</code>)</td></tr>
+        <tr><td><code>X-Vibe-Tier-Claims</code></td><td>Comma-separated tier claims</td></tr>
+    </table>
+
+    <h3>Signature Computation</h3>
+
+    <p>1. Build the string to sign:</p>
+<pre>
+{timestamp}|{method}|{path}
+</pre>
+    <p>Example: <code>1706745600|POST|/v1/query</code></p>
+
+    <p>2. Compute HMAC-SHA256 using your signing key (Base64-decoded):</p>
+<pre>
+<span class="keyword">const</span> stringToSign = <span class="string">`${timestamp}|${method}|${path}`</span>;
+<span class="keyword">const</span> key = base64Decode(signingKey);
+<span class="keyword">const</span> signature = base64Encode(hmacSHA256(key, stringToSign));
+</pre>
+
+    <p>3. Include in request headers:</p>
+<pre>
+curl -X POST http://your-server/v1/query \
+  -H "Content-Type: application/json" \
+  -H "X-Vibe-Timestamp: 1706745600" \
+  -H "X-Vibe-Signature: aB3dEf...base64...==" \
+  -d '{"sql": "SELECT 1"}'
+</pre>
+
+    <h3>Timing Constraints</h3>
+
+    <table>
+        <tr><th>Constraint</th><th>Value</th><th>Error</th></tr>
+        <tr><td>Max timestamp age</td><td>5 minutes</td><td><code>TIMESTAMP_EXPIRED</code> (401)</td></tr>
+        <tr><td>Max clock skew (future)</td><td>1 minute</td><td><code>TIMESTAMP_FUTURE</code> (401)</td></tr>
+    </table>
+
+    <h3>Auth Error Codes</h3>
+
+    <table>
+        <tr><th>Code</th><th>HTTP</th><th>Description</th></tr>
+        <tr><td><code>HMAC_REQUIRED</code></td><td>401</td><td>Missing X-Vibe-Timestamp or X-Vibe-Signature headers</td></tr>
+        <tr><td><code>INVALID_TIMESTAMP</code></td><td>401</td><td>Timestamp is not a valid number</td></tr>
+        <tr><td><code>TIMESTAMP_EXPIRED</code></td><td>401</td><td>Request timestamp is more than 5 minutes old</td></tr>
+        <tr><td><code>TIMESTAMP_FUTURE</code></td><td>401</td><td>Request timestamp is more than 1 minute in the future</td></tr>
+        <tr><td><code>SIGNATURE_MISMATCH</code></td><td>401</td><td>Computed signature does not match the provided signature</td></tr>
+    </table>
+
+    <h2 id="public-endpoints">Public Endpoints <span class="edition-badge edition-server">Server</span></h2>
+
+    <p>These endpoints do not require HMAC authentication:</p>
+
+    <table>
+        <tr><th>Path</th><th>Description</th></tr>
+        <tr><td><code>/health</code></td><td>Health check</td></tr>
+        <tr><td><code>/v1/health</code></td><td>Health check (versioned)</td></tr>
+        <tr><td><code>/swagger</code></td><td>Swagger UI</td></tr>
+        <tr><td><code>/swagger/index.html</code></td><td>Swagger UI</td></tr>
+        <tr><td><code>/swagger/v1/swagger.json</code></td><td>OpenAPI spec</td></tr>
+    </table>
+
+    <!-- ============================================================ -->
+    <!-- SCHEMA EVOLUTION                                              -->
+    <!-- ============================================================ -->
+
+    <h2 id="schema-versioning">Schema Versioning <span class="edition-badge edition-server">Server</span></h2>
+
+    <p>VibeSQL Server supports JSON Schema versioning and evolution for collections. Schemas are scoped by client (tenant) and collection.</p>
+
+    <h3>Schema Properties</h3>
+
+    <table>
+        <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        <tr><td><code>CollectionSchemaId</code></td><td>int</td><td>&mdash;</td><td>Primary key</td></tr>
+        <tr><td><code>ClientId</code></td><td>int</td><td>&mdash;</td><td>Tenant identifier (IDP client)</td></tr>
+        <tr><td><code>Collection</code></td><td>string</td><td><code>""</code></td><td>Collection name</td></tr>
+        <tr><td><code>JsonSchema</code></td><td>string?</td><td><code>null</code></td><td>JSON Schema definition</td></tr>
+        <tr><td><code>Version</code></td><td>int</td><td><code>1</code></td><td>Schema version (incremented on updates)</td></tr>
+        <tr><td><code>IsActive</code></td><td>bool</td><td><code>true</code></td><td>Whether this is the active schema version</td></tr>
+        <tr><td><code>IsSystem</code></td><td>bool</td><td><code>false</code></td><td>System collections are exempt from tier limits</td></tr>
+        <tr><td><code>IsLocked</code></td><td>bool</td><td><code>false</code></td><td>Locked schemas prevent structural modifications</td></tr>
+        <tr><td><code>CreatedAt</code></td><td>DateTimeOffset</td><td>&mdash;</td><td>Creation timestamp</td></tr>
+        <tr><td><code>UpdatedAt</code></td><td>DateTimeOffset?</td><td><code>null</code></td><td>Last update timestamp</td></tr>
+    </table>
+
+    <div class="callout">
+        <strong>Locked schemas:</strong> When <code>IsLocked = true</code>, structural changes (add, rename, delete fields) are blocked. Document CRUD (INSERT, UPDATE, DELETE) is still allowed.
+    </div>
+
+    <h2 id="migration-transforms">Migration Transforms <span class="edition-badge edition-server">Server</span></h2>
+
+    <p>Schema migrations define transforms applied to documents when migrating between schema versions. Transforms are defined in the JSON Schema under the <code>x-vibe-migrations</code> extension.</p>
+
+    <h3>Transform Definition</h3>
+<pre>
+{
+  <span class="string">"x-vibe-migrations"</span>: {
+    <span class="string">"1_to_2"</span>: [
+      {
+        <span class="string">"field"</span>: <span class="string">"price"</span>,
+        <span class="string">"transform"</span>: <span class="string">"multiply"</span>,
+        <span class="string">"args"</span>: <span class="number">100</span>,
+        <span class="string">"reason"</span>: <span class="string">"Convert dollars to cents"</span>
+      }
+    ]
+  }
+}
+</pre>
+
+    <h3>Available Transforms</h3>
+
+    <table>
+        <tr><th>Transform</th><th>Args</th><th>Description</th><th>Example</th></tr>
+        <tr>
+            <td><code>multiply</code></td>
+            <td>number</td>
+            <td>Multiplies a numeric field</td>
+            <td><code>{"field": "price", "transform": "multiply", "args": 100}</code></td>
+        </tr>
+        <tr>
+            <td><code>divide</code></td>
+            <td>number</td>
+            <td>Divides a numeric field (checks for zero divisor)</td>
+            <td><code>{"field": "price", "transform": "divide", "args": 100}</code></td>
+        </tr>
+        <tr>
+            <td><code>map</code></td>
+            <td>object (key&rarr;value)</td>
+            <td>Maps string values</td>
+            <td><code>{"field": "status", "transform": "map", "args": {"active": "enabled", "inactive": "disabled"}}</code></td>
+        </tr>
+        <tr>
+            <td><code>default</code></td>
+            <td>any</td>
+            <td>Sets a default value if null or missing</td>
+            <td><code>{"field": "role", "transform": "default", "args": "viewer"}</code></td>
+        </tr>
+        <tr>
+            <td><code>cast</code></td>
+            <td>string (target type)</td>
+            <td>Casts to a different type</td>
+            <td><code>{"field": "age", "transform": "cast", "args": "integer"}</code></td>
+        </tr>
+        <tr>
+            <td><code>rename</code></td>
+            <td>string (new name)</td>
+            <td>Renames the field</td>
+            <td><code>{"field": "name", "transform": "rename", "args": "full_name"}</code></td>
+        </tr>
+    </table>
+
+    <h3>Cast Target Types</h3>
+
+    <table>
+        <tr><th>Type String</th><th>Result</th></tr>
+        <tr><td><code>"int"</code> or <code>"integer"</code></td><td>Integer</td></tr>
+        <tr><td><code>"double"</code> or <code>"number"</code></td><td>Floating-point</td></tr>
+        <tr><td><code>"string"</code></td><td>String</td></tr>
+        <tr><td><code>"bool"</code> or <code>"boolean"</code></td><td>Boolean</td></tr>
+    </table>
+
+    <h2 id="compatibility">Compatibility Checks <span class="edition-badge edition-server">Server</span></h2>
+
+    <p>Before applying schema changes, VibeSQL checks compatibility between the current and proposed schema:</p>
+
+    <table>
+        <tr><th>Level</th><th>Description</th></tr>
+        <tr><td><code>FullyCompatible</code></td><td>No breaking changes. Safe to apply immediately.</td></tr>
+        <tr><td><code>ForwardCompatible</code></td><td>Changes exist but migration transforms are available. Documents will be migrated.</td></tr>
+        <tr><td><code>Breaking</code></td><td>Fields removed or types changed without migration transforms. Requires manual review.</td></tr>
+    </table>
+
+    <h3>Schema Change Types</h3>
+
+    <table>
+        <tr><th>Change</th><th>Description</th></tr>
+        <tr><td><code>Added</code></td><td>New field added to the schema</td></tr>
+        <tr><td><code>Removed</code></td><td>Existing field removed from the schema</td></tr>
+        <tr><td><code>TypeChanged</code></td><td>Field type changed (e.g., string &rarr; integer)</td></tr>
+    </table>
+
+    <!-- ============================================================ -->
+    <!-- SDK REFERENCE                                                 -->
+    <!-- ============================================================ -->
+
+    <h2 id="sdk-install">SDK Installation <span class="edition-badge edition-sdk">SDK</span></h2>
+
+<pre>
+npm install @vibe/client
+</pre>
+
+    <h3>Environment Variables</h3>
+
+    <table>
+        <tr><th>Variable</th><th>Required</th><th>Description</th></tr>
+        <tr><td><code>VIBE_API_URL</code> or <code>NEXT_PUBLIC_VIBE_API_URL</code></td><td>For direct mode</td><td>VibeSQL API URL (e.g., <code>http://127.0.0.1:5173</code>)</td></tr>
+        <tr><td><code>IDP_URL</code> or <code>NEXT_PUBLIC_IDP_URL</code></td><td>For proxy mode</td><td>Identity provider URL for proxied requests</td></tr>
+        <tr><td><code>VIBE_CLIENT_ID</code></td><td>For proxy mode</td><td>Client ID for multi-tenant routing</td></tr>
+        <tr><td><code>VIBE_HMAC_KEY</code></td><td>For Server auth</td><td>HMAC signing key (Base64)</td></tr>
+        <tr><td><code>VIBE_COLLECTION</code></td><td>No</td><td>Default collection name (default: <code>vibe_app</code>)</td></tr>
+    </table>
+
+    <h2 id="sdk-client">Client Setup <span class="edition-badge edition-sdk">SDK</span></h2>
+
+    <h3>createVibeClient()</h3>
+<pre>
+<span class="keyword">import</span> { createVibeClient } <span class="keyword">from</span> <span class="string">'@vibe/client'</span>;
+
+<span class="comment">// Direct mode (Micro or direct Server access)</span>
+<span class="keyword">const</span> client = createVibeClient({
+  apiUrl: <span class="string">'http://127.0.0.1:5173'</span>,
+});
+
+<span class="comment">// Proxy mode (through IDP)</span>
+<span class="keyword">const</span> client = createVibeClient({
+  idpUrl: <span class="string">'https://your-idp.example.com'</span>,
+  clientId: <span class="string">'your-client-id'</span>,
+  signingKey: <span class="string">'your-hmac-key-base64'</span>,
+});
+
+<span class="comment">// With all options</span>
+<span class="keyword">const</span> client = createVibeClient({
+  apiUrl: <span class="string">'http://127.0.0.1:5173'</span>,
+  idpUrl: <span class="string">'https://your-idp.example.com'</span>,
+  clientId: <span class="string">'your-client-id'</span>,
+  signingKey: <span class="string">'your-hmac-key-base64'</span>,
+  defaultCollection: <span class="string">'my_app'</span>,
+  timeout: <span class="number">30000</span>,       <span class="comment">// 30 seconds (default)</span>
+  debug: <span class="keyword">false</span>,          <span class="comment">// Enable debug logging</span>
+  getAccessToken: <span class="keyword">async</span> () => <span class="string">'bearer-token'</span>,
+});
+</pre>
+
+    <h3>Configuration Interface</h3>
+
+    <table>
+        <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+        <tr><td><code>apiUrl</code></td><td>string?</td><td>env var</td><td>Direct API URL</td></tr>
+        <tr><td><code>idpUrl</code></td><td>string?</td><td>env var</td><td>IDP proxy URL (enables proxy mode)</td></tr>
+        <tr><td><code>clientId</code></td><td>string?</td><td>env var</td><td>Client ID for multi-tenant</td></tr>
+        <tr><td><code>signingKey</code></td><td>string?</td><td>env var</td><td>HMAC signing key (Base64)</td></tr>
+        <tr><td><code>defaultCollection</code></td><td>string?</td><td><code>"vibe_app"</code></td><td>Default collection name</td></tr>
+        <tr><td><code>getAccessToken</code></td><td>() =&gt; Promise&lt;string | null&gt;</td><td>&mdash;</td><td>Bearer token provider</td></tr>
+        <tr><td><code>timeout</code></td><td>number?</td><td><code>30000</code></td><td>Request timeout in milliseconds</td></tr>
+        <tr><td><code>debug</code></td><td>boolean?</td><td><code>false</code></td><td>Enable debug logging</td></tr>
+    </table>
+
+    <h3>getVibeClient() — Singleton</h3>
+<pre>
+<span class="keyword">import</span> { getVibeClient } <span class="keyword">from</span> <span class="string">'@vibe/client'</span>;
+
+<span class="comment">// Auto-initializes using environment variables</span>
+<span class="keyword">const</span> client = getVibeClient();
+</pre>
+
+    <h3>Connection Modes</h3>
+    <p><strong>Direct mode:</strong> SDK connects directly to the VibeSQL API. Used with Micro or direct Server access.</p>
+    <p><strong>Proxy mode:</strong> SDK routes requests through the IDP proxy at <code>{idpUrl}/api/vibe/proxy</code>. Enabled when <code>idpUrl</code> is set. The proxy handles HMAC signing and multi-tenant routing.</p>
+
+    <h2 id="sdk-collections">Collection CRUD <span class="edition-badge edition-sdk">SDK</span></h2>
+
+<pre>
+<span class="keyword">const</span> users = client.collection&lt;User&gt;(<span class="string">'users'</span>);
+</pre>
+
+    <h3>list(options?)</h3>
+<pre>
+<span class="keyword">const</span> result = <span class="keyword">await</span> users.list({
+  limit: <span class="number">20</span>,              <span class="comment">// default: 20</span>
+  offset: <span class="number">0</span>,             <span class="comment">// default: 0</span>
+  orderBy: <span class="string">'created_at'</span>,
+  orderDir: <span class="string">'desc'</span>,      <span class="comment">// 'asc' | 'desc'</span>
+  filter: { role: <span class="string">'admin'</span> },
+});
+
+<span class="comment">// result.data       → User[]</span>
+<span class="comment">// result.pagination → { total, limit, offset, hasMore }</span>
+</pre>
+
+    <h3>get(id)</h3>
+<pre>
+<span class="keyword">const</span> user = <span class="keyword">await</span> users.get(<span class="number">1</span>);          <span class="comment">// by number ID</span>
+<span class="keyword">const</span> user = <span class="keyword">await</span> users.get(<span class="string">'abc-uuid'</span>); <span class="comment">// by string ID</span>
+<span class="comment">// Returns User | null (null if not found)</span>
+</pre>
+
+    <h3>create(data)</h3>
+<pre>
+<span class="keyword">const</span> newUser = <span class="keyword">await</span> users.create({
+  name: <span class="string">'Alice'</span>,
+  email: <span class="string">'alice@example.com'</span>,
+  role: <span class="string">'admin'</span>,
+});
+<span class="comment">// Returns the created User with server-assigned id</span>
+</pre>
+
+    <h3>update(id, data)</h3>
+<pre>
+<span class="keyword">const</span> updated = <span class="keyword">await</span> users.update(<span class="number">1</span>, {
+  name: <span class="string">'Alice Smith'</span>,
+});
+<span class="comment">// HTTP PATCH — partial update, returns updated User</span>
+</pre>
+
+    <h3>delete(id)</h3>
+<pre>
+<span class="keyword">await</span> users.delete(<span class="number">1</span>);
+<span class="comment">// Returns void</span>
+</pre>
+
+    <h3>Filter Format</h3>
+    <p>Simple filters use <code>{field: value}</code> syntax (operator defaults to <code>eq</code>):</p>
+<pre>
+<span class="comment">// Simple equality filter</span>
+{ role: <span class="string">'admin'</span> }
+
+<span class="comment">// With explicit operator</span>
+{ age: { operator: <span class="string">'gt'</span>, value: <span class="number">21</span> } }
+</pre>
+    <p>Filters are converted to the Vibe query format: <code>[{ field, operator, value }]</code></p>
+
+    <h3>Pagination Interface</h3>
+
+    <table>
+        <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>total</code></td><td>number</td><td>Total matching documents</td></tr>
+        <tr><td><code>limit</code></td><td>number</td><td>Page size</td></tr>
+        <tr><td><code>offset</code></td><td>number</td><td>Current offset</td></tr>
+        <tr><td><code>hasMore</code></td><td>boolean</td><td>Whether more pages exist</td></tr>
+    </table>
+
+    <h2 id="sdk-admin">Admin API <span class="edition-badge edition-sdk">SDK</span></h2>
+
+<pre>
+<span class="keyword">const</span> admin = client.admin;
+</pre>
+
+    <h3>Roles</h3>
+<pre>
+<span class="comment">// List roles</span>
+<span class="keyword">const</span> roles = <span class="keyword">await</span> admin.roles.list({ limit: <span class="number">50</span>, offset: <span class="number">0</span> });
+
+<span class="comment">// Get role by ID</span>
+<span class="keyword">const</span> role = <span class="keyword">await</span> admin.roles.get(<span class="number">1</span>);
+
+<span class="comment">// Create role</span>
+<span class="keyword">const</span> newRole = <span class="keyword">await</span> admin.roles.create({
+  name: <span class="string">'editor'</span>,
+  description: <span class="string">'Can edit content'</span>,
+  source: <span class="string">'custom'</span>,           <span class="comment">// optional</span>
+});
+
+<span class="comment">// Update role</span>
+<span class="keyword">const</span> updated = <span class="keyword">await</span> admin.roles.update(<span class="number">1</span>, {
+  description: <span class="string">'Updated description'</span>,
+});
+
+<span class="comment">// Delete role</span>
+<span class="keyword">await</span> admin.roles.delete(<span class="number">1</span>);
+</pre>
+
+    <h3>Users</h3>
+<pre>
+<span class="comment">// List users</span>
+<span class="keyword">const</span> users = <span class="keyword">await</span> admin.users.list({ limit: <span class="number">50</span> });
+
+<span class="comment">// Get user by ID</span>
+<span class="keyword">const</span> user = <span class="keyword">await</span> admin.users.get(<span class="string">'user-uuid'</span>);
+
+<span class="comment">// Get user's roles</span>
+<span class="keyword">const</span> roles = <span class="keyword">await</span> admin.users.getRoles(<span class="string">'user-uuid'</span>);
+</pre>
+
+    <h3>Tenant</h3>
+<pre>
+<span class="comment">// Get tenant configuration</span>
+<span class="keyword">const</span> config = <span class="keyword">await</span> admin.tenant.getConfig();
+<span class="comment">// Returns: { client_id, site_name, branding?: { logo_url?, primary_color? } }</span>
+</pre>
+
+    <h3>Admin Type Definitions</h3>
+
+    <table>
+        <tr><th>Type</th><th>Fields</th></tr>
+        <tr><td><code>Role</code></td><td><code>id: number</code>, <code>name: string</code>, <code>description?: string</code>, <code>source: string</code>, <code>created_at: string</code>, <code>updated_at: string</code></td></tr>
+        <tr><td><code>CreateRole</code></td><td><code>name: string</code>, <code>description?: string</code>, <code>source?: string</code></td></tr>
+        <tr><td><code>UpdateRole</code></td><td><code>name?: string</code>, <code>description?: string</code></td></tr>
+        <tr><td><code>User</code></td><td><code>id: string</code>, <code>email: string</code>, <code>name?: string</code>, <code>avatar_url?: string</code>, <code>created_at: string</code>, <code>last_login?: string</code></td></tr>
+        <tr><td><code>TenantConfig</code></td><td><code>client_id: string</code>, <code>site_name: string</code>, <code>branding?: { logo_url?: string, primary_color?: string }</code></td></tr>
+    </table>
+
+    <h2 id="sdk-auth">Auth Utilities <span class="edition-badge edition-sdk">SDK</span></h2>
+
+<pre>
+<span class="keyword">import</span> {
+  hasRole, hasAnyRole, hasAllRoles,
+  isAdmin, isPlatformAdmin, isClientAdmin,
+  getHighestRoleLevel, meetsRoleLevel,
+  VibeRoles, ADMIN_ROLES, ROLE_HIERARCHY
+} <span class="keyword">from</span> <span class="string">'@vibe/client'</span>;
+</pre>
+
+    <h3>Role Constants</h3>
+
+    <table>
+        <tr><th>Constant</th><th>Value</th><th>Hierarchy Level</th></tr>
+        <tr><td><code>VibeRoles.PLATFORM_ADMIN</code></td><td><code>"platform_admin"</code></td><td>4 (highest)</td></tr>
+        <tr><td><code>VibeRoles.VIBE_APP_ADMIN</code></td><td><code>"vibe_app_admin"</code></td><td>3</td></tr>
+        <tr><td><code>VibeRoles.VIBE_CLIENT_ADMIN</code></td><td><code>"vibe_client_admin"</code></td><td>2</td></tr>
+        <tr><td><code>VibeRoles.IDP_CLIENT_ADMIN</code></td><td><code>"idp_client_admin"</code></td><td>2</td></tr>
+        <tr><td><code>VibeRoles.VIBE_APP_USER</code></td><td><code>"vibe_app_user"</code></td><td>1 (lowest)</td></tr>
+    </table>
+
+    <h3>Role Groups</h3>
+
+    <table>
+        <tr><th>Group</th><th>Roles</th></tr>
+        <tr><td><code>ADMIN_ROLES</code></td><td><code>platform_admin</code>, <code>vibe_app_admin</code>, <code>vibe_client_admin</code>, <code>idp_client_admin</code></td></tr>
+        <tr><td><code>PLATFORM_ADMIN_ROLES</code></td><td><code>platform_admin</code>, <code>vibe_app_admin</code></td></tr>
+        <tr><td><code>CLIENT_ADMIN_ROLES</code></td><td><code>vibe_client_admin</code>, <code>idp_client_admin</code></td></tr>
+    </table>
+
+    <h3>Utility Functions</h3>
+
+    <table>
+        <tr><th>Function</th><th>Signature</th><th>Description</th></tr>
+        <tr><td><code>hasRole</code></td><td><code>(roles, role) => boolean</code></td><td>Check if user has a specific role</td></tr>
+        <tr><td><code>hasAnyRole</code></td><td><code>(roles, roles[]) => boolean</code></td><td>Check if user has any of the given roles</td></tr>
+        <tr><td><code>hasAllRoles</code></td><td><code>(roles, roles[]) => boolean</code></td><td>Check if user has all of the given roles</td></tr>
+        <tr><td><code>isAdmin</code></td><td><code>(roles) => boolean</code></td><td>Has any admin role</td></tr>
+        <tr><td><code>isPlatformAdmin</code></td><td><code>(roles) => boolean</code></td><td>Has <code>platform_admin</code> or <code>vibe_app_admin</code></td></tr>
+        <tr><td><code>isClientAdmin</code></td><td><code>(roles) => boolean</code></td><td>Has client admin role (not platform admin)</td></tr>
+        <tr><td><code>getHighestRoleLevel</code></td><td><code>(roles) => number</code></td><td>Returns highest hierarchy level (0 if no roles)</td></tr>
+        <tr><td><code>meetsRoleLevel</code></td><td><code>(roles, level) => boolean</code></td><td>Check if user meets minimum role level</td></tr>
+    </table>
+
+<pre>
+<span class="comment">// Usage examples</span>
+<span class="keyword">const</span> userRoles = [<span class="string">'vibe_client_admin'</span>, <span class="string">'vibe_app_user'</span>];
+
+isAdmin(userRoles);                    <span class="comment">// true</span>
+isPlatformAdmin(userRoles);            <span class="comment">// false</span>
+isClientAdmin(userRoles);              <span class="comment">// true</span>
+hasRole(userRoles, <span class="string">'platform_admin'</span>);  <span class="comment">// false</span>
+getHighestRoleLevel(userRoles);        <span class="comment">// 2</span>
+meetsRoleLevel(userRoles, <span class="number">3</span>);          <span class="comment">// false</span>
+</pre>
+
+    <h2 id="sdk-errors">Error Handling <span class="edition-badge edition-sdk">SDK</span></h2>
+
+<pre>
+<span class="keyword">import</span> { VibeError } <span class="keyword">from</span> <span class="string">'@vibe/client'</span>;
+
+<span class="keyword">try</span> {
+  <span class="keyword">const</span> user = <span class="keyword">await</span> users.get(<span class="number">999</span>);
+} <span class="keyword">catch</span> (error) {
+  <span class="keyword">if</span> (error <span class="keyword">instanceof</span> VibeError) {
+    console.log(error.code);       <span class="comment">// 'NOT_FOUND'</span>
+    console.log(error.message);    <span class="comment">// 'Document not found'</span>
+    console.log(error.status);     <span class="comment">// 404</span>
+    console.log(error.isRetryable()); <span class="comment">// false</span>
+  }
+}
+</pre>
+
+    <h3>SDK Error Codes</h3>
+
+    <table>
+        <tr><th>Code</th><th>HTTP Status</th><th>Retryable</th><th>Description</th></tr>
+        <tr><td><code>NETWORK_ERROR</code></td><td>&mdash;</td><td>Yes</td><td>Network connectivity issue</td></tr>
+        <tr><td><code>UNAUTHORIZED</code></td><td>401</td><td>No</td><td>Authentication failed</td></tr>
+        <tr><td><code>FORBIDDEN</code></td><td>403</td><td>No</td><td>Insufficient permissions</td></tr>
+        <tr><td><code>NOT_FOUND</code></td><td>404</td><td>No</td><td>Resource not found</td></tr>
+        <tr><td><code>VALIDATION_ERROR</code></td><td>422</td><td>No</td><td>Invalid input data</td></tr>
+        <tr><td><code>CONFLICT</code></td><td>409</td><td>No</td><td>Resource conflict (e.g., duplicate key)</td></tr>
+        <tr><td><code>RATE_LIMITED</code></td><td>429</td><td>Yes</td><td>Too many requests</td></tr>
+        <tr><td><code>SERVER_ERROR</code></td><td>500+</td><td>Yes</td><td>Server-side error</td></tr>
+        <tr><td><code>UNKNOWN_ERROR</code></td><td>other</td><td>No</td><td>Unexpected error</td></tr>
+    </table>
+
+    <h2 id="sdk-types">Type Generation <span class="edition-badge edition-sdk">SDK</span></h2>
+
+    <p>The <code>@vibe/next-plugin</code> package generates TypeScript types from your collection schemas automatically.</p>
+
+<pre>
+npm install @vibe/next-plugin
+</pre>
+
+    <h3>Configuration</h3>
+
+    <table>
+        <tr><th>Option</th><th>Env Var</th><th>Description</th></tr>
+        <tr><td><code>idpUrl</code></td><td><code>IDP_URL</code>, <code>NEXT_PUBLIC_IDP_URL</code></td><td>Identity provider URL</td></tr>
+        <tr><td><code>clientId</code></td><td><code>VIBE_CLIENT_ID</code>, <code>NEXT_PUBLIC_VIBE_CLIENT_ID</code></td><td>Client ID</td></tr>
+        <tr><td><code>signingKey</code></td><td><code>VIBE_HMAC_KEY</code>, <code>IDP_SIGNING_KEY</code></td><td>HMAC signing key</td></tr>
+        <tr><td><code>outputDir</code></td><td>&mdash;</td><td>Output directory (default: <code>node_modules/.vibe/types</code>)</td></tr>
+        <tr><td><code>collections</code></td><td>&mdash;</td><td>Specific collections to generate (default: all)</td></tr>
+    </table>
+
+    <h3>Generated Output</h3>
+    <p>The plugin generates:</p>
+    <ul>
+        <li>A <code>.d.ts</code> file for each collection with the document type</li>
+        <li>An <code>index.d.ts</code> with re-exports and a <code>VibeCollections</code> interface</li>
+        <li>Type augmentation for <code>@vibe/client</code> so <code>client.collection('name')</code> returns the correct type</li>
+    </ul>
+
+<pre>
+<span class="comment">// After type generation, collections are fully typed:</span>
+<span class="keyword">const</span> users = client.collection(<span class="string">'users'</span>);
+<span class="comment">// TypeScript knows users.list() returns ListResult&lt;UserDocument&gt;</span>
+<span class="comment">// TypeScript knows users.get() returns UserDocument | null</span>
+</pre>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER                                                        -->
+    <!-- ============================================================ -->
+
+    <div style="margin-top: 64px; padding-top: 32px; border-top: 1px solid #1e293b; color: #64748b; font-size: 13px;">
+        <p>VibeSQL is open source under the Apache 2.0 license.</p>
+        <p>
+            <a href="https://github.com/PayEz-Net/vibesql-server" style="color: #93c5fd;">Server Edition</a> &middot;
+            <a href="https://github.com/PayEz-Net/vibesql-micro" style="color: #93c5fd;">Micro Edition</a> &middot;
+            <a href="mailto:hello@vibesql.online" style="color: #93c5fd;">Contact</a> &middot;
+            Built by <a href="https://idealvibe.online" style="color: #c084fc;">IdealVibe</a>
+        </p>
+    </div>
+
+</main>
+
+<script>
+    // Theme
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        document.querySelector('.theme-toggle').textContent = isLight ? 'Dark' : 'Light';
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+            document.querySelector('.theme-toggle').textContent = 'Dark';
+        }
+    });
+
+    // Active sidebar link tracking
+    const sections = document.querySelectorAll('h2[id], h3[id]');
+    const navLinks = document.querySelectorAll('.sidebar a');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            if (window.scrollY >= section.offsetTop - 80) {
+                current = section.id;
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+    // Close mobile sidebar on link click
+    document.querySelectorAll('.sidebar a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.remove('open');
+        });
+    });
+</script>
+
+</body>
+</html>
