@@ -465,7 +465,7 @@ Nothing left on the machine.</pre>
                 </ul>
 
                 <div class="callout callout-warn">
-                    <strong>This is the starting point, not the ceiling.</strong> Give each agent its own Claude Code session with the mail MCP, and they become autonomous collaborators — reading each other's mail, responding with analysis, and coordinating on tasks. The database and mail system are the infrastructure. The intelligence is up to you.
+                    <strong>This is the starting point, not the ceiling.</strong> The schema supports full <a href="#orchestration" style="color: #fbbf24;">agent orchestration</a> — sequential chains, parallel workers, async tracking. Give each agent its own session with the mail MCP, and they become autonomous collaborators. The database is the infrastructure. The intelligence is up to you.
                 </div>
             </section>
         </div>
@@ -560,6 +560,114 @@ erDiagram
     kanban_boards ||--o{ kanban_columns : "has"
     kanban_columns ||--o{ kanban_cards : "contains"
                 </pre>
+            </div>
+        </section>
+
+        <!-- Orchestration -->
+        <section id="orchestration" class="step" style="padding-top: 40px;">
+            <h2 style="text-align: center; margin-bottom: 8px; font-size: 32px;">Agent Orchestration</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 32px;">The schema above isn't just mail — it's the persistence layer for full agent workflows. Here's how it maps to orchestration patterns like <a href="https://github.com/nicobailon/pi-subagents" style="color: #a78bfa;">Pi subagents</a>.</p>
+
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 32px 16px; overflow-x: auto; margin-bottom: 32px;">
+                <pre class="mermaid" style="padding: 0; background: transparent; display: flex; justify-content: center;">
+graph LR
+    subgraph Chain["Sequential Chain"]
+        direction LR
+        S[Scout] -->|context.md| P[Planner]
+        P -->|plan.md| W[Worker]
+        W -->|progress.md| R[Reviewer]
+    end
+
+    subgraph Parallel["Parallel Execution"]
+        direction TB
+        W1[Worker 1<br/>Auth module]
+        W2[Worker 2<br/>API layer]
+        W3[Worker 3<br/>UI components]
+    end
+
+    subgraph VibeSQL["VibeSQL Persistence"]
+        direction TB
+        AG[(agents)]
+        MSG[(messages)]
+        KB[(kanban_boards)]
+        TM[(teams)]
+    end
+
+    Chain --> MSG
+    Parallel --> MSG
+    Chain --> KB
+    Parallel --> KB
+
+    style Chain fill:#1e1b4b,stroke:#6d28d9,color:#e2e8f0
+    style Parallel fill:#0c2a3e,stroke:#06b6d4,color:#e2e8f0
+    style VibeSQL fill:#1a1229,stroke:#7c3aed,color:#e2e8f0
+    style S fill:#0d3321,stroke:#22c55e,color:#22c55e
+    style P fill:#1e1b4b,stroke:#a78bfa,color:#a78bfa
+    style W fill:#1e293b,stroke:#3b82f6,color:#3b82f6
+    style R fill:#2a1215,stroke:#f472b6,color:#f472b6
+    style W1 fill:#1e293b,stroke:#3b82f6,color:#3b82f6
+    style W2 fill:#1e293b,stroke:#3b82f6,color:#3b82f6
+    style W3 fill:#1e293b,stroke:#3b82f6,color:#3b82f6
+    style AG fill:#1a1229,stroke:#a78bfa,color:#a78bfa
+    style MSG fill:#1a1229,stroke:#a78bfa,color:#a78bfa
+    style KB fill:#1a1229,stroke:#a78bfa,color:#a78bfa
+    style TM fill:#1a1229,stroke:#a78bfa,color:#a78bfa
+                </pre>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px;">
+                <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px;">
+                    <div style="font-size: 14px; font-weight: 600; color: #22c55e; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">Chains</div>
+                    <h3 style="color: #f1f5f9; font-size: 18px; margin-bottom: 8px;">Sequential Pipelines</h3>
+                    <p style="color: #94a3b8; font-size: 14px; line-height: 1.6;">Scout gathers context, Planner designs the approach, Worker executes, Reviewer validates. Each step's output becomes the next step's input — all persisted as messages with thread IDs.</p>
+                    <div style="margin-top: 12px; padding: 10px; background: #0f172a; border-radius: 8px; font-family: 'SF Mono', monospace; font-size: 12px; color: #64748b;">
+                        <span style="color: #22c55e;">messages.thread_id</span> = "chain-run-001"<br>
+                        <span style="color: #a78bfa;">messages.from_agent_id</span> &rarr; scout, planner, worker
+                    </div>
+                </div>
+
+                <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px;">
+                    <div style="font-size: 14px; font-weight: 600; color: #06b6d4; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">Parallel</div>
+                    <h3 style="color: #f1f5f9; font-size: 18px; margin-bottom: 8px;">Concurrent Workers</h3>
+                    <p style="color: #94a3b8; font-size: 14px; line-height: 1.6;">Multiple agents work simultaneously on different parts of the same project. Kanban cards track assignment and progress. Messages carry results between parallel branches.</p>
+                    <div style="margin-top: 12px; padding: 10px; background: #0f172a; border-radius: 8px; font-family: 'SF Mono', monospace; font-size: 12px; color: #64748b;">
+                        <span style="color: #06b6d4;">kanban_cards.assigned_agent_id</span> &rarr; worker_1<br>
+                        <span style="color: #06b6d4;">kanban_cards.column_id</span> &rarr; In Progress
+                    </div>
+                </div>
+
+                <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px;">
+                    <div style="font-size: 14px; font-weight: 600; color: #f472b6; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">Async</div>
+                    <h3 style="color: #f1f5f9; font-size: 18px; margin-bottom: 8px;">Durable State</h3>
+                    <p style="color: #94a3b8; font-size: 14px; line-height: 1.6;">Agent status, execution progress, and completion events — all queryable with SQL instead of polling flat files. Any agent can check any other agent's progress in real time.</p>
+                    <div style="margin-top: 12px; padding: 10px; background: #0f172a; border-radius: 8px; font-family: 'SF Mono', monospace; font-size: 12px; color: #64748b;">
+                        <span style="color: #f472b6;">agents.last_active_at</span> &rarr; NOW()<br>
+                        <span style="color: #f472b6;">inbox WHERE read_at IS NULL</span> &rarr; pending
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
+                <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); border-radius: 10px; padding: 16px; text-align: center;">
+                    <div style="font-size: 28px; font-weight: 800; color: #22c55e;">Scout</div>
+                    <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Fast recon &amp; context</div>
+                </div>
+                <div style="background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.2); border-radius: 10px; padding: 16px; text-align: center;">
+                    <div style="font-size: 28px; font-weight: 800; color: #a78bfa;">Planner</div>
+                    <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Design &amp; architecture</div>
+                </div>
+                <div style="background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 10px; padding: 16px; text-align: center;">
+                    <div style="font-size: 28px; font-weight: 800; color: #3b82f6;">Worker</div>
+                    <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Execute &amp; build</div>
+                </div>
+                <div style="background: rgba(244,114,182,0.08); border: 1px solid rgba(244,114,182,0.2); border-radius: 10px; padding: 16px; text-align: center;">
+                    <div style="font-size: 28px; font-weight: 800; color: #f472b6;">Reviewer</div>
+                    <div style="font-size: 13px; color: #64748b; margin-top: 4px;">Validate &amp; improve</div>
+                </div>
+            </div>
+
+            <div class="callout">
+                <strong>VibeSQL replaces flat files with queryable state.</strong> Instead of <code style="background: rgba(6,182,212,0.2); padding: 2px 6px; border-radius: 4px;">status.json</code> and <code style="background: rgba(6,182,212,0.2); padding: 2px 6px; border-radius: 4px;">events.jsonl</code>, agent progress lives in PostgreSQL — joinable, indexable, and accessible to every agent on the team. Chains become message threads. Parallel task status becomes kanban columns. Async polling becomes <code style="background: rgba(6,182,212,0.2); padding: 2px 6px; border-radius: 4px;">SELECT * FROM inbox WHERE read_at IS NULL</code>.
             </div>
         </section>
 
