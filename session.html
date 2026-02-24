@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>Live Session — VibeSQL Agent Mail Quickstart</title>
+    <meta name="description" content="Watch a real Claude Code session install VibeSQL, build an agent mail schema, register agents, and run a full multi-agent collaboration — all on localhost.">
+    <link rel="icon" type="image/svg+xml" href="/vibesql-icon.svg">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --cyan: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --green: #22c55e;
+            --amber: #f59e0b;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #e2e8f0;
+            background: #0f172a;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid #334155;
+            padding: 16px 0;
+            position: sticky; top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo span { color: var(--primary); }
+        .logo svg { width: 28px; height: 28px; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 500; }
+        .nav-links a:hover { color: #e2e8f0; }
+
+        /* Page header */
+        .page-hero {
+            padding: 60px 0 20px;
+            text-align: center;
+        }
+        .page-hero h1 { font-size: 44px; font-weight: 800; color: #f1f5f9; margin-bottom: 12px; }
+        .page-hero p { color: #94a3b8; font-size: 18px; max-width: 640px; margin: 0 auto 24px; }
+        .session-meta {
+            display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+            font-size: 14px; color: #64748b;
+        }
+        .session-meta span { display: flex; align-items: center; gap: 6px; }
+        .meta-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+        /* Claude Code terminal window */
+        .terminal {
+            background: #0c0c0c;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 32px 0 80px;
+            font-family: 'Cascadia Code', 'SF Mono', 'Fira Code', 'JetBrains Mono', Monaco, 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        /* Title bar */
+        .terminal-titlebar {
+            background: #1a1a1a;
+            border-bottom: 1px solid #2a2a2a;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .titlebar-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+        .titlebar-text {
+            flex: 1; text-align: center;
+            color: #666; font-size: 13px;
+        }
+
+        /* Terminal body */
+        .terminal-body {
+            padding: 24px;
+            color: #d4d4d4;
+            overflow-x: auto;
+        }
+
+        /* Claude Code banner */
+        .cc-banner {
+            color: #d4d4d4;
+            margin-bottom: 24px;
+            white-space: pre;
+            line-height: 1.3;
+        }
+        .cc-banner .logo-art { color: #c084fc; }
+        .cc-banner .version { color: #a1a1aa; }
+        .cc-banner .model { color: #e2e8f0; }
+        .cc-banner .path { color: #a1a1aa; }
+
+        /* User prompt */
+        .cc-prompt {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            color: #e2e8f0;
+        }
+        .cc-prompt .arrow { color: #22c55e; font-weight: 700; }
+        .cc-prompt .text { color: #e2e8f0; }
+
+        /* Step dividers */
+        .cc-divider {
+            border: none;
+            border-top: 1px solid #2a2a2a;
+            margin: 28px 0;
+        }
+
+        /* Agent action line */
+        .cc-action {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 4px;
+            align-items: flex-start;
+        }
+        .cc-action .bullet {
+            color: #c084fc;
+            flex-shrink: 0;
+            margin-top: 1px;
+            font-size: 16px;
+        }
+        .cc-action .text {
+            color: #d4d4d4;
+        }
+        .cc-action .text strong { color: #e2e8f0; font-weight: 600; }
+
+        /* Tool call */
+        .cc-tool {
+            display: flex;
+            gap: 10px;
+            margin: 12px 0 4px;
+            align-items: flex-start;
+        }
+        .cc-tool .bullet {
+            color: #c084fc;
+            flex-shrink: 0;
+            margin-top: 1px;
+            font-size: 16px;
+        }
+        .cc-tool .name {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        .cc-tool .args {
+            color: #a1a1aa;
+        }
+
+        /* Tool output */
+        .cc-output {
+            margin: 2px 0 12px 28px;
+            padding-left: 16px;
+            border-left: 2px solid #333;
+            color: #a1a1aa;
+            font-size: 13px;
+        }
+        .cc-output .line { padding: 1px 0; }
+        .cc-output .success { color: #22c55e; }
+        .cc-output .info { color: #60a5fa; }
+        .cc-output .warn { color: #fbbf24; }
+        .cc-output .muted { color: #525252; }
+
+        /* Collapsed output */
+        .cc-collapsed {
+            margin: 2px 0 12px 28px;
+            padding-left: 16px;
+            border-left: 2px solid #333;
+        }
+        .cc-collapsed summary {
+            color: #525252;
+            cursor: pointer;
+            font-size: 13px;
+            user-select: none;
+        }
+        .cc-collapsed summary:hover { color: #737373; }
+        .cc-collapsed .inner {
+            color: #a1a1aa;
+            font-size: 13px;
+            padding-top: 4px;
+        }
+
+        /* Agent commentary / narration */
+        .cc-narration {
+            margin: 12px 0 12px 28px;
+            color: #d4d4d4;
+            font-size: 14px;
+        }
+
+        /* Step report */
+        .cc-report {
+            margin: 16px 0 16px 28px;
+            color: #d4d4d4;
+        }
+        .cc-report h3 {
+            color: #e2e8f0;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .cc-report ul {
+            list-style: none;
+            padding: 0;
+        }
+        .cc-report li {
+            padding: 3px 0 3px 18px;
+            position: relative;
+            color: #a1a1aa;
+            font-size: 14px;
+        }
+        .cc-report li::before {
+            content: '-';
+            position: absolute;
+            left: 4px;
+            color: #525252;
+        }
+
+        /* ASCII tables */
+        .cc-table {
+            margin: 12px 0 12px 28px;
+            font-size: 13px;
+            color: #a1a1aa;
+            white-space: pre;
+            overflow-x: auto;
+            line-height: 1.4;
+        }
+        .cc-table .header { color: #94a3b8; font-weight: 600; }
+        .cc-table .border { color: #333; }
+        .cc-table .value { color: #d4d4d4; }
+        .cc-table .highlight { color: #22c55e; }
+
+        /* Summary table at bottom */
+        .cc-summary-table {
+            margin: 16px 0 16px 28px;
+            width: calc(100% - 28px);
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .cc-summary-table th {
+            text-align: left;
+            padding: 8px 12px;
+            color: #94a3b8;
+            border-bottom: 1px solid #333;
+            font-weight: 600;
+        }
+        .cc-summary-table td {
+            padding: 8px 12px;
+            color: #d4d4d4;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .cc-summary-table tr:last-child td { border-bottom: none; }
+        .cc-summary-table .step-num { color: #c084fc; font-weight: 600; }
+        .cc-summary-table .check { color: #22c55e; }
+
+        /* Churn timer */
+        .cc-churn {
+            margin: 20px 0;
+            color: #525252;
+            font-size: 13px;
+            text-align: center;
+            font-style: italic;
+        }
+        .cc-churn .time { color: #fbbf24; }
+
+        /* Skill badge */
+        .cc-skill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 6px;
+            padding: 2px 10px;
+            font-size: 13px;
+            color: #06b6d4;
+            margin-left: 28px;
+            margin-bottom: 8px;
+        }
+
+        /* Kanban board visual */
+        .cc-kanban {
+            display: flex;
+            gap: 12px;
+            margin: 16px 0 16px 28px;
+            flex-wrap: wrap;
+        }
+        .kanban-col {
+            flex: 1;
+            min-width: 160px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .kanban-col h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .kanban-col.todo h4 { color: #94a3b8; }
+        .kanban-col.progress h4 { color: #fbbf24; }
+        .kanban-col.done h4 { color: #22c55e; }
+        .kanban-card {
+            background: #0c0c0c;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 12px;
+            color: #d4d4d4;
+        }
+        .kanban-card .assignee { color: #f472b6; font-size: 11px; margin-top: 4px; }
+        .kanban-empty { color: #333; font-size: 12px; font-style: italic; }
+
+        /* Footer */
+        footer { padding: 40px 0; border-top: 1px solid #334155; color: var(--gray); }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        footer .links { display: flex; gap: 24px; }
+        footer a { color: var(--gray); text-decoration: none; }
+        footer a:hover { color: #e2e8f0; }
+
+        @media (max-width: 768px) {
+            .page-hero h1 { font-size: 28px; }
+            .nav-links { display: none; }
+            .terminal { font-size: 12px; }
+            .terminal-body { padding: 16px; }
+            .cc-kanban { flex-direction: column; }
+            .footer-content { flex-direction: column; gap: 20px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">
+                <svg width="28" height="28" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs><linearGradient id="vibeGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
+                    <g transform="translate(37, 37)">
+                        <circle cx="0" cy="0" r="12" fill="url(#vibeGradient)"/>
+                        <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" stroke-width="3" transform="rotate(-30)" fill="none" opacity="0.8"/>
+                        <circle cx="35" cy="0" r="5" fill="#06b6d4" transform="rotate(-30)"/>
+                        <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" stroke-width="3" transform="rotate(30)" fill="none" opacity="0.8"/>
+                        <circle cx="-35" cy="0" r="5" fill="#7c3aed" transform="rotate(30)"/>
+                    </g>
+                </svg>
+                Vibe<span>SQL</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/docs.html">Docs</a>
+                <a href="/changelog.html">Changelog</a>
+                <a href="/quickstart.html">Quickstart</a>
+                <a href="/session.html" style="color: #22c55e; font-weight: 700;">Live Session</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="page-hero">
+            <h1>Live Session</h1>
+            <p>A real Claude Code session running the full VibeSQL Agent Mail quickstart. Unedited. Every tool call, every query, every result.</p>
+            <div class="session-meta">
+                <span><span class="meta-dot" style="background: #c084fc;"></span> Claude Code v2.1.50</span>
+                <span><span class="meta-dot" style="background: #22c55e;"></span> Opus 4.6</span>
+                <span><span class="meta-dot" style="background: #fbbf24;"></span> 7m 44s</span>
+                <span><span class="meta-dot" style="background: #06b6d4;"></span> 12 steps, zero errors</span>
+            </div>
+        </section>
+
+        <!-- Terminal Window -->
+        <div class="terminal">
+            <div class="terminal-titlebar">
+                <span class="titlebar-dot dot-red"></span>
+                <span class="titlebar-dot dot-yellow"></span>
+                <span class="titlebar-dot dot-green"></span>
+                <span class="titlebar-text">claude &mdash; E:\Repos\agentmailtest</span>
+            </div>
+
+            <div class="terminal-body">
+
+                <!-- Banner -->
+                <div class="cc-banner"><span class="logo-art"> &#x2590;&#x259B;&#x2588;&#x2588;&#x2588;&#x259C;&#x258C;</span>   <span class="version">Claude Code v2.1.50</span>
+<span class="logo-art">&#x259D;&#x259C;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x259B;&#x2598;</span>  <span class="model">Opus 4.6 &middot; Claude Max</span>
+<span class="logo-art">  &#x2598;&#x2598; &#x259D;&#x259D;</span>    <span class="path">E:\Repos\agentmailtest</span></div>
+
+                <!-- User prompt -->
+                <div class="cc-prompt">
+                    <span class="arrow">&#10095;</span>
+                    <span class="text">Read instructions.md and follow each step. Report back after each step, then move to the next.</span>
+                </div>
+
+                <!-- Read file -->
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Read</span> <span class="args">1 file</span></span>
+                </div>
+
+                <div class="cc-narration">Got it. I'm now <strong>vibe_installer</strong>. Let me begin with Step 1.</div>
+
+                <!-- ==================== STEP 1 ==================== -->
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Step 1: Install and Start VibeSQL</h3></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(npm install -g vibesql-micro)</span></span>
+                </div>
+                <div class="cc-output">
+                    <div class="line success">changed 1 package in 31s</div>
+                </div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(npx vibesql-micro version)</span></span>
+                </div>
+                <div class="cc-output">
+                    <div class="line">VibeSQL Version Information:</div>
+                    <div class="line value">  Version:    <span style="color:#22c55e;">1.0.4</span></div>
+                    <div class="line">  Git Commit: 25054d94</div>
+                    <div class="line">  Go:         go1.25.7</div>
+                    <div class="line">  Platform:   windows/amd64</div>
+                </div>
+
+                <div class="cc-narration">Good &mdash; version 1.0.4 installed. Now starting the server in the background.</div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(npx vibesql-micro serve)</span></span>
+                </div>
+                <details class="cc-collapsed">
+                    <summary>&#x25B6; Server startup log (click to expand)</summary>
+                    <div class="inner">
+                        <div class="line">[INFO] Starting VibeSQL 1.0.4</div>
+                        <div class="line">[INFO] Starting PostgreSQL...</div>
+                        <div class="line">[INFO] Extracting PostgreSQL binaries...</div>
+                        <div class="line">[INFO] Initializing database...</div>
+                        <div class="line">[INFO] PostgreSQL started on port 5433</div>
+                        <div class="line">[INFO] Waiting for connections...</div>
+                        <div class="line success">[INFO] VibeSQL ready &mdash; http://127.0.0.1:5173</div>
+                    </div>
+                </details>
+
+                <div class="cc-narration">VibeSQL is running. Now verifying the database is empty.</div>
+
+                <div class="cc-skill">&#x2699; vibe-sql &mdash; 2 tools allowed</div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(curl -s POST /v1/query &mdash; SELECT table_name FROM information_schema.tables ...)</span></span>
+                </div>
+                <div class="cc-output">
+                    <div class="line">{ <span class="success">"success": true</span>, "executionTime": 11.024 }</div>
+                </div>
+
+                <div class="cc-report">
+                    <h3>Step 1 Report</h3>
+                    <ul>
+                        <li>Install: vibesql-micro installed globally via npm</li>
+                        <li>Version: 1.0.4 (Go 1.25.7, Windows/amd64)</li>
+                        <li>Server: VibeSQL running on 127.0.0.1:5173 with PostgreSQL 16.1 on port 5433</li>
+                        <li>Database: Empty &mdash; no tables in public schema (fresh database confirmed)</li>
+                    </ul>
+                </div>
+
+                <!-- ==================== STEP 2 ==================== -->
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Step 2: Create the Agent Mail Schema</h3></div>
+
+                <div class="cc-narration">Creating all 10 tables. Running each CREATE TABLE statement.</div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(CREATE TABLE settings ...)</span></span>
+                </div>
+                <div class="cc-output"><div class="line">{ <span class="success">"success": true</span>, "executionTime": 9.885 }</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(CREATE TABLE agents ...)</span></span>
+                </div>
+                <div class="cc-output"><div class="line">{ <span class="success">"success": true</span>, "executionTime": 7.301 }</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(CREATE TABLE teams ... teams_members ... projects ... kanban_boards ... kanban_columns ... kanban_cards ... messages ... inbox)</span></span>
+                </div>
+                <div class="cc-output">
+                    <div class="line success">All 10 tables created &mdash; 8 more CREATE TABLE calls, all returned success: true</div>
+                </div>
+
+                <div class="cc-narration">All 10 tables created. Now creating the 14 indexes.</div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(CREATE INDEX &times; 14)</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">All 14 indexes created successfully</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(SELECT table_name FROM information_schema.tables ...)</span></span>
+                </div>
+
+                <div class="cc-table"><span class="border">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="border">&#9474;</span> <span class="header"> #  </span><span class="border">&#9474;</span> <span class="header">    Table       </span><span class="border">&#9474;</span>
+<span class="border">&#9500;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</span>
+<span class="border">&#9474;</span> <span class="value"> 1  </span><span class="border">&#9474;</span> agents         <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value"> 2  </span><span class="border">&#9474;</span> inbox          <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value"> 3  </span><span class="border">&#9474;</span> kanban_boards  <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value"> 4  </span><span class="border">&#9474;</span> kanban_cards   <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value"> 5  </span><span class="border">&#9474;</span> kanban_columns <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value"> 6  </span><span class="border">&#9474;</span> messages       <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value"> 7  </span><span class="border">&#9474;</span> projects       <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value"> 8  </span><span class="border">&#9474;</span> settings       <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value"> 9  </span><span class="border">&#9474;</span> team_members   <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value">10  </span><span class="border">&#9474;</span> teams          <span class="border">&#9474;</span>
+<span class="border">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span></div>
+
+                <!-- ==================== STEP 3 ==================== -->
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Step 3: Register Three Agents and Create a Team</h3></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(INSERT INTO agents &mdash; vibe_installer, test_agent_1, test_agent_2)</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">3 agents registered</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(INSERT INTO teams + team_members)</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">Team "demo-team" created with 3 members</div></div>
+
+                <div class="cc-table"><span class="border">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="border">&#9474;</span> <span class="header">ID  </span><span class="border">&#9474;</span> <span class="header">     Name       </span><span class="border">&#9474;</span> <span class="header"> Display Name   </span><span class="border">&#9474;</span> <span class="header">   Role     </span><span class="border">&#9474;</span> <span class="header">Active </span><span class="border">&#9474;</span>
+<span class="border">&#9500;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</span>
+<span class="border">&#9474;</span> <span class="value">1   </span><span class="border">&#9474;</span> vibe_installer  <span class="border">&#9474;</span> Vibe Installer  <span class="border">&#9474;</span> installer   <span class="border">&#9474;</span> <span class="highlight">true  </span><span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value">2   </span><span class="border">&#9474;</span> test_agent_1    <span class="border">&#9474;</span> Research Agent  <span class="border">&#9474;</span> researcher  <span class="border">&#9474;</span> <span class="highlight">true  </span><span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value">3   </span><span class="border">&#9474;</span> test_agent_2    <span class="border">&#9474;</span> Engineer Agent  <span class="border">&#9474;</span> engineer    <span class="border">&#9474;</span> <span class="highlight">true  </span><span class="border">&#9474;</span>
+<span class="border">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span></div>
+
+                <!-- ==================== STEP 4 ==================== -->
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Step 4: Create a Project and Kanban Board</h3></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(INSERT INTO projects, kanban_boards, kanban_columns, kanban_cards)</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">Project "vibesql-research" created with board, 3 columns, 1 card</div></div>
+
+                <div class="cc-kanban">
+                    <div class="kanban-col todo">
+                        <h4>To Do</h4>
+                        <div class="kanban-card">
+                            Investigate JSONB storage
+                            <div class="assignee">Research Agent</div>
+                        </div>
+                    </div>
+                    <div class="kanban-col progress">
+                        <h4>In Progress</h4>
+                        <div class="kanban-empty">(empty)</div>
+                    </div>
+                    <div class="kanban-col done">
+                        <h4>Done</h4>
+                        <div class="kanban-empty">(empty)</div>
+                    </div>
+                </div>
+
+                <!-- ==================== STEPS 5-6 ==================== -->
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Steps 5 &amp; 6: Send Messages &amp; Cross-Agent Communication</h3></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(INSERT INTO messages + inbox &times; 3)</span></span>
+                </div>
+                <div class="cc-output">
+                    <div class="line success">Message 1: vibe_installer &rarr; test_agent_1 &mdash; "Welcome aboard, researcher"</div>
+                    <div class="line success">Message 2: vibe_installer &rarr; test_agent_2 &mdash; "Welcome aboard, engineer"</div>
+                    <div class="line success">Message 3: vibe_installer &rarr; test_agent_1 &mdash; "Assignment: Research VibeSQL architecture"</div>
+                </div>
+
+                <!-- ==================== STEP 7 ==================== -->
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Step 7: Move the Kanban Card</h3></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(UPDATE kanban_cards SET column_id = ... WHERE title = 'Investigate JSONB storage')</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">Card moved: To Do &rarr; In Progress</div></div>
+
+                <div class="cc-kanban">
+                    <div class="kanban-col todo">
+                        <h4>To Do</h4>
+                        <div class="kanban-empty">(empty)</div>
+                    </div>
+                    <div class="kanban-col progress">
+                        <h4>In Progress</h4>
+                        <div class="kanban-card">
+                            Investigate JSONB storage
+                            <div class="assignee">Research Agent</div>
+                        </div>
+                    </div>
+                    <div class="kanban-col done">
+                        <h4>Done</h4>
+                        <div class="kanban-empty">(empty)</div>
+                    </div>
+                </div>
+
+                <!-- ==================== STEPS 8-9 ==================== -->
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Steps 8 &amp; 9: Outbox Check &amp; Final Results</h3></div>
+
+                <div class="cc-table"><span class="border">&#9484;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span>
+<span class="border">&#9474;</span> <span class="header">ID </span><span class="border">&#9474;</span> <span class="header">    Sender      </span><span class="border">&#9474;</span> <span class="header">  Recipient  </span><span class="border">&#9474;</span> <span class="header">                 Subject                   </span><span class="border">&#9474;</span>
+<span class="border">&#9500;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9532;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;</span>
+<span class="border">&#9474;</span> <span class="value">1  </span><span class="border">&#9474;</span> vibe_installer  <span class="border">&#9474;</span> test_agent_1  <span class="border">&#9474;</span> Welcome aboard, researcher                 <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value">2  </span><span class="border">&#9474;</span> vibe_installer  <span class="border">&#9474;</span> test_agent_2  <span class="border">&#9474;</span> Welcome aboard, engineer                   <span class="border">&#9474;</span>
+<span class="border">&#9474;</span> <span class="value">3  </span><span class="border">&#9474;</span> vibe_installer  <span class="border">&#9474;</span> test_agent_1  <span class="border">&#9474;</span> Assignment: Research VibeSQL architecture   <span class="border">&#9474;</span>
+<span class="border">&#9492;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span></div>
+
+                <div class="cc-report">
+                    <h3>System Summary</h3>
+                    <ul>
+                        <li>Agents registered: 3</li>
+                        <li>Teams: 1 (demo-team, 3 members)</li>
+                        <li>Projects: 1</li>
+                        <li>Kanban cards: 1</li>
+                        <li>Messages sent: 3</li>
+                    </ul>
+                </div>
+
+                <!-- ==================== STEP 10 ==================== -->
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Step 10: Direct Database Access with /vibe-sql</h3></div>
+
+                <div class="cc-narration">Running natural-language queries via the <code style="background: rgba(6,182,212,0.15); padding: 2px 6px; border-radius: 4px; color: #06b6d4;">/vibe-sql</code> slash command.</div>
+
+                <div class="cc-skill">&#x2699; vibe-sql &mdash; 2 tools allowed</div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Query</span><span class="args">: "Show all registered agents with their roles"</span></span>
+                </div>
+                <div class="cc-output"><div class="line info">SELECT id, name, display_name, role, is_active FROM agents ORDER BY id</div></div>
+                <div class="cc-output"><div class="line success">3 rows, 0.50ms</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Query</span><span class="args">: "Show all teams and their members"</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">3 rows, 0.57ms</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Query</span><span class="args">: "Show the kanban board with all columns and cards"</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">3 rows, 1.22ms</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Query</span><span class="args">: "Show all messages with sender, recipient, subject, and body"</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">3 rows, 2.35ms</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Query</span><span class="args">: "How many messages has each agent sent?"</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">3 rows, 1.64ms</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Query</span><span class="args">: "Insert test message from test_agent_1 to test_agent_2"</span></span>
+                </div>
+                <div class="cc-output">
+                    <div class="line success">Message 4 created: test_agent_1 &rarr; test_agent_2 &mdash; "Research complete"</div>
+                </div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Query</span><span class="args">: "Move kanban card to Done column"</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">Card moved to Done</div></div>
+
+                <div class="cc-kanban">
+                    <div class="kanban-col todo">
+                        <h4>To Do</h4>
+                        <div class="kanban-empty">(empty)</div>
+                    </div>
+                    <div class="kanban-col progress">
+                        <h4>In Progress</h4>
+                        <div class="kanban-empty">(empty)</div>
+                    </div>
+                    <div class="kanban-col done">
+                        <h4>Done</h4>
+                        <div class="kanban-card">
+                            Investigate JSONB storage
+                            <div class="assignee">Research Agent</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Query</span><span class="args">: "Show thread research-thread-001"</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">1 row, 1.28ms</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Query</span><span class="args">: "Show final kanban board state"</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">3 rows, 1.39ms &mdash; all complete</div></div>
+
+                <div class="cc-narration">All 10 /vibe-sql queries executed successfully &mdash; natural language to SQL, executed, and returned full results.</div>
+
+                <!-- ==================== STEPS 11-12 ==================== -->
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Step 11: Clean Shutdown</h3></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(npx vibesql-micro stop)</span></span>
+                </div>
+                <div class="cc-output">
+                    <div class="line">Shutdown signal sent. Waiting for VibeSQL to exit...</div>
+                    <div class="line success">VibeSQL stopped.</div>
+                </div>
+                <div class="cc-output">
+                    <div class="line success">Port 5173: no listening process</div>
+                    <div class="line success">Port 5433: no listening process</div>
+                    <div class="line success">Zero orphan processes, zero held ports</div>
+                </div>
+
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Step 12: Clean Uninstall</h3></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(npm uninstall -g vibesql-micro)</span></span>
+                </div>
+                <div class="cc-output"><div class="line">removed 1 package in 508ms</div></div>
+
+                <div class="cc-tool">
+                    <span class="bullet">&#9679;</span>
+                    <span><span class="name">Bash</span><span class="args">(rm -rf ./vibe-data)</span></span>
+                </div>
+                <div class="cc-output"><div class="line success">Done</div></div>
+
+                <div class="cc-report">
+                    <ul>
+                        <li>Binary removed: vibesql-micro not found in PATH</li>
+                        <li>Data removed: ./vibe-data directory deleted</li>
+                        <li>Machine clean: Nothing left behind</li>
+                    </ul>
+                </div>
+
+                <!-- ==================== FINAL SUMMARY ==================== -->
+                <hr class="cc-divider">
+
+                <div class="cc-report"><h3>Final Summary &mdash; All 12 Steps Complete</h3></div>
+
+                <table class="cc-summary-table">
+                    <thead>
+                        <tr><th>Step</th><th>Action</th><th>Result</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="step-num">1</td><td>Install &amp; Start VibeSQL</td><td><span class="check">&#10003;</span> v1.0.4, PostgreSQL 16.1 running</td></tr>
+                        <tr><td class="step-num">2</td><td>Create Schema</td><td><span class="check">&#10003;</span> 10 tables, 14 indexes</td></tr>
+                        <tr><td class="step-num">3</td><td>Register Agents &amp; Team</td><td><span class="check">&#10003;</span> 3 agents, 1 team</td></tr>
+                        <tr><td class="step-num">4</td><td>Project &amp; Kanban Board</td><td><span class="check">&#10003;</span> 1 project, 1 board, 3 columns, 1 card</td></tr>
+                        <tr><td class="step-num">5</td><td>Welcome Messages</td><td><span class="check">&#10003;</span> 2 messages sent</td></tr>
+                        <tr><td class="step-num">6</td><td>Cross-Agent Communication</td><td><span class="check">&#10003;</span> Assignment message sent</td></tr>
+                        <tr><td class="step-num">7</td><td>Move Kanban Card</td><td><span class="check">&#10003;</span> To Do &rarr; In Progress</td></tr>
+                        <tr><td class="step-num">8</td><td>Check Outbox</td><td><span class="check">&#10003;</span> 3 messages confirmed</td></tr>
+                        <tr><td class="step-num">9</td><td>Final Results</td><td><span class="check">&#10003;</span> System fully operational</td></tr>
+                        <tr><td class="step-num">10</td><td>/vibe-sql Queries</td><td><span class="check">&#10003;</span> 10 queries including insert + update</td></tr>
+                        <tr><td class="step-num">11</td><td>Clean Shutdown</td><td><span class="check">&#10003;</span> Zero orphans, zero held ports</td></tr>
+                        <tr><td class="step-num">12</td><td>Clean Uninstall</td><td><span class="check">&#10003;</span> Binary removed, data removed, clean</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="cc-churn">&#x273B; Churned for <span class="time">7m 44s</span></div>
+
+                <div class="cc-narration" style="text-align: center; color: #64748b; margin-top: 8px;">Install in seconds, uninstall in seconds, leave nothing behind.</div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="links">
+                <a href="https://github.com/PayEz-Net/vibesql-server">Server</a>
+                <a href="https://github.com/PayEz-Net/vibesql-micro">Micro</a>
+                <a href="https://github.com/PayEz-Net/vibesql-skills">AI Skills</a>
+                <a href="/docs.html">Docs</a>
+                <a href="/changelog.html">Changelog</a>
+                <span>Apache 2.0</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

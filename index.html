@@ -833,10 +833,13 @@
                     Vibe<span>SQL</span>
                 </a>
                 <div class="nav-links">
+                    <a href="/quickstart.html" style="color: #06b6d4; font-weight: 600;">Quickstart</a>
                     <a href="#features">Features</a>
+                    <a href="https://github.com/PayEz-Net/vibesql-skills" style="color: #06b6d4;">AI Skills</a>
                     <a href="#schemas">Schemas</a>
                     <a href="#pricing">Pricing</a>
                     <a href="/docs.html">Docs</a>
+                    <a href="/changelog.html" style="color: #22c55e;">Changelog</a>
                     <a href="/about.html">About</a>
                     <button class="theme-toggle" onclick="toggleTheme()">☀️ Light</button>
                     <a href="https://github.com/PayEz-Net/vibesql-server" class="github-btn">
@@ -875,6 +878,9 @@
                 <a href="https://github.com/PayEz-Net/vibesql-micro/releases" class="btn btn-secondary">
                     Try Micro (Free Dev Tool)
                 </a>
+                <a href="https://github.com/PayEz-Net/vibesql-skills" class="btn btn-secondary" style="border-color: #06b6d4; color: #06b6d4;">
+                    /vibe-sql AI Skill
+                </a>
             </div>
 
             <p class="sub-text">Open source. Apache 2.0. Self-host on your infrastructure, use our managed cloud, or start free locally.</p>
@@ -884,31 +890,73 @@
     <section class="features" style="padding: 60px 0;">
         <div class="container">
             <div class="section-header">
-                <h2>The VibeSQL Vision</h2>
-                <p>The first database purpose-built for AI systems. Three ways to deploy, one powerful platform.</p>
+                <h2>The VibeSQL Platform</h2>
+                <p>Nine open source projects. One production-grade data platform for AI systems.</p>
             </div>
 
             <div class="feature-grid">
-                <div class="feature-card featured-vision">
+                <a href="https://github.com/PayEz-Net/vibesql-server" class="feature-card featured-vision" style="text-decoration: none; color: inherit; cursor: pointer;">
                     <div class="feature-icon">🏢</div>
                     <h3>VibeSQL Server</h3>
-                    <p><strong>Production infrastructure for serious deployments.</strong> Encryption governance, token auth, multi-tenant architecture. Deploy on your infrastructure with Docker, Kubernetes, or bare metal. Apache 2.0 licensed.</p>
-                    <p class="vision-tag">→ Full control. Zero vendor lock-in.</p>
-                </div>
+                    <p><strong>Production multi-tenant PostgreSQL.</strong> Schema evolution, HMAC auth, encryption governance. Deploy with Docker, Kubernetes, or bare metal. Apache 2.0.</p>
+                    <p class="vision-tag">→ The database.</p>
+                </a>
 
-                <div class="feature-card">
-                    <div class="feature-icon">☁️</div>
-                    <h3>VibeSQL Cloud</h3>
-                    <p><strong>Fully managed infrastructure.</strong> Zero ops, instant scale. Same capabilities as Server Edition, but we handle the infrastructure, monitoring, and maintenance for you.</p>
-                    <p class="vision-tag" style="color: #06b6d4;">→ Ship features, not infrastructure.</p>
-                </div>
+                <a href="https://github.com/PayEz-Net/vibesql-edge" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="feature-icon">🔐</div>
+                    <h3>VibeSQL Edge</h3>
+                    <p><strong>Bring your own identity provider.</strong> Auth gateway that connects Auth0, Entra ID, Okta, or any OIDC provider to VibeSQL. Dynamic registration, role mapping, HMAC signing.</p>
+                    <p class="vision-tag" style="color: #06b6d4;">→ Your IDP, our data plane.</p>
+                </a>
 
-                <div class="feature-card">
+                <a href="https://github.com/PayEz-Net/vibesql-audit" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>VibeSQL Audit</h3>
+                    <p><strong>PCI DSS compliant audit logging.</strong> PostgreSQL C extension with SHA-256 hash chains, WAL change capture, JSONB field-level diffing, and GELF forwarding.</p>
+                    <p class="vision-tag" style="color: #06b6d4;">→ Compliance that runs itself.</p>
+                </a>
+
+                <a href="https://github.com/PayEz-Net/vibesql-vault" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="feature-icon">🔒</div>
+                    <h3>VibeSQL Vault</h3>
+                    <p><strong>Governed storage for encrypted data.</strong> Access policies, retention enforcement, purge proof, compliance evidence. Drop it next to Micro for the smallest possible PCI CDE.</p>
+                    <p class="vision-tag" style="color: #06b6d4;">→ Micro + Vault = minimal CDE.</p>
+                </a>
+
+                <a href="https://github.com/PayEz-Net/vibesql-cryptaply" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="feature-icon">🔑</div>
+                    <h3>VibeSQL CryptAply</h3>
+                    <p><strong>Governed encryption for VibeSQL.</strong> AES-256-GCM encryption, key lifecycle management, CryptAply governance bridge. Encrypts data, stores in Vault, reports to CryptAply.</p>
+                    <p class="vision-tag" style="color: #06b6d4;">→ Encrypt. Govern. Comply.</p>
+                </a>
+
+                <a href="https://github.com/PayEz-Net/vibesql-backup" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="feature-icon">💾</div>
+                    <h3>VibeSQL Backup</h3>
+                    <p><strong>Encrypted backups that never leave the CDE in plaintext.</strong> Streaming envelope encryption, governed restore, crypto-shredding, compliance evidence.</p>
+                    <p class="vision-tag" style="color: #06b6d4;">→ Plaintext never touches disk.</p>
+                </a>
+
+                <a href="https://github.com/PayEz-Net/vibesql-sync" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="feature-icon">🔄</div>
+                    <h3>VibeSQL Sync</h3>
+                    <p><strong>Governed replication where the wire is out of PCI scope.</strong> Payload-level encryption, selective column publication, signed Merkle-rooted audit trail, air-gap mode.</p>
+                    <p class="vision-tag" style="color: #06b6d4;">→ The governed path between CDEs.</p>
+                </a>
+
+                <a href="https://github.com/PayEz-Net/vibesql-micro/releases" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
                     <div class="feature-icon">🆓</div>
                     <h3>VibeSQL Micro</h3>
-                    <p><strong>Try it free, no sign-up.</strong> Single binary for local dev and prototyping. Perfect for proving the concept before deploying to production with Server or Cloud.</p>
+                    <p><strong>Try it free, no sign-up.</strong> Single 77MB binary with embedded PostgreSQL 16. Local dev, prototyping, and PCI CDE companion with Vault.</p>
                     <p class="vision-tag" style="color: #94a3b8;">→ Prove it works. Then scale.</p>
-                </div>
+                </a>
+
+                <a href="https://github.com/PayEz-Net/vibe-sdk" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Vibe SDK</h3>
+                    <p><strong>The ORM that disappears.</strong> TypeScript types generated from your VibeSQL schema. Live hot-reload, zero config, pre-built CRUD and React hooks.</p>
+                    <p class="vision-tag" style="color: #94a3b8;">→ Change schema. Types update.</p>
+                </a>
             </div>
         </div>
     </section>
@@ -916,18 +964,56 @@
     <section class="code-section">
         <div class="container">
             <div class="code-block">
-<span class="comment"># Production deployment with Docker</span><br>
-<span class="prompt">$</span> docker run -d -p 5432:5432 vibesql/server:latest<br><br>
-<span class="comment"># Kubernetes production deployment</span><br>
-<span class="prompt">$</span> kubectl apply -f vibesql-server.yaml<br><br>
-<span class="comment"># Local development with Micro (free)</span><br>
-<span class="prompt">$</span> ./vibesql-micro-windows-x64.exe  <span class="comment"># Windows</span><br>
-<span class="prompt">$</span> ./vibesql-micro-macos-arm64     <span class="comment"># macOS</span><br>
-<span class="prompt">$</span> ./vibesql-micro-linux-x64       <span class="comment"># Linux</span><br><br>
-<span class="comment"># Same JSON-based SQL API across all editions</span><br>
-<span class="prompt">$</span> curl -X POST http://your-server:5432/v1/query \<br>
+<span class="comment"># 1. Try it — one command, no sign-up</span><br>
+<span class="prompt">$</span> npx vibesql-micro<br>
+<span class="comment"># → Running at http://localhost:5173</span><br><br>
+<span class="comment"># 2. Query it</span><br>
+<span class="prompt">$</span> curl -X POST http://localhost:5173/v1/query \<br>
   -H "Content-Type: application/json" \<br>
-  -d '{"sql": "SELECT * FROM ai_state WHERE id = 123"}'
+  -d '{"sql": "SELECT 1 as hello"}'<br><br>
+<span class="comment"># 3. Connect your AI — install the /vibe-sql skill</span><br>
+<span class="prompt">$</span> /vibe-sql show me all tables<br>
+<span class="prompt">$</span> /vibe-sql create a users table with name, email, age<br><br>
+<span class="comment"># Ready for production? Deploy the server edition</span><br>
+<span class="prompt">$</span> docker run -d -p 5432:5432 vibesql/server:latest
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="updates" style="padding: 60px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2>What's New</h2>
+                <p>Latest releases and updates from the VibeSQL platform.</p>
+            </div>
+
+            <div class="feature-grid" style="max-width: 900px; margin: 0 auto;">
+                <a href="https://github.com/PayEz-Net/vibesql-skills" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer; border-color: #06b6d4;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div class="feature-icon" style="margin-bottom: 0;">🤖</div>
+                        <span style="font-size: 12px; color: #06b6d4; font-weight: 600; background: rgba(6,182,212,0.1); padding: 4px 10px; border-radius: 12px;">NEW</span>
+                    </div>
+                    <h3>/vibe-sql AI Skills</h3>
+                    <p>Talk to your VibeSQL database in natural language. Skills for Claude Code, OpenCode, and Codex CLI. Install in one command, QA-tested 10/10.</p>
+                </a>
+
+                <a href="/changelog.html" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div class="feature-icon" style="margin-bottom: 0;">📦</div>
+                        <span style="font-size: 12px; color: #22c55e; font-weight: 600; background: rgba(34,197,94,0.1); padding: 4px 10px; border-radius: 12px;">v1.0.3</span>
+                    </div>
+                    <h3>VibeSQL Micro v1.0.3</h3>
+                    <p>Parameterized queries with <code style="font-size: 13px;">$1, $2</code> placeholders. Now on npm — <code style="font-size: 13px;">npx vibesql-micro</code>. See full changelog.</p>
+                </a>
+
+                <a href="/docs.html#ai-skills" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div class="feature-icon" style="margin-bottom: 0;">📖</div>
+                        <span style="font-size: 12px; color: #94a3b8; font-weight: 600; background: rgba(148,163,184,0.1); padding: 4px 10px; border-radius: 12px;">DOCS</span>
+                    </div>
+                    <h3>AI Skills Documentation</h3>
+                    <p>Full install guides for Claude Code, OpenCode, and Codex CLI. Copy one file, start querying in natural language.</p>
+                </a>
             </div>
         </div>
     </section>
@@ -1107,6 +1193,91 @@ CREATE TABLE access_logs (
         </div>
     </section>
 
+    <section class="features" id="comparison" style="padding: 80px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2>How VibeSQL Compares</h2>
+                <p>See how VibeSQL stacks up against popular database platforms for AI and local development.</p>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; max-width: 900px; margin: 0 auto; border-collapse: collapse; font-size: 15px;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #334155;">
+                            <th style="padding: 16px 12px; text-align: left; color: #94a3b8; font-weight: 600;">Feature</th>
+                            <th style="padding: 16px 12px; text-align: center; color: #7c3aed; font-weight: 700;">VibeSQL Micro</th>
+                            <th style="padding: 16px 12px; text-align: center; color: #94a3b8; font-weight: 600;">Supabase</th>
+                            <th style="padding: 16px 12px; text-align: center; color: #94a3b8; font-weight: 600;">Railway / Neon</th>
+                            <th style="padding: 16px 12px; text-align: center; color: #94a3b8; font-weight: 600;">PlanetScale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #1e293b;">
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Installation</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #06b6d4; font-weight: 500;">Single command</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Sign up + API keys</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Sign up + deploy</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Sign up + configure</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1e293b;">
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Setup time</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #06b6d4; font-weight: 500;">&lt; 10 seconds</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">~5 minutes</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">~3 minutes</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">~5 minutes</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1e293b;">
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Local development</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">&#10003; Localhost</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">&#10007; Cloud only</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">&#10007; Cloud only</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">&#10007; Cloud only</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1e293b;">
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Cost</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">Free forever</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Free tier + paid</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Free tier + paid</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Free tier + paid</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1e293b;">
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">PostgreSQL</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">&#10003; Native 16.1</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">&#10003;</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">&#10003;</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">&#10007; MySQL</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1e293b;">
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">JSONB support</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">&#10003; Full</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">&#10003; Full</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">&#10003; Full</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">&#10007; JSON only</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1e293b;">
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Auth built-in</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">No*</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">&#10003;</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">No</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">No</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Best for</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #06b6d4; font-weight: 500;">Local dev, prototyping</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Production apps</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Production apps</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Production apps</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p style="text-align: center; color: #64748b; font-size: 13px; margin-top: 20px; max-width: 700px; margin-left: auto; margin-right: auto;">
+                *VibeSQL Server (production version) includes HMAC authentication and configurable tier limits. See <a href="https://github.com/PayEz-Net/vibesql-server" style="color: #7c3aed;">VibeSQL Server</a> for production deployments.
+            </p>
+        </div>
+    </section>
+
     <section class="pricing" id="pricing">
         <div class="container">
             <div class="section-header">
@@ -1202,7 +1373,9 @@ CREATE TABLE access_logs (
                 <div class="links">
                     <a href="https://github.com/PayEz-Net/vibesql-server">Server Edition</a>
                     <a href="https://github.com/PayEz-Net/vibesql-micro">Micro (Dev Tool)</a>
+                    <a href="https://github.com/PayEz-Net/vibesql-skills">AI Skills</a>
                     <a href="/docs.html">Docs</a>
+                    <a href="/changelog.html">Changelog</a>
                     <a href="mailto:hello@vibesql.online">Contact</a>
                     <span>Apache 2.0</span>
                 </div>

@@ -257,6 +257,12 @@
     <a href="#migration-transforms">Migration Transforms</a>
     <a href="#compatibility">Compatibility Checks</a>
 
+    <div class="section-title">AI Coding Skills</div>
+    <a href="#ai-skills">Overview</a>
+    <a href="#skill-claude">Claude Code</a>
+    <a href="#skill-others">Other Editors</a>
+    <a href="#skill-install">Installation</a>
+
     <div class="section-title">SDK Reference</div>
     <a href="#sdk-install">Installation</a>
     <a href="#sdk-client">Client Setup</a>
@@ -1690,6 +1696,88 @@ npm install @vibe/next-plugin
 </pre>
 
     <!-- ============================================================ -->
+    <!-- AI CODING SKILLS                                              -->
+    <!-- ============================================================ -->
+
+    <h2 id="ai-skills">AI Coding Skills</h2>
+
+    <p>VibeSQL ships <strong>AI coding skills</strong> &mdash; lightweight plugins that let your AI coding assistant talk directly to your VibeSQL database. No servers to run, no packages to install. Just drop a skill file into your editor and go.</p>
+
+    <div class="callout">
+        <strong>How it works:</strong> You type a natural language command (e.g. <code>/vibe-sql show me all tables</code>), your AI assistant translates it to PostgreSQL, executes it against VibeSQL's HTTP API, and presents the results &mdash; all in one step.
+    </div>
+
+    <h3>What Skills Can Do</h3>
+    <ul>
+        <li><strong>Explore</strong> &mdash; list tables, describe schemas, inspect columns and types</li>
+        <li><strong>Query</strong> &mdash; SELECT with filters, joins, aggregations, JSONB operators</li>
+        <li><strong>Create</strong> &mdash; CREATE TABLE, ALTER TABLE, add columns, set defaults</li>
+        <li><strong>CRUD</strong> &mdash; INSERT...RETURNING, UPDATE...WHERE, DELETE...WHERE</li>
+        <li><strong>JSONB</strong> &mdash; full PostgreSQL JSONB support with all 9 operators</li>
+    </ul>
+
+    <p>Every skill embeds the full VibeSQL API reference, so your AI assistant knows the endpoint, response format, error codes, safety rules, and PostgreSQL syntax without any extra configuration.</p>
+
+    <h2 id="skill-claude">Claude Code <span class="edition-badge edition-micro">Available Now</span></h2>
+
+    <p>The <code>/vibe-sql</code> skill for <a href="https://claude.com/claude-code" style="color: #93c5fd;">Claude Code</a> lets you talk to your database in natural language directly from your terminal.</p>
+
+<pre>
+<span class="comment"># Examples</span>
+/vibe-sql show me all tables
+/vibe-sql create a users table with name, email, and age
+/vibe-sql add a row: name=Widget, price=9.99
+/vibe-sql what's the average price in stripe_sales
+/vibe-sql add a phone column to the users table
+</pre>
+
+    <p>The skill translates your request to PostgreSQL SQL, executes it via <code>POST /v1/query</code>, and presents formatted results. It enforces safety rules (UPDATE/DELETE require WHERE) and handles all error codes.</p>
+
+    <h2 id="skill-others">Supported Platforms</h2>
+
+    <p>The <code>/vibe-sql</code> skill ships for three AI coding tools today:</p>
+
+    <table>
+        <tr><th>Tool</th><th>Skill Location</th><th>Status</th></tr>
+        <tr><td>Claude Code</td><td><code>~/.claude/skills/vibe-sql/</code></td><td style="color: #22c55e;">Available</td></tr>
+        <tr><td>OpenCode</td><td><code>~/.opencode/skills/vibe-sql/</code></td><td style="color: #22c55e;">Available</td></tr>
+        <tr><td>Codex CLI</td><td><code>~/.agents/skills/vibe-sql/</code></td><td style="color: #22c55e;">Available</td></tr>
+    </table>
+
+    <p>Same skill body, platform-specific frontmatter. All three are QA-tested and passing 10/10 scenarios.</p>
+
+    <h2 id="skill-install">Installation</h2>
+
+    <p>Skills are single files. Copy the skill into your project and your AI editor discovers it automatically.</p>
+
+    <h3>Claude Code</h3>
+
+<pre>
+git clone https://github.com/PayEz-Net/vibesql-skills.git /tmp/vibesql-skills
+cp -r /tmp/vibesql-skills/claude/vibe-sql ~/.claude/skills/vibe-sql
+</pre>
+
+    <p>Open Claude Code and type <code>/vibe-sql show me all tables</code>.</p>
+
+    <h3>OpenCode</h3>
+
+<pre>
+git clone https://github.com/PayEz-Net/vibesql-skills.git /tmp/vibesql-skills
+cp -r /tmp/vibesql-skills/opencode/vibe-sql ~/.opencode/skills/vibe-sql
+</pre>
+
+    <h3>Codex CLI</h3>
+
+<pre>
+git clone https://github.com/PayEz-Net/vibesql-skills.git /tmp/vibesql-skills
+cp -r /tmp/vibesql-skills/codex/vibe-sql ~/.agents/skills/vibe-sql
+</pre>
+
+    <div class="callout">
+        <strong>Default URL:</strong> Skills default to <code>http://localhost:5173</code> (VibeSQL Micro). If your instance runs elsewhere, set the <code>VIBESQL_URL</code> environment variable.
+    </div>
+
+    <!-- ============================================================ -->
     <!-- FOOTER                                                        -->
     <!-- ============================================================ -->
 
@@ -1698,6 +1786,7 @@ npm install @vibe/next-plugin
         <p>
             <a href="https://github.com/PayEz-Net/vibesql-server" style="color: #93c5fd;">Server Edition</a> &middot;
             <a href="https://github.com/PayEz-Net/vibesql-micro" style="color: #93c5fd;">Micro Edition</a> &middot;
+            <a href="https://github.com/PayEz-Net/vibesql-skills" style="color: #93c5fd;">AI Skills</a> &middot;
             <a href="mailto:hello@vibesql.online" style="color: #93c5fd;">Contact</a> &middot;
             Built by <a href="https://idealvibe.online" style="color: #c084fc;">IdealVibe</a>
         </p>

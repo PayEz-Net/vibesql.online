@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>Changelog — VibeSQL</title>
+    <meta name="description" content="VibeSQL release history and changelog. See what's new in each version.">
+    <link rel="icon" type="image/svg+xml" href="/vibesql-icon.svg">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #e2e8f0;
+            background: #0f172a;
+        }
+        body.light-mode { color: var(--dark); background: white; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid #334155;
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        body.light-mode header { background: rgba(255,255,255,0.95); border-bottom-color: var(--border); }
+        nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .logo {
+            font-size: 24px; font-weight: 700; color: #ffffff;
+            text-decoration: none; display: flex; align-items: center; gap: 8px;
+        }
+        body.light-mode .logo { color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .logo svg { width: 28px; height: 28px; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: #e2e8f0; }
+        body.light-mode .nav-links a { color: var(--gray); }
+        body.light-mode .nav-links a:hover { color: var(--dark); }
+        .theme-toggle {
+            background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
+            padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500;
+        }
+        .theme-toggle:hover { background: #334155; }
+        body.light-mode .theme-toggle { background: white; border-color: var(--border); color: var(--dark); }
+
+        /* Page content */
+        .page-header { padding: 60px 0 40px; text-align: center; }
+        .page-header h1 { font-size: 48px; font-weight: 800; color: #f1f5f9; margin-bottom: 12px; }
+        body.light-mode .page-header h1 { color: var(--dark); }
+        .page-header p { color: #94a3b8; font-size: 18px; }
+        body.light-mode .page-header p { color: var(--gray); }
+
+        /* Timeline */
+        .timeline { padding: 0 0 80px; }
+        .release {
+            position: relative;
+            padding: 32px;
+            margin-bottom: 32px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+        }
+        body.light-mode .release { background: white; border-color: var(--border); }
+        .release:hover { border-color: #475569; }
+        body.light-mode .release:hover { border-color: #94a3b8; }
+        .release-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .release-title { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .release-title h2 { font-size: 28px; font-weight: 700; color: #f1f5f9; }
+        body.light-mode .release-title h2 { color: var(--dark); }
+        .release-tag {
+            font-size: 13px; font-weight: 600; padding: 4px 12px;
+            border-radius: 20px; white-space: nowrap;
+        }
+        .tag-latest { background: rgba(34,197,94,0.15); color: #22c55e; }
+        .tag-patch { background: rgba(59,130,246,0.15); color: #3b82f6; }
+        .tag-major { background: rgba(124,58,237,0.15); color: #a78bfa; }
+        .release-date { color: #64748b; font-size: 14px; white-space: nowrap; padding-top: 6px; }
+        .release-summary {
+            font-size: 16px; color: #cbd5e1; margin-bottom: 20px;
+            padding-bottom: 20px; border-bottom: 1px solid #334155;
+        }
+        body.light-mode .release-summary { color: var(--gray); border-bottom-color: var(--border); }
+
+        .change-group { margin-bottom: 16px; }
+        .change-group:last-child { margin-bottom: 0; }
+        .change-group h3 { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .change-group h3.added { color: #22c55e; }
+        .change-group h3.fixed { color: #f59e0b; }
+        .change-group h3.changed { color: #3b82f6; }
+
+        .change-group ul { list-style: none; padding: 0; }
+        .change-group li {
+            padding: 6px 0 6px 20px;
+            position: relative;
+            color: #cbd5e1;
+            font-size: 15px;
+        }
+        body.light-mode .change-group li { color: #475569; }
+        .change-group li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 14px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .change-group.added li::before { background: #22c55e; }
+        .change-group.fixed li::before { background: #f59e0b; }
+        .change-group.changed li::before { background: #3b82f6; }
+
+        .change-group code {
+            background: #0f172a; padding: 2px 6px; border-radius: 4px;
+            font-size: 13px; color: #7dd3fc;
+        }
+        body.light-mode .change-group code { background: #f1f5f9; color: #2563eb; }
+
+        .release-links { margin-top: 20px; padding-top: 16px; border-top: 1px solid #334155; display: flex; gap: 20px; flex-wrap: wrap; }
+        body.light-mode .release-links { border-top-color: var(--border); }
+        .release-links a {
+            color: #7c3aed; text-decoration: none; font-size: 14px; font-weight: 500;
+            display: flex; align-items: center; gap: 4px;
+        }
+        .release-links a:hover { text-decoration: underline; }
+
+        /* Footer */
+        footer { padding: 40px 0; border-top: 1px solid #334155; color: var(--gray); }
+        body.light-mode footer { border-top-color: var(--border); }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        footer .links { display: flex; gap: 24px; }
+        footer a { color: var(--gray); text-decoration: none; }
+        footer a:hover { color: #e2e8f0; }
+        body.light-mode footer a:hover { color: var(--dark); }
+
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            .release-title h2 { font-size: 22px; }
+            .nav-links { display: none; }
+            .footer-content { flex-direction: column; gap: 20px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">
+                <svg width="28" height="28" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="vibeGradient" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#7c3aed"/>
+                            <stop offset="100%" stop-color="#06b6d4"/>
+                        </linearGradient>
+                    </defs>
+                    <g transform="translate(37, 37)">
+                        <circle cx="0" cy="0" r="12" fill="url(#vibeGradient)"/>
+                        <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" stroke-width="3" transform="rotate(-30)" fill="none" opacity="0.8"/>
+                        <circle cx="35" cy="0" r="5" fill="#06b6d4" transform="rotate(-30)"/>
+                        <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" stroke-width="3" transform="rotate(30)" fill="none" opacity="0.8"/>
+                        <circle cx="-35" cy="0" r="5" fill="#7c3aed" transform="rotate(30)"/>
+                    </g>
+                </svg>
+                Vibe<span>SQL</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="https://github.com/PayEz-Net/vibesql-skills" style="color: #06b6d4;">AI Skills</a>
+                <a href="/docs.html">Docs</a>
+                <a href="/changelog.html" style="color: #22c55e;">Changelog</a>
+                <button class="theme-toggle" onclick="toggleTheme()">☀️ Light</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Changelog</h1>
+            <p>Release history for VibeSQL Micro. All releases available on <a href="https://github.com/PayEz-Net/vibesql-micro/releases" style="color: #7c3aed;">GitHub</a> and <a href="https://www.npmjs.com/package/vibesql-micro" style="color: #7c3aed;">npm</a>.</p>
+        </div>
+
+        <div class="timeline">
+
+            <!-- v1.0.4 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>v1.0.4</h2>
+                        <span class="release-tag tag-latest">LATEST</span>
+                        <span class="release-tag tag-patch">FEATURE</span>
+                    </div>
+                    <span class="release-date">February 23, 2026</span>
+                </div>
+                <p class="release-summary">Graceful shutdown overhaul, <code>vibe stop</code> command, and a new quickstart showcasing the Rust Agent Mail MCP server for multi-agent coordination on localhost.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><code>vibe stop</code> command — cleanly shuts down a running instance via HTTP endpoint or PID file fallback</li>
+                        <li><code>/v1/shutdown</code> localhost-only endpoint for programmatic shutdown</li>
+                        <li>Windows Job Object (<code>KILL_ON_JOB_CLOSE</code>) — guarantees child process cleanup even on crash</li>
+                        <li>Unix process groups (<code>Setpgid</code>) — group kill ensures no orphaned PostgreSQL processes</li>
+                        <li>Hello Agent Intelligence quickstart — install vibesql-micro + Rust Agent Mail MCP server, spin up a multi-agent team on localhost in 5 minutes</li>
+                    </ul>
+                </div>
+                <div class="change-group fixed">
+                    <h3 class="fixed">Fixed</h3>
+                    <ul>
+                        <li>Graceful shutdown: switched from <code>exec.CommandContext</code> to <code>exec.Command</code> so <code>pg_ctl stop</code> actually runs before context cancellation</li>
+                        <li><code>Stop()</code> ordering: PostgreSQL now stops before context is cancelled, preventing data loss</li>
+                        <li>Process tree fallback: <code>stopPostgres()</code> kills the entire process tree, not just the main PID</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v1.0.4">GitHub Release →</a>
+                    <a href="https://www.npmjs.com/package/vibesql-micro/v/1.0.4">npm →</a>
+                </div>
+            </div>
+
+            <!-- v1.0.3 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>v1.0.3</h2>
+                        <span class="release-tag tag-patch">FEATURE</span>
+                    </div>
+                    <span class="release-date">February 23, 2026</span>
+                </div>
+                <p class="release-summary">Parameterized query support — pass <code>params</code> alongside <code>sql</code> for safe, typed queries using PostgreSQL <code>$1</code>, <code>$2</code> placeholders.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li>Optional <code>params</code> array in request body: <code>{"sql": "SELECT $1::text", "params": ["hello"]}</code></li>
+                        <li>PostgreSQL native <code>$1</code>, <code>$2</code>, ... placeholders with automatic type inference</li>
+                        <li>Full CRUD support: SELECT, INSERT, UPDATE, DELETE all work with params</li>
+                        <li>Backward compatible — existing raw SQL requests without params work unchanged</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v1.0.3">GitHub Release →</a>
+                    <a href="https://www.npmjs.com/package/vibesql-micro/v/1.0.3">npm →</a>
+                </div>
+            </div>
+
+            <!-- v1.0.2 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>v1.0.2</h2>
+                        <span class="release-tag tag-patch">PATCH</span>
+                    </div>
+                    <span class="release-date">February 23, 2026</span>
+                </div>
+                <p class="release-summary">Better startup diagnostics — when PostgreSQL fails to start, you now see exactly why instead of a generic timeout.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li>PostgreSQL stderr output included in startup failure messages (last 20 lines)</li>
+                        <li>Step-by-step progress logging: <code>Extracting</code> → <code>Initializing</code> → <code>Starting on port</code> → <code>Waiting for connections</code></li>
+                        <li>Real-time PostgreSQL LOG and WARNING lines shown during startup (not just FATAL/ERROR)</li>
+                    </ul>
+                </div>
+                <div class="change-group fixed">
+                    <h3 class="fixed">Fixed</h3>
+                    <ul>
+                        <li>Generic "timeout after 30s" message now shows the actual PostgreSQL error (port conflicts, permission issues, missing files)</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v1.0.2">GitHub Release →</a>
+                    <a href="https://www.npmjs.com/package/vibesql-micro/v/1.0.2">npm →</a>
+                </div>
+            </div>
+
+            <!-- v1.0.1 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>v1.0.1</h2>
+                        <span class="release-tag tag-patch">PATCH</span>
+                    </div>
+                    <span class="release-date">February 22, 2026</span>
+                </div>
+                <p class="release-summary">Windows fix for the PostgreSQL <code>/share</code> directory resolution bug that caused startup failures on some machines.</p>
+
+                <div class="change-group fixed">
+                    <h3 class="fixed">Fixed</h3>
+                    <ul>
+                        <li>Windows: PostgreSQL resolves <code>/share</code> as <code>&lt;drive&gt;:\share</code> — now creates share directory on both the temp and CWD drives</li>
+                        <li>Clear error message when drive-root write fails (suggests running as Administrator)</li>
+                        <li>Automatic cleanup of <code>\share</code> and <code>\lib</code> directories on shutdown</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v1.0.1">GitHub Release →</a>
+                    <a href="https://www.npmjs.com/package/vibesql-micro/v/1.0.1">npm →</a>
+                </div>
+            </div>
+
+            <!-- v1.0.0 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>v1.0.0</h2>
+                        <span class="release-tag tag-major">INITIAL RELEASE</span>
+                    </div>
+                    <span class="release-date">February 22, 2026</span>
+                </div>
+                <p class="release-summary">First public release. PostgreSQL 16.1 embedded in a single binary with HTTP API. Available on npm and GitHub Releases.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li>Embedded PostgreSQL 16.1 — full ACID, JSONB, arrays, all standard types</li>
+                        <li>HTTP API at <code>POST /v1/query</code> — send SQL, get JSON back</li>
+                        <li>Single binary for Windows (x64), Linux (x64), and macOS (Intel)</li>
+                        <li>npm distribution — <code>npx vibesql-micro</code> downloads and runs automatically</li>
+                        <li>Safety: UPDATE/DELETE require WHERE clause, query size limits, row count limits, 5s timeout</li>
+                        <li>Auto-creates data directory, initializes PostgreSQL, starts HTTP server</li>
+                        <li>Clean shutdown with <code>Ctrl+C</code> — stops PostgreSQL, removes temp files</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v1.0.0">GitHub Release →</a>
+                    <a href="https://www.npmjs.com/package/vibesql-micro/v/1.0.0">npm →</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="links">
+                <a href="https://github.com/PayEz-Net/vibesql-server">Server Edition</a>
+                <a href="https://github.com/PayEz-Net/vibesql-micro">Micro (Dev Tool)</a>
+                <a href="https://github.com/PayEz-Net/vibesql-skills">AI Skills</a>
+                <a href="/docs.html">Docs</a>
+                <a href="/changelog.html">Changelog</a>
+                <span>Apache 2.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            updateThemeButton();
+        }
+        function updateThemeButton() {
+            const btn = document.querySelector('.theme-toggle');
+            const isLight = document.body.classList.contains('light-mode');
+            btn.textContent = isLight ? '🌙 Dark' : '☀️ Light';
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') document.body.classList.add('light-mode');
+            updateThemeButton();
+        });
+    </script>
+</body>
+</html>

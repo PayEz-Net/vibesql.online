@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>Hello Agent Intelligence — VibeSQL Quickstart</title>
+    <meta name="description" content="Build your first AI agent team in 5 minutes. Local database, agent mail, real-time collaboration — all on your machine. No cloud, no signup.">
+    <link rel="icon" type="image/svg+xml" href="/vibesql-icon.svg">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --cyan: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --green: #22c55e;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #e2e8f0;
+            background: #0f172a;
+        }
+        body.light-mode { color: var(--dark); background: white; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid #334155;
+            padding: 16px 0;
+            position: sticky; top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        body.light-mode header { background: rgba(255,255,255,0.95); border-bottom-color: var(--border); }
+        .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        body.light-mode .logo { color: var(--dark); }
+        .logo span { color: var(--primary); }
+        .logo svg { width: 28px; height: 28px; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 500; }
+        .nav-links a:hover { color: #e2e8f0; }
+        body.light-mode .nav-links a { color: var(--gray); }
+        body.light-mode .nav-links a:hover { color: var(--dark); }
+        .theme-toggle {
+            background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
+            padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500;
+        }
+        body.light-mode .theme-toggle { background: white; border-color: var(--border); color: var(--dark); }
+
+        /* Hero */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 52px; font-weight: 800; color: #f1f5f9;
+            margin-bottom: 16px; letter-spacing: -0.02em;
+        }
+        body.light-mode .hero h1 { color: var(--dark); }
+        .hero .subtitle {
+            font-size: 22px; color: #94a3b8; max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        body.light-mode .hero .subtitle { color: var(--gray); }
+        .hero-badges { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 500;
+        }
+        .badge-time { background: rgba(34,197,94,0.15); color: #22c55e; }
+        .badge-local { background: rgba(6,182,212,0.15); color: #06b6d4; }
+        .badge-free { background: rgba(124,58,237,0.15); color: #a78bfa; }
+
+        /* Steps */
+        .steps { padding: 0 0 80px; }
+        .step {
+            margin-bottom: 64px;
+            position: relative;
+        }
+        .step-number {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--cyan));
+            color: white; font-weight: 700; font-size: 18px;
+            margin-bottom: 16px;
+        }
+        .step h2 {
+            font-size: 28px; font-weight: 700; color: #f1f5f9;
+            margin-bottom: 12px;
+        }
+        body.light-mode .step h2 { color: var(--dark); }
+        .step p, .step li {
+            color: #cbd5e1; font-size: 16px;
+        }
+        body.light-mode .step p, body.light-mode .step li { color: #475569; }
+        .step p { margin-bottom: 16px; }
+
+        /* Code blocks */
+        .code-block {
+            background: #1e293b; border: 1px solid #334155;
+            border-radius: 12px; overflow: hidden; margin: 16px 0;
+        }
+        body.light-mode .code-block { background: #1e293b; }
+        .code-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 16px; border-bottom: 1px solid #334155;
+            font-size: 12px; color: #64748b; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .code-header .label { display: flex; align-items: center; gap: 8px; }
+        .code-header .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot-green { background: #22c55e; }
+        .dot-blue { background: #3b82f6; }
+        .dot-purple { background: #a78bfa; }
+        .dot-cyan { background: #06b6d4; }
+        .copy-btn {
+            background: #334155; color: #94a3b8; border: none;
+            padding: 4px 10px; border-radius: 6px; cursor: pointer;
+            font-size: 12px; font-weight: 500;
+        }
+        .copy-btn:hover { background: #475569; color: #e2e8f0; }
+        pre {
+            padding: 20px; margin: 0; overflow-x: auto;
+            font-family: 'SF Mono', 'Fira Code', Monaco, monospace;
+            font-size: 14px; line-height: 1.6; color: #e2e8f0;
+        }
+        pre .comment { color: #64748b; }
+        pre .prompt { color: #22c55e; }
+        pre .url { color: #06b6d4; }
+        pre .string { color: #fbbf24; }
+        pre .key { color: #a78bfa; }
+        pre .agent-name { color: #f472b6; }
+
+        /* Architecture diagram */
+        .arch {
+            background: #1e293b; border: 1px solid #334155;
+            border-radius: 16px; padding: 40px; margin: 32px 0;
+            text-align: center;
+        }
+        body.light-mode .arch { background: #f8fafc; border-color: var(--border); }
+        .arch-row {
+            display: flex; justify-content: center; align-items: center;
+            gap: 16px; margin: 12px 0; flex-wrap: wrap;
+        }
+        .arch-box {
+            padding: 12px 20px; border-radius: 10px; font-weight: 600;
+            font-size: 14px; white-space: nowrap;
+        }
+        .arch-db { background: rgba(124,58,237,0.2); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+        .arch-server { background: rgba(6,182,212,0.2); color: #06b6d4; border: 1px solid rgba(6,182,212,0.3); }
+        .arch-client { background: rgba(34,197,94,0.2); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+        .arch-arrow { color: #475569; font-size: 20px; }
+        .arch-label { color: #64748b; font-size: 12px; margin-top: 4px; }
+
+        /* Callout */
+        .callout {
+            background: rgba(6,182,212,0.1); border-left: 4px solid var(--cyan);
+            padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 20px 0;
+            color: #7dd3fc; font-size: 15px;
+        }
+        body.light-mode .callout { background: #ecfeff; color: #0e7490; }
+        .callout strong { color: #22d3ee; }
+        body.light-mode .callout strong { color: #0891b2; }
+
+        .callout-warn {
+            background: rgba(251,191,36,0.1); border-left-color: #fbbf24;
+            color: #fde68a;
+        }
+        body.light-mode .callout-warn { background: #fffbeb; color: #92400e; }
+
+
+        /* CTA */
+        .cta-section {
+            text-align: center; padding: 60px 0 80px;
+            border-top: 1px solid #334155;
+        }
+        body.light-mode .cta-section { border-top-color: var(--border); }
+        .cta-section h2 { font-size: 32px; font-weight: 700; color: #f1f5f9; margin-bottom: 16px; }
+        body.light-mode .cta-section h2 { color: var(--dark); }
+        .cta-section p { color: #94a3b8; font-size: 18px; margin-bottom: 32px; }
+        .cta-buttons { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+        .btn {
+            padding: 14px 28px; border-radius: 8px; font-weight: 600;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-secondary { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; }
+        .btn-secondary:hover { background: #334155; }
+
+        /* Footer */
+        footer { padding: 40px 0; border-top: 1px solid #334155; color: var(--gray); }
+        body.light-mode footer { border-top-color: var(--border); }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        footer .links { display: flex; gap: 24px; }
+        footer a { color: var(--gray); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .nav-links { display: none; }
+            .arch-row { flex-direction: column; }
+            .arch-arrow { transform: rotate(90deg); }
+            .footer-content { flex-direction: column; gap: 20px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">
+                <svg width="28" height="28" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs><linearGradient id="vibeGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
+                    <g transform="translate(37, 37)">
+                        <circle cx="0" cy="0" r="12" fill="url(#vibeGradient)"/>
+                        <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" stroke-width="3" transform="rotate(-30)" fill="none" opacity="0.8"/>
+                        <circle cx="35" cy="0" r="5" fill="#06b6d4" transform="rotate(-30)"/>
+                        <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" stroke-width="3" transform="rotate(30)" fill="none" opacity="0.8"/>
+                        <circle cx="-35" cy="0" r="5" fill="#7c3aed" transform="rotate(30)"/>
+                    </g>
+                </svg>
+                Vibe<span>SQL</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/docs.html">Docs</a>
+                <a href="/changelog.html" style="color: #22c55e;">Changelog</a>
+                <a href="/quickstart.html" style="color: #06b6d4; font-weight: 700;">Quickstart</a>
+                <button class="theme-toggle" onclick="toggleTheme()">☀️ Light</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-badges">
+                <span class="hero-badge badge-time">5 minutes</span>
+                <span class="hero-badge badge-local">100% localhost</span>
+                <span class="hero-badge badge-free">free forever</span>
+            </div>
+            <h1>Hello, Agent Intelligence</h1>
+            <p class="subtitle">Build a team of AI experts that collaborate on your ideas. Database, mail server, and agent TUI — all running on your machine.</p>
+        </section>
+
+        <!-- Video Demo -->
+        <section class="step" style="margin-bottom: 48px;">
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 16px; overflow: hidden;">
+                <div style="padding: 12px 20px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 13px; color: #94a3b8; font-weight: 600;">LIVE DEMO &mdash; Claude Code runs the full 12-step quickstart autonomously (1.5x speed)</span>
+                    <span style="font-size: 12px; color: #475569;">2:59</span>
+                </div>
+                <video controls preload="metadata" style="width: 100%; display: block;" poster="">
+                    <source src="/vibe_sql_mail_demo_v2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <p style="text-align: center; margin-top: 12px; color: #64748b; font-size: 14px;">Install, schema, agents, mail, kanban, queries, shutdown, uninstall &mdash; nothing left behind.</p>
+        </section>
+
+        <!-- Try It Yourself -->
+        <section class="step" style="margin-bottom: 64px;">
+            <div class="step-number" style="background: linear-gradient(135deg, #22c55e, #06b6d4);">&#9654;</div>
+            <h2>Try it yourself</h2>
+            <p>The video above is 100% reproducible. Create an empty folder with these three files, open Claude Code in it, and say <strong>"Read instructions.md and follow each step."</strong> That's it.</p>
+
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 16px; font-size: 13px; font-weight: 500; background: rgba(34,197,94,0.15); color: #22c55e;">Node.js required</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 16px; font-size: 13px; font-weight: 500; background: rgba(124,58,237,0.15); color: #a78bfa;">Claude Code required</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 16px; font-size: 13px; font-weight: 500; background: rgba(6,182,212,0.15); color: #06b6d4;">No cloud, no signup</span>
+            </div>
+
+            <!-- File tree -->
+            <div class="code-block" style="margin-bottom: 24px;">
+                <div class="code-header">
+                    <div class="label"><span class="dot dot-green"></span> Project Structure</div>
+                </div>
+<pre style="color: #94a3b8;">my-agent-demo/
+  instructions.md            <span style="color: #475569;">&larr; the prompt Claude follows</span>
+  .claude/
+    settings.json            <span style="color: #475569;">&larr; MCP servers (database + mail)</span>
+    settings.local.json      <span style="color: #475569;">&larr; auto-approve permissions</span></pre>
+            </div>
+
+            <!-- File 1: .claude/settings.json -->
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="label"><span class="dot dot-purple"></span> .claude/settings.json</div>
+                    <button class="copy-btn" onclick="copy(this, document.getElementById('settings-json').textContent)">Copy</button>
+                </div>
+<pre id="settings-json">{
+  <span class="key">"mcpServers"</span>: {
+    <span class="key">"vibesql"</span>: {
+      <span class="key">"command"</span>: <span class="string">"npx"</span>,
+      <span class="key">"args"</span>: [<span class="string">"@vibesql/mcp"</span>]
+    },
+    <span class="key">"agent-mail"</span>: {
+      <span class="key">"command"</span>: <span class="string">"npx"</span>,
+      <span class="key">"args"</span>: [<span class="string">"vibesql-mail-mcp"</span>, <span class="string">"--agent"</span>, <span class="string">"vibe_installer"</span>, <span class="string">"--micro-url"</span>, <span class="string">"http://localhost:5173"</span>]
+    }
+  }
+}</pre>
+            </div>
+
+            <div class="callout" style="margin-top: 16px; margin-bottom: 16px;">
+                <strong>Two MCP servers, zero config.</strong> <code style="background: rgba(6,182,212,0.2); padding: 2px 6px; border-radius: 4px;">vibesql</code> gives Claude direct SQL access. <code style="background: rgba(6,182,212,0.2); padding: 2px 6px; border-radius: 4px;">agent-mail</code> gives it send/receive/search mail tools. Both connect to vibesql-micro on localhost:5173 &mdash; which the script itself installs and starts in Step 1.
+            </div>
+
+            <!-- File 2: .claude/settings.local.json -->
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="label"><span class="dot dot-cyan"></span> .claude/settings.local.json</div>
+                    <button class="copy-btn" onclick="copy(this, document.getElementById('settings-local').textContent)">Copy</button>
+                </div>
+<pre id="settings-local">{
+  <span class="key">"permissions"</span>: {
+    <span class="key">"allow"</span>: [
+      <span class="string">"Bash(cd:*)"</span>,
+      <span class="string">"Bash(netstat:*)"</span>,
+      <span class="string">"Skill(vibe-sql)"</span>,
+      <span class="string">"Bash(npm install:*)"</span>,
+      <span class="string">"Bash(npx vibesql-micro:*)"</span>,
+      <span class="string">"Bash(sleep 10 &amp;&amp; curl -s http://127.0.0.1:5173/api/tables 2&gt;&amp;1)"</span>,
+      <span class="string">"Bash(curl:*)"</span>
+    ]
+  }
+}</pre>
+            </div>
+
+            <!-- File 3: instructions.md -->
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="label"><span class="dot dot-green"></span> instructions.md &mdash; the prompt</div>
+                    <button class="copy-btn" onclick="copy(this, document.getElementById('instructions-md').textContent)">Copy</button>
+                </div>
+<pre id="instructions-md" style="max-height: 500px; overflow-y: auto; font-size: 13px; line-height: 1.5;"><span style="color: #f1f5f9; font-weight: 700;"># Agent Mail Demo</span>
+
+You are vibe_installer &mdash; an AI agent setting up a fresh Agent Mail
+system from scratch. Follow each step below, report what happened
+after each, and show final results at the end.
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 1: Install and Start VibeSQL</span>
+<span class="comment">npm install -g vibesql-micro</span>
+<span class="comment">npx vibesql-micro version</span>
+<span class="comment">npx vibesql-micro serve</span>  <span style="color: #475569;">(run in background)</span>
+Verify with the <span style="color: #06b6d4;">vibesql</span> MCP tool. Database should be empty.
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 2: Create the Agent Mail Schema</span>
+10 tables (settings, agents, teams, team_members, projects,
+kanban_boards, kanban_columns, kanban_cards, messages, inbox)
++ 14 indexes. Use the <span style="color: #06b6d4;">vibesql</span> MCP query tool for every statement.
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 3: Register Three Agents and Create a Team</span>
+vibe_installer (installer), test_agent_1 (researcher),
+test_agent_2 (engineer) &rarr; team "demo-team"
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 4: Create a Project and Kanban Board</span>
+Project "vibesql-research" &rarr; Board "Research Tasks"
+Columns: To Do, In Progress, Done
+Card: "Investigate JSONB storage" assigned to researcher
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 5: Send Welcome Messages</span>
+Using the <span style="color: #f472b6;">agent-mail</span> MCP, send welcome messages to both agents.
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 6: Cross-Agent Communication</span>
+Send assignment message to test_agent_1 via <span style="color: #f472b6;">agent-mail</span> MCP.
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 7: Move the Kanban Card</span>
+To Do &rarr; In Progress
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 8&ndash;9: Outbox Check + Final Results</span>
+Query messages table, show summary of entire system.
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 10: /vibe-sql Natural Language Queries</span>
+10 queries via the /vibe-sql slash command &mdash; including
+INSERT, UPDATE, thread search, and final board state.
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 11: Clean Shutdown</span>
+<span class="comment">npx vibesql-micro stop</span>
+Verify zero orphan processes, zero held ports.
+
+<span style="color: #f1f5f9; font-weight: 700;">## Step 12: Clean Uninstall</span>
+<span class="comment">npm uninstall -g vibesql-micro</span>
+<span class="comment">rm -rf ./vibe-data</span>
+Nothing left on the machine.</pre>
+            </div>
+
+            <div class="callout callout-warn" style="margin-top: 20px;">
+                <strong>The full instructions.md is ~390 lines</strong> with complete SQL for all tables, indexes, and queries. The summary above shows the structure &mdash; <a href="https://github.com/PayEz-Net/vibesql-mail-mcp/blob/main/examples/instructions.md" style="color: #fbbf24;">grab the full file from GitHub</a> to replicate the exact demo. The <a href="https://github.com/PayEz-Net/vibesql-mail-mcp/tree/main/examples" style="color: #fbbf24;">examples/</a> folder also has the two settings files ready to copy. See the <a href="#schema" style="color: #fbbf24;">full schema diagram</a> below.
+            </div>
+
+            <!-- The prompt -->
+            <div class="code-block" style="margin-top: 24px;">
+                <div class="code-header">
+                    <div class="label"><span class="dot dot-green"></span> Run It</div>
+                    <button class="copy-btn" onclick="copy(this, 'claude')">Copy</button>
+                </div>
+<pre><span class="comment"># In your project folder:</span>
+<span class="prompt">$</span> claude
+
+<span class="comment"># Then type:</span>
+<span class="prompt">&#10095;</span> Read instructions.md and follow each step. Report back after each step, then move to the next.</pre>
+            </div>
+        </section>
+
+        <!-- Architecture -->
+        <section class="step">
+            <h2 style="text-align: center; margin-bottom: 24px;">How it works</h2>
+            <div class="arch">
+                <div class="arch-row">
+                    <div>
+                        <div class="arch-box arch-client" style="min-width: 260px;">Claude Code</div>
+                        <div class="arch-label">AI coding agent</div>
+                    </div>
+                </div>
+                <div class="arch-row">
+                    <span class="arch-arrow">↕</span>
+                    <span class="arch-arrow">↕</span>
+                </div>
+                <div class="arch-row">
+                    <div>
+                        <div class="arch-box arch-server">@vibesql/mcp</div>
+                        <div class="arch-label">SQL queries via MCP</div>
+                    </div>
+                    <div>
+                        <div class="arch-box arch-server" style="background: rgba(244,114,182,0.2); color: #f472b6; border-color: rgba(244,114,182,0.3);">vibesql-mail-mcp</div>
+                        <div class="arch-label">Agent mail via MCP</div>
+                    </div>
+                </div>
+                <div class="arch-row">
+                    <span class="arch-arrow">↕</span>
+                </div>
+                <div class="arch-row">
+                    <div>
+                        <div class="arch-box arch-db">vibesql-micro :5173</div>
+                        <div class="arch-label">Embedded PostgreSQL 16 — stores everything</div>
+                    </div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 16px; color: #64748b; font-size: 14px;">Both MCP servers connect to the same vibesql-micro instance. No separate server processes — Claude talks to the tools directly.</p>
+        </section>
+
+        <div class="steps">
+
+            <!-- What you get -->
+            <section class="step">
+                <div class="step-number" style="background: linear-gradient(135deg, #22c55e, #06b6d4);">&#10003;</div>
+                <h2>What you get</h2>
+                <p>One prompt, twelve steps, zero manual intervention. The demo above builds all of this autonomously:</p>
+
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 8px 0; padding-left: 24px; position: relative;"><span style="position: absolute; left: 0; color: #22c55e;">&#10003;</span> <strong style="color: #f1f5f9;">A PostgreSQL database</strong> running locally with full SQL, JSONB, and ACID guarantees</li>
+                    <li style="padding: 8px 0; padding-left: 24px; position: relative;"><span style="position: absolute; left: 0; color: #22c55e;">&#10003;</span> <strong style="color: #f1f5f9;"><a href="#schema" style="color: #f1f5f9; text-decoration: none; border-bottom: 1px dashed #475569;">10-table agent mail schema</a></strong> with agents, teams, projects, kanban boards, messages, and inbox</li>
+                    <li style="padding: 8px 0; padding-left: 24px; position: relative;"><span style="position: absolute; left: 0; color: #22c55e;">&#10003;</span> <strong style="color: #f1f5f9;">Cross-agent messaging</strong> via MCP tools — send, receive, search, reply without leaving Claude Code</li>
+                    <li style="padding: 8px 0; padding-left: 24px; position: relative;"><span style="position: absolute; left: 0; color: #22c55e;">&#10003;</span> <strong style="color: #f1f5f9;">Natural language queries</strong> via the <code style="background: rgba(6,182,212,0.2); padding: 2px 6px; border-radius: 4px;">/vibe-sql</code> skill — INSERT, UPDATE, search, and board state in plain English</li>
+                    <li style="padding: 8px 0; padding-left: 24px; position: relative;"><span style="position: absolute; left: 0; color: #22c55e;">&#10003;</span> <strong style="color: #f1f5f9;">Clean shutdown and uninstall</strong> — zero orphan processes, zero held ports, nothing left behind</li>
+                </ul>
+
+                <div class="callout callout-warn">
+                    <strong>This is the starting point, not the ceiling.</strong> Give each agent its own Claude Code session with the mail MCP, and they become autonomous collaborators — reading each other's mail, responding with analysis, and coordinating on tasks. The database and mail system are the infrastructure. The intelligence is up to you.
+                </div>
+            </section>
+        </div>
+
+        <!-- Schema -->
+        <section id="schema" class="step" style="padding-top: 40px;">
+            <h2 style="text-align: center; margin-bottom: 8px; font-size: 32px;">Agent Mail Schema</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 32px;">10 tables, 14 indexes — auto-created on first use. <a href="https://github.com/PayEz-Net/vibesql-mail-mcp/blob/main/examples/instructions.md" style="color: #fbbf24;">Full SQL on GitHub</a></p>
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 32px 16px; overflow-x: auto;">
+                <pre class="mermaid" style="padding: 0; background: transparent; display: flex; justify-content: center;">
+erDiagram
+    agents {
+        serial id PK
+        text name UK
+        text display_name
+        text role
+        jsonb expertise_json
+        boolean is_active
+        timestamptz created_at
+    }
+
+    teams {
+        serial id PK
+        text name UK
+        text description
+    }
+
+    team_members {
+        serial id PK
+        integer team_id FK
+        integer agent_id FK
+    }
+
+    projects {
+        serial id PK
+        text name
+        text description
+        text status
+    }
+
+    kanban_boards {
+        serial id PK
+        text name
+        integer project_id FK
+    }
+
+    kanban_columns {
+        serial id PK
+        integer board_id FK
+        text name
+        integer position
+    }
+
+    kanban_cards {
+        serial id PK
+        integer column_id FK
+        text title
+        text description
+        integer assigned_agent_id FK
+    }
+
+    messages {
+        serial id PK
+        integer from_agent_id FK
+        text thread_id
+        text subject
+        text body
+        text importance
+        timestamptz created_at
+    }
+
+    inbox {
+        serial id PK
+        integer message_id FK
+        integer agent_id FK
+        text recipient_type
+        timestamptz read_at
+    }
+
+    settings {
+        text key PK
+        text value
+    }
+
+    agents ||--o{ team_members : "belongs to"
+    teams ||--o{ team_members : "has"
+    agents ||--o{ messages : "sends"
+    agents ||--o{ inbox : "receives"
+    messages ||--o{ inbox : "delivered to"
+    agents ||--o{ kanban_cards : "assigned"
+    projects ||--o{ kanban_boards : "tracked on"
+    kanban_boards ||--o{ kanban_columns : "has"
+    kanban_columns ||--o{ kanban_cards : "contains"
+                </pre>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2>Ready to go deeper?</h2>
+            <p>Explore the full platform — from local dev tools to production infrastructure.</p>
+            <div class="cta-buttons">
+                <a href="/docs.html" class="btn btn-primary">Read the Docs</a>
+                <a href="https://github.com/PayEz-Net/vibesql-skills" class="btn btn-secondary" style="border-color: #06b6d4; color: #06b6d4;">/vibe-sql AI Skill</a>
+                <a href="https://github.com/PayEz-Net/vibesql-micro" class="btn btn-secondary">GitHub</a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="links">
+                <a href="https://github.com/PayEz-Net/vibesql-server">Server</a>
+                <a href="https://github.com/PayEz-Net/vibesql-micro">Micro</a>
+                <a href="https://github.com/PayEz-Net/vibesql-skills">AI Skills</a>
+                <a href="/docs.html">Docs</a>
+                <a href="/changelog.html">Changelog</a>
+                <span>Apache 2.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7c3aed',
+                primaryTextColor: '#e2e8f0',
+                primaryBorderColor: '#6d28d9',
+                lineColor: '#64748b',
+                secondaryColor: '#1e293b',
+                tertiaryColor: '#0f172a',
+                edgeLabelBackground: '#1e293b',
+                attributeBackgroundColorEven: '#1e293b',
+                attributeBackgroundColorOdd: '#162032'
+            },
+            er: {
+                layoutDirection: 'TB',
+                entityPadding: 15,
+                fontSize: 13,
+                useMaxWidth: true
+            }
+        });
+    </script>
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            document.querySelector('.theme-toggle').textContent = isLight ? '🌙 Dark' : '☀️ Light';
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+            const btn = document.querySelector('.theme-toggle');
+            btn.textContent = document.body.classList.contains('light-mode') ? '🌙 Dark' : '☀️ Light';
+        });
+        function copy(btn, text) {
+            navigator.clipboard.writeText(text.trim());
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy', 2000);
+        }
+    </script>
+</body>
+</html>
