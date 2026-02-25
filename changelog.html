@@ -201,12 +201,104 @@
 
         <div class="timeline">
 
+            <!-- v1.0.7 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>v1.0.7</h2>
+                        <span class="release-tag tag-latest">LATEST</span>
+                        <span class="release-tag tag-patch">FEATURE</span>
+                    </div>
+                    <span class="release-date">February 25, 2026</span>
+                </div>
+                <p class="release-summary">Binary relocation engine — embedded PostgreSQL now works on any system regardless of temp directory paths. Also trims npm package from 62MB to 8KB.</p>
+
+                <div class="change-group fixed">
+                    <h3 class="fixed">Fixed</h3>
+                    <ul>
+                        <li>Linux: <code>initdb</code> failed with <code>could not access file "$libdir/dict_snowball"</code> — extension libraries were not being extracted on Linux</li>
+                        <li>Linux: PostgreSQL could not find timezone files — compiled-in <code>PKGDATADIR</code> path didn't match the runtime temp extraction directory</li>
+                    </ul>
+                </div>
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li>Binary relocation engine — scans each extracted binary for compiled-in install paths and patches them in-place (null-padded) to point at the actual extraction directory</li>
+                        <li>Patches all 9 PostgreSQL baked-in paths: <code>share</code>, <code>share/locale</code>, <code>share/man</code>, <code>share/doc</code>, <code>lib</code>, <code>include</code>, <code>include/server</code>, <code>etc</code>, <code>bin</code></li>
+                        <li>Embedded <code>plpgsql.so</code> and <code>dict_snowball.so</code> for Linux — required by <code>initdb</code> post-bootstrap</li>
+                    </ul>
+                </div>
+                <div class="change-group changed">
+                    <h3 class="changed">Changed</h3>
+                    <ul>
+                        <li>Temp directory prefix shortened from <code>vibe-postgres-*</code> to <code>vb-*</code> for path length compatibility</li>
+                        <li>npm package trimmed from 62MB / 137 files to 8KB / 6 files via <code>files</code> whitelist</li>
+                        <li><code>install.js</code> reads version from <code>package.json</code> instead of hardcoding</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v1.0.7">GitHub Release →</a>
+                    <a href="https://www.npmjs.com/package/vibesql-micro/v/1.0.7">npm →</a>
+                </div>
+            </div>
+
+            <!-- v1.0.6 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>v1.0.6</h2>
+                        <span class="release-tag tag-patch">PATCH</span>
+                    </div>
+                    <span class="release-date">February 24, 2026</span>
+                </div>
+                <p class="release-summary">Install script version check — npm upgrades now correctly replace outdated binaries.</p>
+
+                <div class="change-group fixed">
+                    <h3 class="fixed">Fixed</h3>
+                    <ul>
+                        <li><code>install.js</code> now checks the installed binary version before skipping download — previously any existing binary would skip, even if outdated</li>
+                        <li>Upgrading via <code>npm install -g vibesql-micro@&lt;new&gt;</code> now correctly replaces the old binary</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v1.0.6">GitHub Release →</a>
+                    <a href="https://www.npmjs.com/package/vibesql-micro/v/1.0.6">npm →</a>
+                </div>
+            </div>
+
+            <!-- v1.0.5 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>v1.0.5</h2>
+                        <span class="release-tag tag-patch">PATCH</span>
+                    </div>
+                    <span class="release-date">February 24, 2026</span>
+                </div>
+                <p class="release-summary">Linux initdb fix — embedded <code>postgres.bki</code> had CRLF line endings causing startup failure on Linux.</p>
+
+                <div class="change-group fixed">
+                    <h3 class="fixed">Fixed</h3>
+                    <ul>
+                        <li>Linux: <code>initdb</code> failed with <code>input file "...postgres.bki" does not belong to PostgreSQL 16.1</code> on every startup</li>
+                        <li>Root cause: <code>postgres.bki</code> had Windows CRLF line endings — version header read as <code># PostgreSQL 16\r</code> instead of <code># PostgreSQL 16</code></li>
+                        <li>Converted <code>postgres.bki</code> to Unix LF line endings in <code>share.tar.gz</code></li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v1.0.5">GitHub Release →</a>
+                    <a href="https://www.npmjs.com/package/vibesql-micro/v/1.0.5">npm →</a>
+                </div>
+            </div>
+
             <!-- v1.0.4 -->
             <div class="release">
                 <div class="release-header">
                     <div class="release-title">
                         <h2>v1.0.4</h2>
-                        <span class="release-tag tag-latest">LATEST</span>
                         <span class="release-tag tag-patch">FEATURE</span>
                     </div>
                     <span class="release-date">February 23, 2026</span>
