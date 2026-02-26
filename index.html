@@ -135,11 +135,13 @@
         }
 
         /* Dark mode adjustments for specific elements */
-        .nav-links a {
+        .nav-links a,
+        .nav-links a:visited {
             color: #94a3b8;
         }
 
-        body.light-mode .nav-links a {
+        body.light-mode .nav-links a,
+        body.light-mode .nav-links a:visited {
             color: var(--gray);
         }
 
@@ -304,7 +306,7 @@
 
         .nav-links {
             display: flex;
-            gap: 32px;
+            gap: 20px;
             align-items: center;
         }
 
@@ -312,11 +314,23 @@
             color: var(--gray);
             text-decoration: none;
             font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
             transition: color 0.2s;
         }
 
         .nav-links a:hover {
             color: var(--dark);
+        }
+
+        .nav-links a.nav-accent,
+        .nav-links a.nav-accent:visited {
+            color: #06b6d4;
+        }
+
+        .nav-links a.nav-changelog,
+        .nav-links a.nav-changelog:visited {
+            color: #22c55e;
         }
 
         .github-btn {
@@ -833,13 +847,13 @@
                     Vibe<span>SQL</span>
                 </a>
                 <div class="nav-links">
-                    <a href="/quickstart.html" style="color: #06b6d4; font-weight: 600;">Quickstart</a>
+                    <a href="/quickstart.html" class="nav-accent" style="font-weight: 600;">Quickstart</a>
                     <a href="#features">Features</a>
-                    <a href="https://github.com/PayEz-Net/vibesql-skills" style="color: #06b6d4;">AI Skills</a>
+                    <a href="https://github.com/PayEz-Net/vibesql-skills" class="nav-accent">AI Skills</a>
                     <a href="#schemas">Schemas</a>
                     <a href="#pricing">Pricing</a>
                     <a href="/docs.html">Docs</a>
-                    <a href="/changelog.html" style="color: #22c55e;">Changelog</a>
+                    <a href="/changelog.html" class="nav-changelog">Changelog</a>
                     <a href="/about.html">About</a>
                     <button class="theme-toggle" onclick="toggleTheme()">☀️ Light</button>
                     <a href="https://github.com/PayEz-Net/vibesql-server" class="github-btn">
