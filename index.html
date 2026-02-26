@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>VibeSQL — JSON-Based SQL for AI | Open Source</title>
-    <meta name="description" content="Production-ready JSON-based SQL platform for AI systems. Deploy on your infrastructure with full control, use our managed cloud, or start free with our dev tool.">
+    <title>VibeSQL — JSON-Native SQL Database for AI Agents</title>
+    <meta name="description" content="JSON-native SQL database and infra layer built for AI agents and microservices. Open source, PostgreSQL-powered, MCP-integrated.">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/vibesql-icon.svg">
@@ -861,14 +861,14 @@
                 <span class="badge badge-license">📋 Apache 2.0</span>
             </div>
 
-            <h1>Database Built for Agents</h1>
-            <p class="tagline">The complete abstraction of the data plane. Governable encryption, no vendor lock-in, ACP ready.</p>
+            <h1>JSON-Native SQL for AI Agents</h1>
+            <p class="tagline">The database and infra layer built for AI agents and microservices. Store JSON payloads, coordinate multi-agent workflows, and query AI-generated data — with real SQL on Postgres.</p>
 
             <div class="badges" style="margin-bottom: 32px; margin-top: 24px;">
-                <span class="badge badge-license">🔐 Governable Encryption</span>
-                <span class="badge badge-open">🔓 No Vendor Lock-in</span>
-                <span class="badge badge-windows">🤖 ACP Ready</span>
-                <span class="badge badge-license">📡 Data Plane Abstraction</span>
+                <span class="badge badge-license">✉️ Agent Mailboxes</span>
+                <span class="badge badge-open">📦 JSON Event Store</span>
+                <span class="badge badge-windows">🤖 AI App Backend</span>
+                <span class="badge badge-license">🔌 MCP Integration</span>
             </div>
 
             <div class="cta-group">
@@ -964,18 +964,48 @@
     <section class="code-section">
         <div class="container">
             <div class="code-block">
-<span class="comment"># 1. Try it — one command, no sign-up</span><br>
-<span class="prompt">$</span> npx vibesql-micro<br>
-<span class="comment"># → Running at http://localhost:5173</span><br><br>
-<span class="comment"># 2. Query it</span><br>
+<span class="comment"># 1. Start VibeSQL — one command</span><br>
+<span class="prompt">$</span> npx vibesql-micro<br><br>
+<span class="comment"># 2. Store agent events as JSON</span><br>
 <span class="prompt">$</span> curl -X POST http://localhost:5173/v1/query \<br>
-  -H "Content-Type: application/json" \<br>
-  -d '{"sql": "SELECT 1 as hello"}'<br><br>
-<span class="comment"># 3. Connect your AI — install the /vibe-sql skill</span><br>
-<span class="prompt">$</span> /vibe-sql show me all tables<br>
-<span class="prompt">$</span> /vibe-sql create a users table with name, email, age<br><br>
-<span class="comment"># Ready for production? Deploy the server edition</span><br>
-<span class="prompt">$</span> docker run -d -p 5432:5432 vibesql/server:latest
+  -d '{"sql": "CREATE TABLE agent_events (id SERIAL, agent TEXT, data JSONB, ts TIMESTAMPTZ DEFAULT NOW())"}'<br><br>
+<span class="comment"># 3. Query across agents</span><br>
+<span class="prompt">$</span> curl -X POST http://localhost:5173/v1/query \<br>
+  -d '{"sql": "SELECT agent, data-&gt;&gt;&#39;action&#39;, count(*) FROM agent_events GROUP BY 1,2"}'<br><br>
+<span class="comment"># Production? Same API, enterprise features.</span><br>
+<span class="prompt">$</span> docker run -d vibesql/server:latest
+            </div>
+        </div>
+    </section>
+
+    <section class="features" style="padding: 60px 0;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Golden Paths</h2>
+                <p>Three ways to get started with VibeSQL — pick the one that fits your use case.</p>
+            </div>
+
+            <div class="feature-grid" style="max-width: 900px; margin: 0 auto;">
+                <a href="/docs.html#ai-skills" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer; border-color: #06b6d4;">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Connect an MCP Server in 5 Minutes</h3>
+                    <p>Install the /vibe-sql AI skill, point it at VibeSQL, query in natural language. Works with Claude Code, OpenCode, and Codex CLI.</p>
+                    <p class="vision-tag" style="color: #06b6d4;">→ Docs</p>
+                </a>
+
+                <a href="#schemas" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="feature-icon">📦</div>
+                    <h3>JSON Event Store for Your AI App</h3>
+                    <p>Store tool calls, agent actions, conversation logs as queryable JSONB. Production-tested schemas included.</p>
+                    <p class="vision-tag" style="color: #94a3b8;">→ Schemas</p>
+                </a>
+
+                <a href="https://github.com/PayEz-Net/vibesql-micro/releases" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Run Locally With One Command</h3>
+                    <p><code style="font-size: 13px;">npx vibesql-micro</code> — embedded Postgres, zero config, under 10 seconds. Cross-platform.</p>
+                    <p class="vision-tag" style="color: #94a3b8;">→ Releases</p>
+                </a>
             </div>
         </div>
     </section>
@@ -1000,10 +1030,10 @@
                 <a href="/changelog.html" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                         <div class="feature-icon" style="margin-bottom: 0;">📦</div>
-                        <span style="font-size: 12px; color: #22c55e; font-weight: 600; background: rgba(34,197,94,0.1); padding: 4px 10px; border-radius: 12px;">v1.0.3</span>
+                        <span style="font-size: 12px; color: #22c55e; font-weight: 600; background: rgba(34,197,94,0.1); padding: 4px 10px; border-radius: 12px;">v1.0.7</span>
                     </div>
-                    <h3>VibeSQL Micro v1.0.3</h3>
-                    <p>Parameterized queries with <code style="font-size: 13px;">$1, $2</code> placeholders. Now on npm — <code style="font-size: 13px;">npx vibesql-micro</code>. See full changelog.</p>
+                    <h3>VibeSQL Micro v1.0.7</h3>
+                    <p>Binary relocation, Linux support, npm install script. Cross-platform embedded PostgreSQL in one command.</p>
                 </a>
 
                 <a href="/docs.html#ai-skills" class="feature-card" style="text-decoration: none; color: inherit; cursor: pointer;">
@@ -1028,14 +1058,14 @@
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-icon">🎯</div>
-                    <h3>Novel & Unique</h3>
-                    <p>First JSON-based SQL command set built specifically for AI systems. Not an ORM, not a wrapper. A fundamentally new approach to intelligent persistence.</p>
+                    <h3>JSON-First for AI</h3>
+                    <p>AI systems produce JSON. VibeSQL stores, indexes, and queries it natively with PostgreSQL JSONB. No ORMs, no schema wrestling.</p>
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <h3>Scales Infinitely</h3>
-                    <p>From a single process on your laptop to thousands of coordinating systems in the cloud. Same API, same code, limitless scale.</p>
+                    <div class="feature-icon">✉️</div>
+                    <h3>Agent Mailboxes</h3>
+                    <p>Built-in multi-agent messaging. Send, receive, and search messages between agents backed by JSON tables. Proven in production.</p>
                 </div>
 
                 <div class="feature-card">
@@ -1046,20 +1076,20 @@
 
                 <div class="feature-card">
                     <div class="feature-icon">🔐</div>
-                    <h3>Enterprise Security</h3>
-                    <p>Token-based auth, encryption governance, audit trails, and multi-tenant isolation. Built for production from day one.</p>
+                    <h3>Production-Grade</h3>
+                    <p>HMAC auth, encryption governance, audit trails, multi-tenant isolation. Built for compliance environments, not weekend projects.</p>
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon">📡</div>
-                    <h3>AI-Native Protocol</h3>
-                    <p>Async messaging, conversation threading, state management, intelligent coordination. Everything AI systems need to collaborate.</p>
+                    <div class="feature-icon">🔌</div>
+                    <h3>MCP Integration</h3>
+                    <p>First-class MCP server for AI assistants. Talk to your database in natural language. Listed on LobeHub.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
-                    <h3>Deploy Anywhere</h3>
-                    <p>From single-binary dev tools to enterprise Kubernetes clusters. Docker containers, cloud VMs, bare metal servers, or edge devices. One platform, infinite deployment options.</p>
+                    <h3>Dev to Prod, Same API</h3>
+                    <p>From <code style="font-size: 13px;">npx vibesql-micro</code> on your laptop to Kubernetes in production. Same JSON-SQL API, same queries, same code.</p>
                 </div>
             </div>
         </div>
@@ -1197,7 +1227,7 @@ CREATE TABLE access_logs (
         <div class="container">
             <div class="section-header">
                 <h2>How VibeSQL Compares</h2>
-                <p>See how VibeSQL stacks up against popular database platforms for AI and local development.</p>
+                <p>VibeSQL vs. the alternatives for AI agent infrastructure.</p>
             </div>
 
             <div style="overflow-x: auto;">
@@ -1205,75 +1235,75 @@ CREATE TABLE access_logs (
                     <thead>
                         <tr style="border-bottom: 2px solid #334155;">
                             <th style="padding: 16px 12px; text-align: left; color: #94a3b8; font-weight: 600;">Feature</th>
-                            <th style="padding: 16px 12px; text-align: center; color: #7c3aed; font-weight: 700;">VibeSQL Micro</th>
-                            <th style="padding: 16px 12px; text-align: center; color: #94a3b8; font-weight: 600;">Supabase</th>
-                            <th style="padding: 16px 12px; text-align: center; color: #94a3b8; font-weight: 600;">Railway / Neon</th>
-                            <th style="padding: 16px 12px; text-align: center; color: #94a3b8; font-weight: 600;">PlanetScale</th>
+                            <th style="padding: 16px 12px; text-align: center; color: #7c3aed; font-weight: 700;">VibeSQL</th>
+                            <th style="padding: 16px 12px; text-align: center; color: #94a3b8; font-weight: 600;">Generic Postgres</th>
+                            <th style="padding: 16px 12px; text-align: center; color: #94a3b8; font-weight: 600;">Vector DBs</th>
+                            <th style="padding: 16px 12px; text-align: center; color: #94a3b8; font-weight: 600;">AI SQL Clients</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr style="border-bottom: 1px solid #1e293b;">
-                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Installation</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #06b6d4; font-weight: 500;">Single command</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Sign up + API keys</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Sign up + deploy</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Sign up + configure</td>
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">JSON-first queries</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">Native JSONB</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Manual JSONB</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">No SQL</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Human UI only</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #1e293b;">
-                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Setup time</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #06b6d4; font-weight: 500;">&lt; 10 seconds</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">~5 minutes</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">~3 minutes</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">~5 minutes</td>
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Agent messaging</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">Built-in</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">DIY</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">No</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">No</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #1e293b;">
-                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Local development</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">&#10003; Localhost</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">&#10007; Cloud only</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">&#10007; Cloud only</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">&#10007; Cloud only</td>
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">MCP integration</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">First-class</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">No</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Some</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">No</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #1e293b;">
-                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Cost</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">Free forever</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Free tier + paid</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Free tier + paid</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Free tier + paid</td>
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Local dev</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">One command</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Docker + config</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">Cloud-only</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">N/A</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #1e293b;">
-                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">PostgreSQL</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">&#10003; Native 16.1</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">&#10003;</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">&#10003;</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">&#10007; MySQL</td>
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Multi-tenant</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">Built-in</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">DIY</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Varies</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">No</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #1e293b;">
-                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">JSONB support</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">&#10003; Full</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">&#10003; Full</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">&#10003; Full</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">&#10007; JSON only</td>
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Audit / compliance</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">Built-in</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">DIY</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">No</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #ef4444;">No</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #1e293b;">
-                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Auth built-in</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">No*</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">&#10003;</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">No</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">No</td>
+                            <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Open source</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e; font-weight: 600;">Apache 2.0</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #22c55e;">Yes</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Varies</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Mostly no</td>
                         </tr>
                         <tr>
                             <td style="padding: 14px 12px; color: #e2e8f0; font-weight: 500;">Best for</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #06b6d4; font-weight: 500;">Local dev, prototyping</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Production apps</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Production apps</td>
-                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Production apps</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #06b6d4; font-weight: 500;">AI agents + microservices</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Traditional web apps</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Embeddings / RAG</td>
+                            <td style="padding: 14px 12px; text-align: center; color: #94a3b8;">Human analysts</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <p style="text-align: center; color: #64748b; font-size: 13px; margin-top: 20px; max-width: 700px; margin-left: auto; margin-right: auto;">
-                *VibeSQL Server (production version) includes HMAC authentication and configurable tier limits. See <a href="https://github.com/PayEz-Net/vibesql-server" style="color: #7c3aed;">VibeSQL Server</a> for production deployments.
+                VibeSQL IS Postgres — with a JSON-native API layer, agent features, and enterprise security built in.
             </p>
         </div>
     </section>
