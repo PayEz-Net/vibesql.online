@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -35,16 +36,24 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2">
-            <svg width="28" height="28" viewBox="0 0 64 64" className="text-vibe-primary">
-              <g transform="translate(32, 32)">
-                <ellipse cx="0" cy="-16" rx="20" ry="7" fill="currentColor"/>
-                <rect x="-20" y="-16" width="40" height="24" fill="currentColor"/>
-                <ellipse cx="0" cy="8" rx="20" ry="7" fill="currentColor"/>
+          <Link href="/" className="flex items-center gap-2">
+            <svg width="28" height="28" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="vibeGradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#7c3aed"/>
+                  <stop offset="100%" stopColor="#06b6d4"/>
+                </linearGradient>
+              </defs>
+              <g transform="translate(37, 37)">
+                <circle cx="0" cy="0" r="12" fill="url(#vibeGradient)"/>
+                <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" strokeWidth="3" transform="rotate(-30)" fill="none" opacity="0.8"/>
+                <circle cx="35" cy="0" r="5" fill="#06b6d4" transform="rotate(-30)"/>
+                <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" strokeWidth="3" transform="rotate(30)" fill="none" opacity="0.8"/>
+                <circle cx="-35" cy="0" r="5" fill="#7c3aed" transform="rotate(30)"/>
               </g>
             </svg>
-            <span className="font-bold text-white">VibeSQL</span>
-          </a>
+            <span className="font-bold text-white">Vibe<span className="text-blue-400">SQL</span></span>
+          </Link>
 
           {/* Desktop navigation */}
           <div className="hidden md:flex items-center gap-8">
@@ -57,12 +66,6 @@ export default function Navigation() {
                 {link.label}
               </a>
             ))}
-            <a
-              href="/register"
-              className="bg-vibe-accent hover:bg-vibe-accent/90 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
-            >
-              Register
-            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -100,13 +103,6 @@ export default function Navigation() {
               {link.label}
             </a>
           ))}
-          <a
-            href="/register"
-            className="block w-full text-center bg-vibe-accent hover:bg-vibe-accent/90 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Register
-          </a>
         </div>
       </div>
     </nav>

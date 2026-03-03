@@ -56,15 +56,6 @@ export default function Hero() {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a
-            href="/register"
-            className="btn-primary text-lg px-10 py-4 inline-flex items-center gap-2"
-          >
-            Register Now
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </a>
-          <a
             href="#tracks"
             className="btn-secondary text-lg px-10 py-4 inline-flex items-center gap-2"
           >

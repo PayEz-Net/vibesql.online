@@ -1,11 +1,11 @@
 {
-  "name": "vibesql-hackathon",
+  "name": "vibesql-online",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next build && npx http-server out -p 3800",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3800",
     "lint": "next lint"
   },
   "dependencies": {
