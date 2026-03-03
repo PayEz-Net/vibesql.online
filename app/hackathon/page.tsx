@@ -3,6 +3,7 @@ import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Tracks from '@/components/Tracks';
 import Prizes from '@/components/Prizes';
+import Registration from '@/components/Registration';
 import Schedule from '@/components/Schedule';
 import Rules from '@/components/Rules';
 import Judges from '@/components/Judges';
@@ -17,6 +18,7 @@ export default function Home() {
       <About />
       <Tracks />
       <Prizes />
+      <Registration />
       <Schedule />
       <Rules />
       <Judges />

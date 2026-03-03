@@ -20,6 +20,7 @@ export default function Navigation() {
     { href: '#about', label: 'About' },
     { href: '#tracks', label: 'Tracks' },
     { href: '#prizes', label: 'Prizes' },
+    { href: '#register', label: 'Register' },
     { href: '#schedule', label: 'Schedule' },
     { href: '#rules', label: 'Rules' },
     { href: '#faq', label: 'FAQ' },
