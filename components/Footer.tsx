@@ -6,15 +6,20 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <svg width="32" height="32" viewBox="0 0 64 64" className="text-vibe-primary">
-                <g transform="translate(32, 32)">
-                  <ellipse cx="0" cy="-16" rx="20" ry="7" fill="currentColor"/>
-                  <rect x="-20" y="-16" width="40" height="24" fill="currentColor"/>
-                  <ellipse cx="0" cy="8" rx="20" ry="7" fill="currentColor"/>
-                  <line x1="-20" y1="-4" x2="20" y2="-4" stroke="#2563EB" strokeWidth="2" opacity="0.5"/>
-                  <line x1="-20" y1="4" x2="20" y2="4" stroke="#2563EB" strokeWidth="2" opacity="0.5"/>
-                  <ellipse cx="0" cy="-16" rx="20" ry="7" fill="none" stroke="#2563EB" strokeWidth="2" opacity="0.5"/>
-                </g>
+              <svg width="32" height="32" viewBox="0 0 512 512" fill="none">
+                <defs>
+                  <linearGradient id="footBodyGrad" x1="116" y1="0" x2="396" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#1e3a5f" stopOpacity="0.4"/>
+                    <stop offset="50%" stopColor="#2563EB" stopOpacity="0"/>
+                    <stop offset="100%" stopColor="#1e3a5f" stopOpacity="0.3"/>
+                  </linearGradient>
+                </defs>
+                <ellipse cx="256" cy="400" rx="140" ry="40" fill="#1e3a5f"/>
+                <rect x="116" y="160" width="280" height="240" fill="#2563EB"/>
+                <rect x="116" y="160" width="280" height="240" fill="url(#footBodyGrad)"/>
+                <ellipse cx="256" cy="400" rx="140" ry="40" fill="#1e4f8a"/>
+                <ellipse cx="256" cy="160" rx="140" ry="40" fill="#3b82f6"/>
+                <ellipse cx="256" cy="152" rx="100" ry="22" fill="#60a5fa" opacity="0.3"/>
               </svg>
               <span className="text-xl font-bold">VibeSQL Hackathon</span>
             </div>

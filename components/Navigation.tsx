@@ -38,20 +38,20 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <svg width="28" height="28" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="28" height="28" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <linearGradient id="vibeGradient" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#7c3aed"/>
-                  <stop offset="100%" stopColor="#06b6d4"/>
+                <linearGradient id="navBodyGrad" x1="116" y1="0" x2="396" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#1e3a5f" stopOpacity="0.4"/>
+                  <stop offset="50%" stopColor="#2563EB" stopOpacity="0"/>
+                  <stop offset="100%" stopColor="#1e3a5f" stopOpacity="0.3"/>
                 </linearGradient>
               </defs>
-              <g transform="translate(37, 37)">
-                <circle cx="0" cy="0" r="12" fill="url(#vibeGradient)"/>
-                <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" strokeWidth="3" transform="rotate(-30)" fill="none" opacity="0.8"/>
-                <circle cx="35" cy="0" r="5" fill="#06b6d4" transform="rotate(-30)"/>
-                <ellipse cx="0" cy="0" rx="35" ry="12" stroke="url(#vibeGradient)" strokeWidth="3" transform="rotate(30)" fill="none" opacity="0.8"/>
-                <circle cx="-35" cy="0" r="5" fill="#7c3aed" transform="rotate(30)"/>
-              </g>
+              <ellipse cx="256" cy="400" rx="140" ry="40" fill="#1e3a5f"/>
+              <rect x="116" y="160" width="280" height="240" fill="#2563EB"/>
+              <rect x="116" y="160" width="280" height="240" fill="url(#navBodyGrad)"/>
+              <ellipse cx="256" cy="400" rx="140" ry="40" fill="#1e4f8a"/>
+              <ellipse cx="256" cy="160" rx="140" ry="40" fill="#3b82f6"/>
+              <ellipse cx="256" cy="152" rx="100" ry="22" fill="#60a5fa" opacity="0.3"/>
             </svg>
             <span className="font-bold text-white">Vibe<span className="text-blue-400">SQL</span></span>
           </Link>
