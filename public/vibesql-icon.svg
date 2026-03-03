@@ -1,28 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <!-- Minimal VibeSQL icon - Simple database cylinder -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- VibeSQL icon — clean transparent barrel -->
+
+  <!-- Bottom ellipse (base shadow) -->
+  <ellipse cx="256" cy="400" rx="140" ry="40" fill="#1e3a5f"/>
+
+  <!-- Cylinder body -->
+  <rect x="116" y="160" width="280" height="240" fill="#2563EB"/>
+
+  <!-- Left/right edge gradient overlay -->
+  <rect x="116" y="160" width="280" height="240" fill="url(#bodyGrad)"/>
+
+  <!-- Bottom ellipse (visible base) -->
+  <ellipse cx="256" cy="400" rx="140" ry="40" fill="#1e4f8a"/>
+
+  <!-- Top ellipse (lid) -->
+  <ellipse cx="256" cy="160" rx="140" ry="40" fill="#3b82f6"/>
+
+  <!-- Top highlight -->
+  <ellipse cx="256" cy="152" rx="100" ry="22" fill="#60a5fa" opacity="0.3"/>
+
   <defs>
-    <style>
-      .db-primary { fill: #336791; }
-      .db-highlight { fill: none; stroke: #2563EB; stroke-width: 2; opacity: 0.5; }
-    </style>
+    <linearGradient id="bodyGrad" x1="116" y1="0" x2="396" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e3a5f" stop-opacity="0.4"/>
+      <stop offset="50%" stop-color="#2563EB" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#1e3a5f" stop-opacity="0.3"/>
+    </linearGradient>
   </defs>
-
-  <g transform="translate(32, 32)">
-    <!-- Top ellipse -->
-    <ellipse cx="0" cy="-16" rx="20" ry="7" class="db-primary"/>
-
-    <!-- Body -->
-    <rect x="-20" y="-16" width="40" height="24" class="db-primary"/>
-
-    <!-- Bottom ellipse -->
-    <ellipse cx="0" cy="8" rx="20" ry="7" class="db-primary"/>
-
-    <!-- Middle line (data rows visual) -->
-    <line x1="-20" y1="-4" x2="20" y2="-4" class="db-highlight"/>
-    <line x1="-20" y1="4" x2="20" y2="4" class="db-highlight"/>
-
-    <!-- Top highlight -->
-    <ellipse cx="0" cy="-16" rx="20" ry="7" class="db-highlight"/>
-  </g>
 </svg>
