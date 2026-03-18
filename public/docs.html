@@ -263,6 +263,9 @@
     <a href="#skill-others">Other Editors</a>
     <a href="#skill-install">Installation</a>
 
+    <div class="section-title">vsql CLI</div>
+    <a href="#vsql-cli">Overview</a>
+
     <div class="section-title">SDK Reference</div>
     <a href="#sdk-install">Installation</a>
     <a href="#sdk-client">Client Setup</a>
@@ -1694,6 +1697,71 @@ npm install @vibe/next-plugin
 <span class="comment">// TypeScript knows users.list() returns ListResult&lt;UserDocument&gt;</span>
 <span class="comment">// TypeScript knows users.get() returns UserDocument | null</span>
 </pre>
+
+    <!-- ============================================================ -->
+    <!-- vsql CLI                                                      -->
+    <!-- ============================================================ -->
+
+    <h2 id="vsql-cli">vsql CLI <span class="edition-badge edition-all">All Editions</span></h2>
+
+    <p>The <code>vsql</code> command-line tool gives you direct access to any VibeSQL server from your terminal. Query, inspect schemas, manage collections, and roll back schema versions &mdash; all without leaving the shell.</p>
+
+    <h3>Installation</h3>
+
+<pre>
+<span class="comment"># From GitHub</span>
+git clone https://github.com/PayEz-Net/vsql.git
+cd vsql && npm install && npm run build
+npm link  <span class="comment"># makes 'vsql' available globally</span>
+
+<span class="comment"># Or run directly</span>
+node bin/vsql.js
+</pre>
+
+    <h3>Configuration</h3>
+
+<pre>
+<span class="comment"># Interactive setup</span>
+vsql config init
+<span class="comment"># &rarr; Host: http://localhost:52411</span>
+<span class="comment"># &rarr; Key: your-secret-key</span>
+
+<span class="comment"># Or use environment variables</span>
+export VIBESQL_HOST=http://localhost:52411
+export VIBESQL_KEY=your-secret-key
+
+<span class="comment"># Or pass inline</span>
+vsql query "SELECT 1" --host http://localhost:52411 --key your-key
+</pre>
+
+    <h3>Named Profiles</h3>
+
+    <p>Config stored at <code>~/.vsql/config.json</code>. Use <code>--profile &lt;name&gt;</code> to switch between servers.</p>
+
+    <h3>Commands</h3>
+
+    <table>
+        <tr><th>Command</th><th>Description</th></tr>
+        <tr><td><code>vsql query &lt;sql&gt;</code></td><td>Execute SQL query</td></tr>
+        <tr><td><code>vsql tables</code></td><td>List all tables</td></tr>
+        <tr><td><code>vsql describe &lt;table&gt;</code></td><td>Show column details</td></tr>
+        <tr><td><code>vsql schema show &lt;collection&gt;</code></td><td>Dump active JSON schema</td></tr>
+        <tr><td><code>vsql schema update &lt;collection&gt; --file schema.json</code></td><td>Push schema from file</td></tr>
+        <tr><td><code>vsql insert &lt;collection&gt; &lt;table&gt; --file doc.json</code></td><td>Insert documents</td></tr>
+        <tr><td><code>vsql rollback &lt;collection&gt; --list</code></td><td>Show schema version history</td></tr>
+        <tr><td><code>vsql rollback &lt;collection&gt; --dry-run</code></td><td>Preview rollback diff</td></tr>
+        <tr><td><code>vsql rollback &lt;collection&gt; --version N --yes</code></td><td>Execute rollback</td></tr>
+        <tr><td><code>vsql config init</code></td><td>Set up connection profile</td></tr>
+        <tr><td><code>vsql health</code></td><td>Check server connectivity</td></tr>
+    </table>
+
+    <h3>Output Formats</h3>
+
+    <p>Use <code>--format table</code> (default), <code>json</code>, <code>csv</code>, or <code>raw</code>.</p>
+
+    <h3>Schema Safety</h3>
+
+    <p><code>--dry-run</code> shows a diff before applying schema changes. Without <code>--yes</code>, the CLI prompts for confirmation by typing the collection name.</p>
 
     <!-- ============================================================ -->
     <!-- AI CODING SKILLS                                              -->

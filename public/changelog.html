@@ -197,17 +197,114 @@
     <div class="container">
         <div class="page-header">
             <h1>Changelog</h1>
-            <p>Release history for VibeSQL Micro. All releases available on <a href="https://github.com/PayEz-Net/vibesql-micro/releases" style="color: #7c3aed;">GitHub</a> and <a href="https://www.npmjs.com/package/vibesql-micro" style="color: #7c3aed;">npm</a>.</p>
+            <p>Release history for the VibeSQL ecosystem. Source code on <a href="https://github.com/PayEz-Net" style="color: #7c3aed;">GitHub</a>.</p>
         </div>
 
         <div class="timeline">
+
+            <!-- vsql CLI v1.1.0 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>vsql CLI v1.1.0</h2>
+                        <span class="release-tag tag-latest">LATEST</span>
+                        <span class="release-tag tag-major">NEW PRODUCT</span>
+                    </div>
+                    <span class="release-date">March 17, 2026</span>
+                </div>
+                <p class="release-summary">Zero-dependency TypeScript CLI for VibeSQL. Query databases, manage schemas, seed data, rollback versions — all from the command line.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><code>vsql query</code> — execute SQL with table/json/csv output formats</li>
+                        <li><code>vsql schema show &lt;collection&gt;</code> — dump active JSON schema</li>
+                        <li><code>vsql schema update &lt;collection&gt; --file schema.json</code> — push schema changes with dry-run and confirmation</li>
+                        <li><code>vsql insert &lt;collection&gt; &lt;table&gt;</code> — insert documents via <code>--file</code> or <code>--data</code>, with <code>--batch</code> for arrays</li>
+                        <li><code>vsql rollback &lt;collection&gt;</code> — roll back schema versions with <code>--list</code>, <code>--dry-run</code>, <code>--yes</code> safety ladder</li>
+                        <li><code>vsql tables</code>, <code>vsql describe &lt;table&gt;</code> — explore database structure</li>
+                        <li><code>vsql config init</code> — named connection profiles at <code>~/.vsql/config.json</code></li>
+                        <li><code>vsql health</code> — server connectivity check with latency</li>
+                        <li>DDL safety classification (safe/migration/destructive/prohibited)</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vsql">GitHub →</a>
+                </div>
+            </div>
+
+            <!-- VibeSQL Server 2.0.0 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>VibeSQL Server 2.0.0</h2>
+                        <span class="release-tag tag-latest">LATEST</span>
+                        <span class="release-tag tag-major">MAJOR</span>
+                    </div>
+                    <span class="release-date">March 17, 2026</span>
+                </div>
+                <p class="release-summary">Schema management API, document CRUD routes, Schema Sentinel for safe schema evolution, and simplified container secret authentication.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li>Schema CRUD endpoints — <code>PUT /v1/schemas/{collection}</code>, <code>GET /v1/schemas/{collection}/versions</code></li>
+                        <li>Schema rollback endpoint — <code>POST /v1/schemas/{collection}/rollback</code> with version targeting</li>
+                        <li>Document CRUD routes — create, read, update documents within collections</li>
+                        <li>Schema Sentinel — automated DDL risk classification (S-100 safe through P-400 prohibited)</li>
+                        <li><code>SchemaDiffEngine</code> — structural change detection between schema versions</li>
+                        <li><code>ChangeClassifier</code> with taxonomy codes for safe, migration, destructive, and prohibited changes</li>
+                        <li><code>PostgresTableInspector</code> — data-aware destructive change verification</li>
+                        <li><code>SentinelPipeline</code> — full diff → classify → inspect → verdict pipeline</li>
+                        <li>Agent mail schema — standalone relational schema for agent communication</li>
+                        <li>Agent mail performance indexes</li>
+                    </ul>
+                </div>
+                <div class="change-group changed">
+                    <h3 class="changed">Changed</h3>
+                    <ul>
+                        <li>Authentication simplified from HMAC to container secret (<code>Authorization: Secret {key}</code>)</li>
+                        <li>Query size limit raised to 512KB for schema operations</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-server">GitHub →</a>
+                </div>
+            </div>
+
+            <!-- vibesql-mcp v1.0.3 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>vibesql-mcp v1.0.3</h2>
+                        <span class="release-tag tag-patch">PATCH</span>
+                    </div>
+                    <span class="release-date">March 10, 2026</span>
+                </div>
+                <p class="release-summary">MCP server for AI coding tools — connect Claude Code, OpenCode, or Codex CLI to a VibeSQL database.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li>DDL safety classification in client (<code>classifyDdl()</code> method)</li>
+                        <li><code>ALTER TABLE</code> support with injection prevention</li>
+                        <li><code>getConstraints()</code>, <code>getIndexes()</code>, <code>getDependents()</code> for schema exploration</li>
+                        <li><code>getRowCount()</code> for table statistics</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-skills">GitHub →</a>
+                </div>
+            </div>
 
             <!-- v1.0.7 -->
             <div class="release">
                 <div class="release-header">
                     <div class="release-title">
                         <h2>v1.0.7</h2>
-                        <span class="release-tag tag-latest">LATEST</span>
                         <span class="release-tag tag-patch">FEATURE</span>
                     </div>
                     <span class="release-date">February 25, 2026</span>
