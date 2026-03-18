@@ -9,19 +9,19 @@ type Step = 'register' | 'verify' | 'done';
 type ParticipationType = 'solo' | 'have-team' | 'looking';
 
 interface FormData {
-  full_name: string;
+  fullName: string;
   email: string;
-  participation: ParticipationType;
-  track: string;
+  participationType: ParticipationType;
+  trackPreference: string;
 }
 
 export default function Registration() {
   const [step, setStep] = useState<Step>('register');
   const [formData, setFormData] = useState<FormData>({
-    full_name: '',
+    fullName: '',
     email: '',
-    participation: 'solo',
-    track: '',
+    participationType: 'solo',
+    trackPreference: '',
   });
   const [verifyCode, setVerifyCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -37,12 +37,10 @@ export default function Registration() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          full_name: formData.full_name,
+          fullName: formData.fullName,
           email: formData.email,
-          details: {
-            participation: formData.participation,
-            track: formData.track || undefined,
-          },
+          participationType: formData.participationType || undefined,
+          trackPreference: formData.trackPreference || undefined,
         }),
       });
 
@@ -113,15 +111,15 @@ export default function Registration() {
           {step === 'register' && (
             <form onSubmit={handleRegister} className="space-y-5">
               <div>
-                <label htmlFor="full_name" className="form-label">Full Name</label>
+                <label htmlFor="fullName" className="form-label">Full Name</label>
                 <input
-                  id="full_name"
+                  id="fullName"
                   type="text"
                   required
                   className="form-input"
                   placeholder="Jane Doe"
-                  value={formData.full_name}
-                  onChange={e => setFormData(p => ({ ...p, full_name: e.target.value }))}
+                  value={formData.fullName}
+                  onChange={e => setFormData(p => ({ ...p, fullName: e.target.value }))}
                 />
               </div>
 
@@ -149,9 +147,9 @@ export default function Registration() {
                     <button
                       key={value}
                       type="button"
-                      onClick={() => setFormData(p => ({ ...p, participation: value }))}
+                      onClick={() => setFormData(p => ({ ...p, participationType: value }))}
                       className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-all duration-200 border ${
-                        formData.participation === value
+                        formData.participationType === value
                           ? 'bg-vibe-accent/20 border-vibe-accent text-white'
                           : 'bg-slate-800/50 border-slate-600 text-slate-400 hover:border-slate-500'
                       }`}
@@ -172,9 +170,9 @@ export default function Registration() {
                     <button
                       key={value}
                       type="button"
-                      onClick={() => setFormData(p => ({ ...p, track: p.track === value ? '' : value }))}
+                      onClick={() => setFormData(p => ({ ...p, trackPreference: p.trackPreference === value ? '' : value }))}
                       className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-all duration-200 border ${
-                        formData.track === value
+                        formData.trackPreference === value
                           ? 'bg-vibe-accent/20 border-vibe-accent text-white'
                           : 'bg-slate-800/50 border-slate-600 text-slate-400 hover:border-slate-500'
                       }`}
@@ -271,7 +269,7 @@ export default function Registration() {
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">You&apos;re In!</h3>
               <p className="text-slate-400 mb-6">
-                Welcome to the VibeSQL Hackathon, <span className="text-white font-medium">{formData.full_name}</span>.
+                Welcome to the VibeSQL Hackathon, <span className="text-white font-medium">{formData.fullName}</span>.
                 <br />
                 We&apos;ll send event details to <span className="font-mono text-vibe-light">{formData.email}</span>.
               </p>

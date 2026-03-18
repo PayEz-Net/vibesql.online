@@ -12,28 +12,6 @@ export default function Hero() {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-vibe-primary/20 rounded-full blur-[100px] animate-pulse-slow" style={{ animationDelay: '1s' }} />
 
       <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
-        {/* Logo */}
-        <div className="mb-8 flex justify-center">
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700">
-            <svg width="32" height="32" viewBox="0 0 512 512" fill="none">
-              <defs>
-                <linearGradient id="heroBodyGrad" x1="116" y1="0" x2="396" y2="0" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#1e3a5f" stopOpacity="0.4"/>
-                  <stop offset="50%" stopColor="#2563EB" stopOpacity="0"/>
-                  <stop offset="100%" stopColor="#1e3a5f" stopOpacity="0.3"/>
-                </linearGradient>
-              </defs>
-              <ellipse cx="256" cy="400" rx="140" ry="40" fill="#1e3a5f"/>
-              <rect x="116" y="160" width="280" height="240" fill="#2563EB"/>
-              <rect x="116" y="160" width="280" height="240" fill="url(#heroBodyGrad)"/>
-              <ellipse cx="256" cy="400" rx="140" ry="40" fill="#1e4f8a"/>
-              <ellipse cx="256" cy="160" rx="140" ry="40" fill="#3b82f6"/>
-              <ellipse cx="256" cy="152" rx="100" ry="22" fill="#60a5fa" opacity="0.3"/>
-            </svg>
-            <span className="text-lg font-semibold text-slate-200">VibeSQL</span>
-          </div>
-        </div>
-
         {/* Main headline */}
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6">
           <span className="bg-gradient-to-r from-white via-vibe-light to-vibe-accent bg-clip-text text-transparent">
