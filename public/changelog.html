@@ -202,12 +202,88 @@
 
         <div class="timeline">
 
+            <!-- vibesql-mail v1.0.0 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>vibesql-mail v1.0.0</h2>
+                        <span class="release-tag tag-latest">LATEST</span>
+                        <span class="release-tag tag-major">NEW PRODUCT</span>
+                    </div>
+                    <span class="release-date">March 22, 2026</span>
+                </div>
+                <p class="release-summary">Agent-to-agent mail system for AI coding teams. MCP server, npm distribution, and interactive TUI client.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><strong>MCP Server</strong> — Rust stdio JSON-RPC server with 6 tools: <code>check_inbox</code>, <code>read_message</code>, <code>send_mail</code>, <code>reply</code>, <code>list_agents</code>, <code>search_mail</code></li>
+                        <li><strong>npm package</strong> — <code>npx vibesql-mail-mcp --agent MyAgent</code> auto-downloads platform binary from GitHub releases</li>
+                        <li><strong>TUI client</strong> — Interactive terminal mail with inbox, compose, reply, forward, sent, agents, thread views</li>
+                        <li>MCP resources: <code>mail://agents</code>, <code>mail://inbox/{agent}</code>, <code>mail://thread/{thread_id}</code></li>
+                        <li>Auto-migration on first connection — schema created automatically</li>
+                        <li>Windows <code>cmd /c</code> wrapper documentation for MCP config</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-mail-mcp">GitHub →</a>
+                </div>
+            </div>
+
+            <!-- VibeSQL Micro v1.2.0 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>VibeSQL Micro v1.2.0</h2>
+                        <span class="release-tag tag-latest">LATEST</span>
+                    </div>
+                    <span class="release-date">March 22, 2026</span>
+                </div>
+                <p class="release-summary">Parameterized query fix — <code>params</code> array now correctly passes through to PostgreSQL's prepared statement driver.</p>
+
+                <div class="change-group fixed">
+                    <h3 class="fixed">Fixed</h3>
+                    <ul>
+                        <li><code>params</code> array in request body was silently ignored — queries using <code>$1</code>, <code>$2</code> placeholders now work correctly with prepared statements</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v1.2.0">GitHub Release →</a>
+                </div>
+            </div>
+
+            <!-- VibeSQL Server — Edge + Sentinel -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>VibeSQL Server — Edge &amp; Sentinel</h2>
+                    </div>
+                    <span class="release-date">March 19, 2026</span>
+                </div>
+                <p class="release-summary">Two new projects join the VibeSQL Server solution: Edge (OIDC gateway) and Sentinel (schema change classifier).</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><strong>VibeSQL.Edge</strong> — External-facing OIDC gateway with multi-provider JWT auth, federated identity resolution, SQL permission enforcement (Read/Write/Schema/Admin), and HMAC-signed proxy to Server</li>
+                        <li><strong>VibeSQL.Sentinel</strong> — Schema change classification library. 4-tier risk taxonomy: Safe, Migration, Destructive, Prohibited. Data-aware verdict downgrading. Zero EF Core dependency.</li>
+                        <li>Npgsql replaces Devart across all open-source VibeSQL projects</li>
+                        <li>Query size limit raised to 256KB (512KB for schema operations)</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-server">GitHub →</a>
+                </div>
+            </div>
+
             <!-- vsql CLI v1.1.0 -->
             <div class="release">
                 <div class="release-header">
                     <div class="release-title">
                         <h2>vsql CLI v1.1.0</h2>
-                        <span class="release-tag tag-latest">LATEST</span>
                         <span class="release-tag tag-major">NEW PRODUCT</span>
                     </div>
                     <span class="release-date">March 17, 2026</span>
