@@ -1,12 +1,71 @@
-# VibeSQL Website
+# vibesql.online
 
-Landing page for https://vibesql.online
+Product site, docs, and quickstart for [VibeSQL](https://vibesql.online) -- the PostgreSQL-native database platform.
 
-## Deployment via Azure DevOps Pipeline
+## What's on the site
 
-### 1. Create Azure Static Web App (One-time)
+- **Docs** (`public/docs.html`) -- API reference, protocol details, and usage guides
+- **Quickstart** (`public/quickstart.html`) -- get up and running with VibeSQL in minutes
+- **Changelog** (`public/changelog.html`) -- release history and what's new
+- **About** (`public/about.html`) -- project background and team
+- **Registration** (`public/session.html`) -- account sign-up flow
+- **Hackathon** (`app/hackathon/`) -- Next.js-rendered hackathon event page
 
-**Azure Portal:**
+## Tech stack
+
+- **Next.js 15** with static export (`output: 'export'`)
+- **React 19** + **TypeScript**
+- **Tailwind CSS 3** for styling
+- Static HTML pages served from `public/`
+- Built output in `out/` deployed to Azure Static Web Apps
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+This builds the static site and serves it at `http://localhost:3800`.
+
+For a production-style build:
+
+```bash
+npm run build    # outputs to out/
+```
+
+## Project structure
+
+```
+app/                 # Next.js app router pages
+  hackathon/         # Hackathon event page
+  layout.tsx         # Root layout
+  globals.css        # Global styles
+components/          # React components (Hero, Navigation, FAQ, etc.)
+lib/                 # Shared libraries (VibeSQL client)
+public/              # Static HTML pages, assets, icons
+  docs.html          # Documentation
+  quickstart.html    # Quickstart guide
+  changelog.html     # Changelog
+  about.html         # About page
+  session.html       # Registration
+next.config.ts       # Next.js config (static export)
+tailwind.config.ts   # Tailwind configuration
+```
+
+## Contributing
+
+- **Content pages** live in `public/` as standalone HTML files
+- **React components** live in `components/` (Navigation, Hero, Footer, etc.)
+- **Next.js pages** use the App Router in `app/`
+- Run `npm run lint` before submitting changes
+
+## Deployment
+
+The site is deployed as an **Azure Static Web App** via Azure DevOps Pipelines.
+
+### 1. Create Azure Static Web App (one-time)
+
 1. Go to https://portal.azure.com
 2. Create Static Web App
    - Name: `vibesql-online`
@@ -47,13 +106,6 @@ CNAME  vibesql.online  ->  vibesql-online.azurestaticapps.net
 
 Then add custom domain in Azure Static Web App settings.
 
-## Local Preview
+## License
 
-```bash
-start website\index.html
-```
-
-## Files
-
-- `index.html` - Landing page (IdealVibe branded)
-- `README.md` - This file
+MIT
