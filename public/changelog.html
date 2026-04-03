@@ -202,12 +202,63 @@
 
         <div class="timeline">
 
+            <!-- VibeSQL Micro v0.2.0 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>VibeSQL Micro v0.2.0</h2>
+                        <span class="release-tag tag-latest">LATEST</span>
+                        <span class="release-tag tag-major">MAJOR</span>
+                    </div>
+                    <span class="release-date">April 3, 2026</span>
+                </div>
+                <p class="release-summary">We addressed the clumsiness of embedded PostgreSQL by borrowing the best ideas from projects like PGlite and other single-binary distributions. The result is a much cleaner wrapper: streamlined extraction with progress feedback, dynamic port allocation, lock-file guarding, and truly zero-config startup. Cross-platform parity is now verified with 61 automated tests.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><strong>Comprehensive test suite</strong> — 61 tests across unit, integration, and CLI layers</li>
+                        <li><code>test_comprehensive.go</code> — 20 Go integration tests covering JSONB, unicode, concurrency, persistence, JOINs/aggregates, and warm-open performance</li>
+                        <li><code>test_linux_cli.sh</code> — 18 bash CLI tests for Linux (CRUD, complex queries, lock detection, large result sets, path with spaces)</li>
+                        <li>Expanded Go unit tests in <code>pkg/vsql/open_test.go</code> and new <code>pkg/vsql/query_test.go</code></li>
+                        <li><code>TEST_STRATEGY.md</code> and <code>CHANGELOG.md</code> project documentation</li>
+                    </ul>
+                </div>
+
+                <div class="change-group changed">
+                    <h3 class="changed">Changed</h3>
+                    <ul>
+                        <li>Binary extraction now caches once and reuses with visible progress on first run</li>
+                        <li>Lock-file based concurrent access protection with user-friendly <code>WarmError</code> messages</li>
+                        <li>Zero external PostgreSQL dependency — just <code>vsql.Open("app.vsql")</code></li>
+                    </ul>
+                </div>
+
+                <div class="change-group fixed">
+                    <h3 class="fixed">Fixed</h3>
+                    <ul>
+                        <li><code>vsql-cli --profile</code> flag now correctly routes requests to non-default profiles</li>
+                    </ul>
+                </div>
+
+                <div class="change-group changed">
+                    <h3 class="changed">Verified</h3>
+                    <ul>
+                        <li>Linux (ZeroClaw on 10.0.0.93): 61/61 tests passing — binary size ~25 MB</li>
+                        <li>Windows: DLL loading fixed, CLI smoke-tested — binary size ~67 MB</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v0.2.0">GitHub Release →</a>
+                </div>
+            </div>
+
             <!-- vibesql-mail v1.0.0 -->
             <div class="release">
                 <div class="release-header">
                     <div class="release-title">
                         <h2>vibesql-mail v1.0.0</h2>
-                        <span class="release-tag tag-latest">LATEST</span>
                         <span class="release-tag tag-major">NEW PRODUCT</span>
                     </div>
                     <span class="release-date">March 22, 2026</span>
@@ -236,7 +287,6 @@
                 <div class="release-header">
                     <div class="release-title">
                         <h2>VibeSQL Micro v1.2.0</h2>
-                        <span class="release-tag tag-latest">LATEST</span>
                     </div>
                     <span class="release-date">March 22, 2026</span>
                 </div>
@@ -315,7 +365,6 @@
                 <div class="release-header">
                     <div class="release-title">
                         <h2>VibeSQL Server 2.0.0</h2>
-                        <span class="release-tag tag-latest">LATEST</span>
                         <span class="release-tag tag-major">MAJOR</span>
                     </div>
                     <span class="release-date">March 17, 2026</span>
