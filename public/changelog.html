@@ -202,12 +202,112 @@
 
         <div class="timeline">
 
+            <!-- VibeSQL Server v0.3.1 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>VibeSQL Server v0.3.1</h2>
+                        <span class="release-tag tag-latest">LATEST</span>
+                        <span class="release-tag tag-major">MAJOR</span>
+                    </div>
+                    <span class="release-date">April 8, 2026</span>
+                </div>
+                <p class="release-summary">Production-ready Schema Sentinel (VS-SS) — automated schema change protection with risk classification, data-aware inspection, and fail-closed security design.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><strong>Schema Sentinel Pipeline</strong> — Diff → Classify → Inspect → Verdict workflow for all schema changes</li>
+                        <li><strong>Sentinel Taxonomy</strong> — 4-tier risk classification: S-100 (Safe), M-200 (Migration), D-300 (Destructive), P-400 (Prohibited)</li>
+                        <li><strong>Automatic blocking</strong> — Destructive changes (drop tables/columns, type narrowing) blocked by default</li>
+                        <li><strong>Header-based override</strong> — <code>X-Vibe-Force-Schema-Update: true</code> for authorized destructive changes</li>
+                        <li><strong>Fail-closed design</strong> — Errors and missing inspectors default to blocking, never bypass</li>
+                        <li><strong>Data-aware inspection</strong> — <code>PostgresTableInspector</code> checks for data at risk before allowing destructive operations</li>
+                        <li>Budget-limited inspection — 500ms total, 5s per query to prevent performance impact</li>
+                    </ul>
+                </div>
+
+                <div class="change-group changed">
+                    <h3 class="changed">Changed</h3>
+                    <ul>
+                        <li>PUT /v1/schemas/{collection} now returns 409 (Destructive blocked) or 422 (Prohibited) with detailed <code>sentinel.verdict</code> and <code>riskItems</code></li>
+                        <li>Npgsql replaces Devart dotConnect across all open-source VibeSQL projects</li>
+                        <li>Empty container secret validation — no bypass with empty string</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-server">GitHub →</a>
+                </div>
+            </div>
+
+            <!-- vibesql-admin v1.0.0 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>vibesql-admin v1.0.0</h2>
+                        <span class="release-tag tag-major">NEW PRODUCT</span>
+                    </div>
+                    <span class="release-date">April 8, 2026</span>
+                </div>
+                <p class="release-summary">React-based admin UI for VibeSQL — manage databases, backups, sync, and vault from a modern web interface.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><strong>Database Management</strong> — Connect to VibeSQL Micro and Server instances, run queries, view tables</li>
+                        <li><strong>Backup Interface</strong> — Schedule and manage backups with retention policies</li>
+                        <li><strong>Sync Dashboard</strong> — Monitor replication status and sync jobs</li>
+                        <li><strong>Vault Access</strong> — Manage encrypted storage and access policies</li>
+                        <li><strong>Help System</strong> — Integrated documentation with searchable content</li>
+                        <li>Built with React + Vite + TypeScript for fast, type-safe development</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-admin">GitHub →</a>
+                </div>
+            </div>
+
+            <!-- vsql-vault v0.2.0 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>vsql-vault v0.2.0</h2>
+                        <span class="release-tag tag-major">FEATURE</span>
+                    </div>
+                    <span class="release-date">April 8, 2026</span>
+                </div>
+                <p class="release-summary">PCI DSS v4.0 compliance documentation and hardened retention policies. Governed opaque storage for pre-encrypted cardholder data.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><strong>PCI DSS v4.0 Req 3 attestation</strong> — Full compliance documentation for cardholder data storage</li>
+                        <li><strong>Mandatory retention policies</strong> — Configurable max TTL, default TTL, auto-expiry</li>
+                        <li><strong>Purge proof</strong> — SHA-256 evidence of deletion for compliance audits</li>
+                        <li><strong>Admin sweep route</strong> — Authorized access for compliance officers to audit vault contents</li>
+                    </ul>
+                </div>
+
+                <div class="change-group fixed">
+                    <h3 class="fixed">Fixed</h3>
+                    <ul>
+                        <li>TLS dev/prod mode detection — automatic certificate validation in production</li>
+                        <li>Access policy enforcement — PATCH operations now correctly validate caller identity</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-vault">GitHub →</a>
+                </div>
+            </div>
+
             <!-- VibeSQL Micro v0.2.0 -->
             <div class="release">
                 <div class="release-header">
                     <div class="release-title">
                         <h2>VibeSQL Micro v0.2.0</h2>
-                        <span class="release-tag tag-latest">LATEST</span>
                         <span class="release-tag tag-major">MAJOR</span>
                     </div>
                     <span class="release-date">April 3, 2026</span>
