@@ -202,12 +202,48 @@
 
         <div class="timeline">
 
+            <!-- VibeSQL Server v0.3.2 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>VibeSQL Server v0.3.2</h2>
+                        <span class="release-tag tag-latest">LATEST</span>
+                        <span class="release-tag tag-major">MAJOR</span>
+                    </div>
+                    <span class="release-date">April 15, 2026</span>
+                </div>
+                <p class="release-summary">PayEz Vibe API capabilities upstreamed to the open-source server. Non-query DML execution, query validator DX improvements, and full constraint violation observability.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><strong>Non-query DML execution path</strong> — <code>UPDATE</code>, <code>DELETE</code>, and <code>INSERT</code> without <code>RETURNING</code> now route through <code>ExecuteNonQueryAsync</code>, returning the actual affected row count in <code>QueryExecutionResult.RowCount</code></li>
+                        <li><strong>Comment / string-literal guards</strong> — <code>RETURNING</code> detection strips comments and literals so the keyword in a comment or quoted string does not false-positive the non-query check</li>
+                        <li><strong>Query validator DX improvements</strong> — stricter schema-op size-limit detection, oversized-query previews (first 80 chars), invalid-keyword previews, and Unicode-safe surrogate-pair slicing</li>
+                        <li><strong>Constraint violation observability</strong> — PostgreSQL integrity constraint violations (SQLSTATE class 23) emit structured <code>CONSTRAINT_VIOLATION</code> events with constraint name, schema, table, column, detail, hint, and duration</li>
+                        <li><strong>Dedicated constraint log</strong> — Postgres-style rolling flatfile sub-logger (<code>logs/vibesql-constraints.log</code>) leaves the main Console/Graylog pipeline untouched</li>
+                        <li><strong>Branchable error codes</strong> — <code>UNIQUE_VIOLATION</code>, <code>FOREIGN_KEY_VIOLATION</code>, <code>NOT_NULL_VIOLATION</code>, <code>CHECK_VIOLATION</code>, <code>EXCLUSION_VIOLATION</code> with semantic HTTP statuses (409 conflicts, 400 for not-null/check)</li>
+                        <li><strong>Tier 1 test coverage</strong> — <code>tests/VibeSQL.Core.Tests</code> seeded with 41 passing contract regression tests</li>
+                    </ul>
+                </div>
+
+                <div class="change-group changed">
+                    <h3 class="changed">Changed</h3>
+                    <ul>
+                        <li>OSS <code>QueryExecutor</code> is now behaviorally more correct than the private PayEz fork for comment/literal <code>RETURNING</code> detection — reverse-sync candidate identified</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-server/releases/tag/v0.3.0">GitHub Release →</a>
+                </div>
+            </div>
+
             <!-- VibeSQL Server v0.3.1 -->
             <div class="release">
                 <div class="release-header">
                     <div class="release-title">
                         <h2>VibeSQL Server v0.3.1</h2>
-                        <span class="release-tag tag-latest">LATEST</span>
                         <span class="release-tag tag-major">MAJOR</span>
                     </div>
                     <span class="release-date">April 8, 2026</span>
