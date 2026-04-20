@@ -202,12 +202,90 @@
 
         <div class="timeline">
 
+            <!-- VibeSQL Micro v0.3.1 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>VibeSQL Micro v0.3.1</h2>
+                        <span class="release-tag tag-latest">LATEST</span>
+                        <span class="release-tag tag-major">FEATURE</span>
+                    </div>
+                    <span class="release-date">April 20, 2026</span>
+                </div>
+                <p class="release-summary">Pinned-port <code>serve</code> mode unlocks Micro as a long-lived storage backend. Verified end-to-end in production as the data layer for <a href="https://github.com/PayEz-Net/vibesql-vault" style="color: #7c3aed;">vsql-vault</a>. Also ships on npm as a thin wrapper — <code>npx vibesql-micro</code> downloads the platform binary from GitHub and verifies SHA256.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><strong><code>vsql-micro serve --listen 127.0.0.1:5433 --data ./vault.vsql</code></strong> — long-lived server mode on a pinned TCP port. Trust auth, graceful SIGINT/SIGTERM shutdown. Pod-internal use.</li>
+                        <li><strong><code>pkg/vsql.OpenOnPort(path, port, progress)</code></strong> — library API for embedding PostgreSQL on a specific port</li>
+                        <li><strong><code>internal/postgres.StartOnPort(..., port)</code></strong> — internal helper; <code>port=0</code> preserves the previous auto-select behaviour</li>
+                        <li><strong>npm 2.0.0 thin wrapper</strong> — <code>npm install vibesql-micro</code> fetches the matching GitHub release binary on postinstall with SHA256 verification. Published tarball is ~22KB (wrapper only, no Go source or embed assets)</li>
+                    </ul>
+                </div>
+
+                <div class="change-group fixed">
+                    <h3 class="fixed">Fixed</h3>
+                    <ul>
+                        <li><code>runInitdb</code> now passes <code>-L &lt;shareDir&gt;</code> explicitly — <code>PGSHAREDIR</code> alone isn't always honored when the embedded PostgreSQL binary's compiled-in <code>pkglibdir</code> wins (containers, systemd units)</li>
+                    </ul>
+                </div>
+
+                <div class="change-group changed">
+                    <h3 class="changed">Verified</h3>
+                    <ul>
+                        <li>18/18 Linux CLI tests passing on dev-93 (Ubuntu x64)</li>
+                        <li>Deployed as systemd unit on 10.0.0.93, serving as <code>vsql-vault</code>'s storage backend on port 5433 — full card-purpose PUT/GET round-trip verified end-to-end</li>
+                        <li>Release artifact is bit-identical (SHA256) to the production binary</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-micro/releases/tag/v0.3.1">GitHub Release →</a>
+                    &nbsp;·&nbsp;
+                    <a href="https://www.npmjs.com/package/vibesql-micro">npm →</a>
+                </div>
+            </div>
+
+            <!-- vsql-vault v0.1.0 -->
+            <div class="release">
+                <div class="release-header">
+                    <div class="release-title">
+                        <h2>vsql-vault v0.1.0</h2>
+                        <span class="release-tag tag-major">NEW PRODUCT</span>
+                    </div>
+                    <span class="release-date">April 20, 2026</span>
+                </div>
+                <p class="release-summary">First tagged GitHub release. Governed opaque storage for pre-encrypted data — stores ciphertext, enforces per-entry access policies and per-purpose retention, and produces cryptographic purge proof. Paired with <a href="https://github.com/PayEz-Net/vibesql-micro" style="color: #7c3aed;">VibeSQL Micro</a>, the two binaries form the smallest possible PCI cardholder data environment.</p>
+
+                <div class="change-group added">
+                    <h3 class="added">Added</h3>
+                    <ul>
+                        <li><strong>Pluggable logging guide</strong> — <code>docs/logging.md</code> covers the structured-JSON-to-stdout pattern and operator recipes for Graylog (GELF), Fluent, CloudWatch, syslog, journald, and Kubernetes sinks. vsql-vault stays transport-agnostic; operators pick the shipper</li>
+                        <li><strong>Linux x86_64 release artifact</strong> — <code>vsql-vault-linux-x64</code>, ~10.3 MB, musl static-pie linked, no dynamic linker required</li>
+                        <li><strong>Deterministic SHA256</strong> — release binary is bit-identical to the <code>FROM scratch</code> Docker image bits that serve production on 10.0.0.93</li>
+                    </ul>
+                </div>
+
+                <div class="change-group changed">
+                    <h3 class="changed">Verified</h3>
+                    <ul>
+                        <li>Full card-purpose lifecycle on 10.0.0.93: <code>PUT /v1/vault/card/{id}</code> → blob stored via EncryptionApi → GET round-trips ciphertext + audit-logs to <code>vsql_vault.access_log</code></li>
+                        <li>Backed by VibeSQL Micro in <code>serve</code> mode on port 5433 — no standalone PostgreSQL cluster required</li>
+                        <li>Logs streaming to Graylog on the rosa-93 deployment via Docker <code>gelf</code> log driver</li>
+                    </ul>
+                </div>
+
+                <div class="release-links">
+                    <a href="https://github.com/PayEz-Net/vibesql-vault/releases/tag/v0.1.0">GitHub Release →</a>
+                </div>
+            </div>
+
             <!-- VibeSQL Server v0.3.2 -->
             <div class="release">
                 <div class="release-header">
                     <div class="release-title">
                         <h2>VibeSQL Server v0.3.2</h2>
-                        <span class="release-tag tag-latest">LATEST</span>
                         <span class="release-tag tag-major">MAJOR</span>
                     </div>
                     <span class="release-date">April 15, 2026</span>
